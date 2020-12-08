@@ -33,6 +33,6 @@ namespace SemperEngine
 		vertexArray->Bind();
 		shader->Bind();
 		IndexFormat indexFormat = vertexArray->GetIndexBuffer()->GetFormat();
-		glDrawElements(GL_LINES, vertexArray->GetIndexBuffer()->GetCount(), GLIndexBuffer::GetGLTypeOfFormat(indexFormat), nullptr);
+		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GLIndexBuffer::GetGLTypeOfFormat(indexFormat), nullptr);
 	}
 }
