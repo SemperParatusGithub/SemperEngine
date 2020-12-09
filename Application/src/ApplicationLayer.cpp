@@ -9,27 +9,31 @@ ApplicationLayer::ApplicationLayer() :
 	SemperEngine::Renderer::SetClearColor({ 0.7f, 0.7f,0.7f, 0.7f });
 
 	float vertices[] = {
-	-0.5f, -0.5f,
-	 0.5f, -0.5f,
-	 0.0f,  0.5f
+		// Position		Color
+		-0.5f, -0.5f,	1.0f, 0.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,
+		 0.0f,  0.5f,   0.0f, 0.0f, 1.0f, 1.0f
 	};
 	uint8_t indices[] = { 0, 1, 2 };
 
 	std::string vertexShader = {
 		"#version 450 core\n"
 		"layout(location = 0) in vec2 position;\n"
+		"layout(location = 1) in vec4 color;\n"
+		"out vec4 v_Color;\n"
 		"void main()\n"
 		"{\n"
+		"v_Color = color;\n"
 		"gl_Position = vec4(position, 0.0, 1.0);\n"
 		"}\n"
 	};
 	std::string fragmentShader = {
 		"#version 450 core\n"
+		"in vec4 v_Color;"
 		"out vec4 o_Color;\n"
-		"uniform vec4 u_Color;\n"
 		"void main()\n"
 		"{\n"
-		"o_Color = u_Color;\n"
+		"o_Color = v_Color;\n"
 		"}\n"
 	};
 
@@ -37,7 +41,8 @@ ApplicationLayer::ApplicationLayer() :
 
 	m_IndexBuffer = SemperEngine::IndexBuffer::Create(indices, SemperEngine::IndexFormat::Uint8, sizeof(indices));
 	m_VertexBuffer = SemperEngine::VertexBuffer::Create(vertices, sizeof(vertices));
-	m_VertexBuffer->AddElement({ "u_Position", SemperEngine::VertexFormat::Float3, false });
+	m_VertexBuffer->AddElement({ "u_Position", SemperEngine::VertexFormat::Float2, false });
+	m_VertexBuffer->AddElement({ "u_Color", SemperEngine::VertexFormat::Float4, false });
 
 	m_VertexArray = SemperEngine::VertexArray::Create(m_VertexBuffer, m_IndexBuffer);
 }
@@ -53,7 +58,7 @@ void ApplicationLayer::OnDetach()
 void ApplicationLayer::OnUpdate(float deltaTime)
 {
 	SemperEngine::Renderer::Clear();
-	m_Shader->SetUniform4f("u_Color", m_Color[0], m_Color[1], m_Color[2], m_Color[3]);
+	// m_Shader->SetUniform4f("u_Color", m_Color[0], m_Color[1], m_Color[2], m_Color[3]);
 	SemperEngine::Renderer::DrawIndexed(m_VertexArray, m_Shader);
 }
 

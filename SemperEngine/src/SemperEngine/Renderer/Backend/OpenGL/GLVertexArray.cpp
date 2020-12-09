@@ -20,8 +20,15 @@ namespace SemperEngine
 		vertexBuffer->Bind();
 		indexBuffer->Bind();
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+		for (std::size_t i = 0; i < vertexBuffer->GetElements().size(); i++)
+		{
+			const auto &element = vertexBuffer->GetElements()[i];
+			GLenum normalized = element.normalized ? GL_TRUE : GL_FALSE;
+		
+			glEnableVertexAttribArray(i);
+			glVertexAttribPointer(i, element.GetComponentCount(), element.GetComponentOpenGLDataType(), normalized,
+				vertexBuffer->GetStride(), (GLvoid *)(vertexBuffer->GetElements()[i].offset));
+		}
 	}
 	GLVertexArray::~GLVertexArray()
 	{
@@ -35,8 +42,14 @@ namespace SemperEngine
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+		for (std::size_t i = 0; i < vertexBuffer->GetElements().size(); i++)
+		{
+			const auto &element = vertexBuffer->GetElements()[i];
+
+			glEnableVertexAttribArray(i);
+			glVertexAttribPointer(i, element.GetComponentCount(), element.GetComponentOpenGLDataType(),	element.normalized,
+				vertexBuffer->GetStride(), static_cast<const GLvoid *>(&vertexBuffer->GetElements()[i].offset));
+		}
 
 		return this;
 	}
