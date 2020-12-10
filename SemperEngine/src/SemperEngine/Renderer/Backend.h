@@ -1,6 +1,6 @@
 #pragma once
 #include "SemperEngine/Core/Defines.h"
-#include "RenderCommands.h"
+#pragma once
 #include "VertexArray.h"
 #include "Shader.h"
 
