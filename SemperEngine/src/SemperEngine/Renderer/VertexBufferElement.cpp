@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "VertexBufferElement.h"
+#include "VertexBuffer.h"
+
 #include <glad/glad.h>
 #include "SemperEngine/Core/Assert.h"
 

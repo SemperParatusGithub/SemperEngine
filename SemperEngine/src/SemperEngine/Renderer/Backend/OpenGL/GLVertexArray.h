@@ -1,5 +1,7 @@
 #pragma once
 #include "SemperEngine/Renderer/VertexArray.h"
+#include "GLTools.h"
+
 #include <vector>
 
 namespace SemperEngine

@@ -3,16 +3,11 @@
 
 namespace SemperEngine
 {
-	enum class VertexFormat
-	{
-		Float1,
-		Float2,
-		Float3,
-		Float4
-	};
+	enum class VertexFormat;
 
-	struct VertexBufferElement
+	class VertexBufferElement
 	{
+	public:
 		std::string name;
 		VertexFormat format;
 		bool normalized = false;

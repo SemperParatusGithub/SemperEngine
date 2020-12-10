@@ -1,12 +1,15 @@
 #include "pch.h"
 #include "IndexBuffer.h"
 
+#include "SemperEngine/Core/Assert.h"
+
 #include "Backend/OpenGL/GLBackend.h"
 #include "Backend/OpenGL/GLIndexBuffer.h"
 
+
 namespace SemperEngine
 {
-	IndexBuffer *IndexBuffer::Create()
+	IndexBuffer *IndexBuffer::Create(BufferUsage usage)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -19,7 +22,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLIndexBuffer();
+			return new GLIndexBuffer(usage);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");
@@ -29,7 +32,8 @@ namespace SemperEngine
 		SE_ASSERT_MSG(false, "Unknown Render API");
 		return nullptr;
 	}
-	IndexBuffer *IndexBuffer::Create(void *indices, IndexFormat format, uint32_t count)
+
+	IndexBuffer *IndexBuffer::Create(void *indices, IndexFormat format, uint32_t count, BufferUsage usage)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -42,7 +46,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLIndexBuffer(indices, format, count);
+			return new GLIndexBuffer(indices, format, count, usage);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");

@@ -5,13 +5,28 @@
 
 namespace SemperEngine
 {
+	enum class VertexFormat
+	{
+		Float1,
+		Float2,
+		Float3,
+		Float4
+	};
+
+	enum class BufferUsage
+	{
+		Static,
+		Dynamic,
+		Stream
+	};
+
 	class VertexBuffer
 	{
 	public:
 		virtual ~VertexBuffer() = default;
 
-		static VertexBuffer *Create();
-		static VertexBuffer *Create(void *vertices, uint32_t size);
+		static VertexBuffer *Create(BufferUsage usage);
+		static VertexBuffer *Create(void *vertices, uint32_t size, BufferUsage usage);
 
 		virtual void AddElement(VertexBufferElement element) = 0;
 		virtual const std::vector<VertexBufferElement> &GetElements() const = 0;

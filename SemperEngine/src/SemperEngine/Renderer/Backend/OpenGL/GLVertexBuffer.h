@@ -1,15 +1,17 @@
 #pragma once
 #include "SemperEngine/Renderer/VertexBuffer.h"
-#include "SemperEngine/Renderer/RenderCommands.h"
+#include "GLTools.h"
+
 #include <vector>
+
 
 namespace SemperEngine
 {
 	class GLVertexBuffer : public VertexBuffer
 	{
 	public:
-		GLVertexBuffer();
-		GLVertexBuffer(void *vertices, uint32_t size);
+		GLVertexBuffer(BufferUsage usage);
+		GLVertexBuffer(void *vertices, uint32_t size, BufferUsage usage);
 
 		~GLVertexBuffer() override;
 

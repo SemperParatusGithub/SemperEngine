@@ -1,6 +1,6 @@
 #pragma once
-#include "RenderCommands.h"
-#include "SemperEngine/Core/Assert.h"
+#include "VertexBuffer.h"
+
 
 namespace SemperEngine
 {
@@ -16,8 +16,8 @@ namespace SemperEngine
 	public:
 		virtual ~IndexBuffer() = default;
 
-		static IndexBuffer *Create();
-		static IndexBuffer *Create(void *indices, IndexFormat format, uint32_t count);
+		static IndexBuffer *Create(BufferUsage usage);
+		static IndexBuffer *Create(void *indices, IndexFormat format, uint32_t count, BufferUsage usage);
 
 		virtual void AddData(void *indices, IndexFormat format, uint32_t count) = 0;
 

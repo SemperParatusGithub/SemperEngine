@@ -1,13 +1,15 @@
 #pragma once
 #include "SemperEngine/Renderer/IndexBuffer.h"
+#include "GLTools.h"
+
 
 namespace SemperEngine
 {
 	class GLIndexBuffer : public IndexBuffer
 	{
 	public:
-		GLIndexBuffer();
-		GLIndexBuffer(void *indices, IndexFormat format, uint32_t size);
+		GLIndexBuffer(BufferUsage usage);
+		GLIndexBuffer(void *indices, IndexFormat format, uint32_t size, BufferUsage usage);
 
 		virtual ~GLIndexBuffer() override;
 
@@ -18,10 +20,6 @@ namespace SemperEngine
 
 		virtual void Bind() const noexcept override;
 		virtual void UnBind() const noexcept override;
-
-	public:
-		static uint32_t GetSizeOfFormat(IndexFormat format);
-		static uint32_t GetGLTypeOfFormat(IndexFormat format);
 
 	private:
 		RendererID m_RendererID;

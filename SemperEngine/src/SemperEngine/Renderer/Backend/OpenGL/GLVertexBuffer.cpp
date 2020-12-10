@@ -5,18 +5,20 @@
 
 namespace SemperEngine
 {
-	GLVertexBuffer::GLVertexBuffer() : 
-		m_Stride(0)
-	{
-		glCreateBuffers(1, &m_RendererID);
-	}
-
-	GLVertexBuffer::GLVertexBuffer(void *vertices, uint32_t size) : 
+	GLVertexBuffer::GLVertexBuffer(BufferUsage usage) : 
 		m_Stride(0)
 	{
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GLTools::BufferUsageGLUsage(usage));
+	}
+
+	GLVertexBuffer::GLVertexBuffer(void *vertices, uint32_t size, BufferUsage usage) : 
+		m_Stride(0)
+	{
+		glCreateBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, GLTools::BufferUsageGLUsage(usage));
 	}
 
 	GLVertexBuffer::~GLVertexBuffer()
