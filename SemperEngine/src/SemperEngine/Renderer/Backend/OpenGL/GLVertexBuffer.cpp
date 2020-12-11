@@ -26,7 +26,7 @@ namespace SemperEngine
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
-	void GLVertexBuffer::AddElement(VertexBufferElement element)
+	void GLVertexBuffer::AddAttribute(const VertexAttribute &element)
 	{
 		m_Stride += element.GetSize();
 		element.offset = 0;
@@ -38,7 +38,7 @@ namespace SemperEngine
 		m_VertexBufferElements.emplace_back(element);
 	}
 
-	const std::vector<VertexBufferElement> &GLVertexBuffer::GetElements() const
+	const std::vector<VertexAttribute> &GLVertexBuffer::GetElements() const
 	{
 		return m_VertexBufferElements;
 	}

@@ -28,14 +28,14 @@ namespace SemperEngine
 		static VertexBuffer *Create(BufferUsage usage);
 		static VertexBuffer *Create(void *vertices, uint32_t size, BufferUsage usage);
 
-		virtual void AddElement(VertexBufferElement element) = 0;
-		virtual const std::vector<VertexBufferElement> &GetElements() const = 0;
+		virtual void AddAttribute(const VertexAttribute &element) = 0;
+		virtual const std::vector<VertexAttribute> &GetElements() const = 0;
 
 		virtual uint32_t GetStride() const = 0;
 
 		virtual void Bind() const noexcept = 0;
 		virtual void UnBind() const noexcept = 0;
 
-		friend class VertexBufferElement;
+		friend class VertexAttribute;
 	};
 }

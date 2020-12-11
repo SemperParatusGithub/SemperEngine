@@ -15,8 +15,8 @@ namespace SemperEngine
 
 		~GLVertexBuffer() override;
 
-		virtual void AddElement(VertexBufferElement element) override;
-		virtual const std::vector<VertexBufferElement> &GetElements() const override;
+		virtual void AddAttribute(const VertexAttribute &element) override;
+		virtual const std::vector<VertexAttribute> &GetElements() const override;
 
 		virtual uint32_t GetStride() const override;
 
@@ -25,9 +25,9 @@ namespace SemperEngine
 
 	private:
 		RendererID m_RendererID;
-		std::vector<VertexBufferElement> m_VertexBufferElements;
+		std::vector<VertexAttribute> m_VertexBufferElements;
 		uint32_t m_Stride;
 
-		friend class VertexBufferElement;
+		friend class VertexAttribute;
 	};
 }

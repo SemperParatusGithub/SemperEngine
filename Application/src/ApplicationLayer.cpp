@@ -41,8 +41,8 @@ ApplicationLayer::ApplicationLayer() :
 
 	m_IndexBuffer = SemperEngine::IndexBuffer::Create(indices, SemperEngine::IndexFormat::Uint8, sizeof(indices), SemperEngine::BufferUsage::Static);
 	m_VertexBuffer = SemperEngine::VertexBuffer::Create(vertices, sizeof(vertices), SemperEngine::BufferUsage::Static);
-	m_VertexBuffer->AddElement({ "u_Position", SemperEngine::VertexFormat::Float2, false });
-	m_VertexBuffer->AddElement({ "u_Color", SemperEngine::VertexFormat::Float4, false });
+	m_VertexBuffer->AddAttribute({ "u_Position", SemperEngine::VertexFormat::Float2, false });
+	m_VertexBuffer->AddAttribute({ "u_Color", SemperEngine::VertexFormat::Float4, false });
 
 	m_VertexArray = SemperEngine::VertexArray::Create(m_VertexBuffer, m_IndexBuffer);
 }

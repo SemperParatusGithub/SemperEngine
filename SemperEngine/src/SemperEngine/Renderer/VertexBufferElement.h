@@ -5,14 +5,14 @@ namespace SemperEngine
 {
 	enum class VertexFormat;
 
-	class VertexBufferElement
+	class VertexAttribute
 	{
 	public:
 		std::string name;
 		VertexFormat format;
 		bool normalized = false;
 
-		uint32_t offset;
+		mutable uint32_t offset;
 
 		uint32_t GetSize() const noexcept;
 		uint32_t GetComponentCount() const noexcept;
