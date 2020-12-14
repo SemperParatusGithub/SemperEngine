@@ -74,6 +74,27 @@ namespace SemperEngine
 		TextureWrap textureWrap;
 	};
 
+	struct TextureLoadOptions
+	{
+		bool flipX;
+		bool flipY;
+		bool generateMipMaps;
+			
+		TextureLoadOptions()
+		{
+			flipX = false;
+			flipY = false;
+			generateMipMaps = false;
+		}
+
+		TextureLoadOptions(bool flipX, bool flipY, bool genMips = true)
+			: flipX(flipX)
+			, flipY(flipY)
+			, generateMipMaps(genMips)
+		{
+		}
+	};
+
 	class Texture
 	{
 	public:
@@ -85,16 +106,14 @@ namespace SemperEngine
 		virtual uint32_t GetHeight() const noexcept = 0;
 
 		virtual void Bind(uint32_t slot = 0) const noexcept = 0;
-		virtual void UnBind() const noexcept = 0;
+		virtual void UnBind(uint32_t slot = 0) const noexcept = 0;
 	};
 
 	class Texture2D : public Texture
 	{
 	public:
-		// static Texture *Create();
-		// static Texture *Create(const std::string &filepath);
-		// static Texture *Create(uint32_t width, uint32_t height);
-
-		virtual void Load(const std::string &filepath) = 0;
+		static Texture2D *Create(TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
+		static Texture2D *Create(const std::string &filepath, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
+		static Texture2D *Create(uint32_t width, uint32_t height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
 	};
 }
