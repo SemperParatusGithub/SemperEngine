@@ -18,6 +18,7 @@ private:
     SemperEngine::VertexArray *m_VertexArray;
     SemperEngine::VertexBuffer *m_VertexBuffer;
     SemperEngine::IndexBuffer *m_IndexBuffer;
+    SemperEngine::Texture2D *m_BackgroundTexture;
 
     SemperEngine::Shader *m_Shader;
 };

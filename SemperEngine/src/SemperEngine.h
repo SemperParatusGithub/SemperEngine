@@ -16,4 +16,5 @@
 #include "SemperEngine/Renderer/VertexArray.h"
 #include "SemperEngine/Renderer/VertexBuffer.h"
 #include "SemperEngine/Renderer/IndexBuffer.h"
+#include "SemperEngine/Renderer/Texture.h"
 #include "SemperEngine/Renderer/Shader.h"
