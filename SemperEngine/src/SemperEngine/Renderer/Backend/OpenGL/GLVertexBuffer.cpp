@@ -35,7 +35,7 @@ namespace SemperEngine
 		{
 			element.offset += m_VertexBufferElements[i].GetSize();
 		}
-		m_VertexBufferElements.emplace_back(element);
+		m_VertexBufferElements.push_back(element);
 	}
 
 	const std::vector<VertexAttribute> &GLVertexBuffer::GetElements() const
