@@ -13,8 +13,6 @@ namespace SemperEngine
 
 		virtual ~GLIndexBuffer() override;
 
-		virtual void AddData(void *indices, IndexFormat format, uint32_t size) override;
-
 		virtual inline IndexFormat GetFormat() const noexcept override { return m_Format; }
 		virtual inline uint32_t GetCount() const noexcept override { return m_Count; }
 

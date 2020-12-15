@@ -26,6 +26,12 @@ namespace SemperEngine
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
+	void GLVertexBuffer::SetData(const void *vertices, uint32_t size)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, vertices);
+	}
+
 	void GLVertexBuffer::AddAttribute(const VertexAttribute &element)
 	{
 		m_Stride += element.GetSize();

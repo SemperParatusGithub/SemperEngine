@@ -26,7 +26,9 @@ namespace SemperEngine
 		virtual ~VertexBuffer() = default;
 
 		static VertexBuffer *Create(BufferUsage usage);
-		static VertexBuffer *Create(void *vertices, uint32_t size, BufferUsage usage);
+		static VertexBuffer *Create(const void *vertices, uint32_t size, BufferUsage usage);
+
+		virtual void SetData(const void *vertices, uint32_t size) = 0;
 
 		virtual void AddAttribute(const VertexAttribute &element) = 0;
 		virtual const std::vector<VertexAttribute> &GetElements() const = 0;

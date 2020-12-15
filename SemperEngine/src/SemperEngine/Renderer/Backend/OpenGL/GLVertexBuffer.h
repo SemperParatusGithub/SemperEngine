@@ -11,9 +11,11 @@ namespace SemperEngine
 	{
 	public:
 		GLVertexBuffer(BufferUsage usage);
-		GLVertexBuffer(void *vertices, uint32_t size, BufferUsage usage);
+		GLVertexBuffer(const void *vertices, uint32_t size, BufferUsage usage);
 
 		~GLVertexBuffer() override;
+
+		virtual void SetData(const void *vertices, uint32_t size);
 
 		virtual void AddAttribute(const VertexAttribute &element) override;
 		virtual const std::vector<VertexAttribute> &GetElements() const override;

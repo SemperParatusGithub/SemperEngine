@@ -29,10 +29,6 @@ namespace SemperEngine
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
-	void GLIndexBuffer::AddData(void *indices, IndexFormat format, uint32_t size)
-	{
-	}
-
 	void GLIndexBuffer::Bind() const noexcept
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
