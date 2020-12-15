@@ -31,8 +31,8 @@ namespace SemperEngine
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, GL_RGBA8, m_Width, m_Height);
 
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, m_TextureData.minFilter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, m_TextureData.magFilter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -93,8 +93,8 @@ namespace SemperEngine
 		glCreateTextures(GL_TEXTURE_2D, 1, &localHandle);
 		glTextureStorage2D(localHandle, 1, GL_RGBA8, m_Width, m_Height);
 
-		glTextureParameteri(localHandle, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTextureParameteri(localHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(localHandle, GL_TEXTURE_MIN_FILTER, m_TextureData.minFilter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
+		glTextureParameteri(localHandle, GL_TEXTURE_MAG_FILTER, m_TextureData.magFilter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
 
 		glTextureParameteri(localHandle, GL_TEXTURE_WRAP_S, GLTools::TextureWrapToGL(m_TextureData.textureWrap));
 		glTextureParameteri(localHandle, GL_TEXTURE_WRAP_T, GLTools::TextureWrapToGL(m_TextureData.textureWrap));
