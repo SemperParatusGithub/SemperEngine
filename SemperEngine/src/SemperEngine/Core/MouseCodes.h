@@ -1,10 +1,10 @@
 #pragma once
+#include "Types.h"
 
-#include <iostream>
 
 namespace SemperEngine
 {
-	using MouseCode = uint16_t;
+	using MouseCode = u16;
 
 	namespace Mouse
 	{

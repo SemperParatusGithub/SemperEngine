@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "LayerStack.h"
 
+
 namespace SemperEngine
 {
-
     LayerStack::LayerStack() : 
         m_LayerInsertIndex(0)
     {
@@ -89,5 +89,4 @@ namespace SemperEngine
     {
         return m_LayerStack.rend();
     }
-
 }

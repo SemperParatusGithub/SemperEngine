@@ -12,20 +12,20 @@
 
 namespace SemperEngine
 {
-	uint32_t GLTools::IndexFormatSize(IndexFormat format)
+	u32 GLTools::IndexFormatSize(IndexFormat format)
 	{
 		switch (format)
 		{
-			case IndexFormat::Uint8:	return sizeof(uint8_t);
-			case IndexFormat::Uint16:	return sizeof(uint16_t);
-			case IndexFormat::Uint32:	return sizeof(uint32_t);
+			case IndexFormat::Uint8:	return sizeof(u8);
+			case IndexFormat::Uint16:	return sizeof(u16);
+			case IndexFormat::Uint32:	return sizeof(u32);
 
 			default: SE_ASSERT_MSG(false, "Unknown Index Format");
 		}
 		return 0;
 	}
 
-	uint32_t GLTools::IndexFormatToGLType(IndexFormat format)
+	u32 GLTools::IndexFormatToGLType(IndexFormat format)
 	{
 		switch (format)
 		{
@@ -38,7 +38,7 @@ namespace SemperEngine
 		return 0;
 	}
 
-	uint32_t GLTools::BufferUsageGLUsage(BufferUsage usage)
+	u32 GLTools::BufferUsageGLUsage(BufferUsage usage)
 	{
 		switch (usage)
 		{
@@ -50,7 +50,7 @@ namespace SemperEngine
 		}
 		return 0;
 	}
-	uint32_t GLTools::TextureFormatToGL(TextureFormat format)
+	u32 GLTools::TextureFormatToGL(TextureFormat format)
 	{
 		switch (format)
 		{
@@ -68,7 +68,7 @@ namespace SemperEngine
 			default: SE_ASSERT_MSG(false, "Unknown Texture format Format");
 		}
 	}
-	uint32_t GLTools::TextureWrapToGL(TextureWrap wrap)
+	u32 GLTools::TextureWrapToGL(TextureWrap wrap)
 	{
 		switch (wrap)
 		{
@@ -81,7 +81,7 @@ namespace SemperEngine
 			default: SE_ASSERT_MSG(false, "Unknown Texture Wrap Format");
 		}
 	}
-	uint32_t GLTools::TextureFormatToInternalFormat(uint32_t format)
+	u32 GLTools::TextureFormatToInternalFormat(u32 format)
 	{
 		switch (format)
 		{
@@ -102,7 +102,7 @@ namespace SemperEngine
 			default: SE_ASSERT_MSG(false, "Unknown Texture Format");
 		}
 	}
-	TextureFormat GLTools::BitsToTextureFormat(uint32_t bits)
+	TextureFormat GLTools::BitsToTextureFormat(u32 bits)
 	{
 		switch (bits)
 		{

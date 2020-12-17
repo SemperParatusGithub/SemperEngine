@@ -4,9 +4,9 @@
 
 #include <glm/glm.hpp>
 
+
 namespace SemperEngine
 {
-
 	class Input
 	{
 	public:
@@ -17,5 +17,4 @@ namespace SemperEngine
 		static float GetMouseX();
 		static float GetMouseY();
 	};
-
 }

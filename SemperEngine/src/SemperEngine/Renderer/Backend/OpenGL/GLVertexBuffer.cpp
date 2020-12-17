@@ -13,7 +13,7 @@ namespace SemperEngine
 		glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GLTools::BufferUsageGLUsage(usage));
 	}
 
-	GLVertexBuffer::GLVertexBuffer(void *vertices, uint32_t size, BufferUsage usage) : 
+	GLVertexBuffer::GLVertexBuffer(const void *vertices, u32 size, BufferUsage usage) :
 		m_Stride(0)
 	{
 		glCreateBuffers(1, &m_RendererID);
@@ -26,7 +26,7 @@ namespace SemperEngine
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
-	void GLVertexBuffer::SetData(const void *vertices, uint32_t size)
+	void GLVertexBuffer::SetData(const void *vertices, u32 size)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, size, vertices);
@@ -49,7 +49,7 @@ namespace SemperEngine
 		return m_VertexBufferElements;
 	}
 
-	uint32_t GLVertexBuffer::GetStride() const
+	u32 GLVertexBuffer::GetStride() const
 	{
 		return m_Stride;
 	}

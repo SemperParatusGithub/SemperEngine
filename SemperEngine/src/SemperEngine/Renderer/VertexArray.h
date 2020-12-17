@@ -1,5 +1,6 @@
 #pragma once
 #include "SemperEngine/Core/Assert.h"
+#include "SemperEngine/Core/Types.h"
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"

@@ -20,7 +20,7 @@
 	#define SE_ASSERT(value)												\
 		if (!(value))														\
 		{																	\
-			SE_CORE_ERROR("Assertion Failed: %s File: %s, Line: %s ");	\
+			SE_CORE_ERROR("Assertion Failed: %s File: %s, Line: %s ");		\
 			SE_DEBUGBREAK;													\
 		}
 

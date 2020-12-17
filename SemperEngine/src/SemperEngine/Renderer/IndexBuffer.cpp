@@ -33,7 +33,7 @@ namespace SemperEngine
 		return nullptr;
 	}
 
-	IndexBuffer *IndexBuffer::Create(void *indices, IndexFormat format, uint32_t count, BufferUsage usage)
+	IndexBuffer *IndexBuffer::Create(void *indices, IndexFormat format, u32 count, BufferUsage usage)
 	{
 		switch (Backend::GetRenderAPI())
 		{

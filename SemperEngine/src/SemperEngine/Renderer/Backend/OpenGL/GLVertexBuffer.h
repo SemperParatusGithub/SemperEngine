@@ -11,16 +11,16 @@ namespace SemperEngine
 	{
 	public:
 		GLVertexBuffer(BufferUsage usage);
-		GLVertexBuffer(const void *vertices, uint32_t size, BufferUsage usage);
+		GLVertexBuffer(const void *vertices, u32 size, BufferUsage usage);
 
 		~GLVertexBuffer() override;
 
-		virtual void SetData(const void *vertices, uint32_t size);
+		virtual void SetData(const void *vertices, u32 size);
 
 		virtual void AddAttribute(const VertexAttribute &element) override;
 		virtual const std::vector<VertexAttribute> &GetElements() const override;
 
-		virtual uint32_t GetStride() const override;
+		virtual u32 GetStride() const override;
 
 		virtual void Bind() const noexcept override;
 		virtual void UnBind() const noexcept override;
@@ -28,7 +28,7 @@ namespace SemperEngine
 	private:
 		RendererID m_RendererID;
 		std::vector<VertexAttribute> m_VertexBufferElements;
-		uint32_t m_Stride;
+		u32 m_Stride;
 
 		friend class VertexAttribute;
 	};

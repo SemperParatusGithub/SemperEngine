@@ -12,14 +12,14 @@
 
 namespace SemperEngine
 {
-	static uint32_t s_TotalGLFWWindowCount = 0;
+	static u32 s_TotalGLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char *description)
 	{
 		SE_CORE_ERROR("%d: %s", error, description);
 	}
 
-	WindowGLFW::WindowGLFW(uint32_t width, uint32_t height, const std::string &title)
+	WindowGLFW::WindowGLFW(u32 width, u32 height, const std::string &title)
 	{
 		m_WindowData.width  = width;
 		m_WindowData.height = height;

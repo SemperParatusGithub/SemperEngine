@@ -14,7 +14,7 @@ namespace SemperEngine
 		glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GLTools::BufferUsageGLUsage(usage));
 	}
 
-	GLIndexBuffer::GLIndexBuffer(void *indices, IndexFormat format, uint32_t size, BufferUsage usage)
+	GLIndexBuffer::GLIndexBuffer(void *indices, IndexFormat format, u32 size, BufferUsage usage)
 	{
 		m_Format = format;
 		m_Count = size / GLTools::IndexFormatSize(format);

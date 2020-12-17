@@ -1,10 +1,10 @@
 #pragma once
-#include <iostream>
+#include "SemperEngine/Core/Types.h"
 
 
 namespace SemperEngine
 {
-	using RendererID = uint32_t;
+	using RendererID = u32;
 
 	// Forward Declarations
 	class VertexBuffer;
@@ -21,14 +21,14 @@ namespace SemperEngine
 	class GLTools
 	{
 	public:
-		static uint32_t IndexFormatSize(IndexFormat format);
-		static uint32_t IndexFormatToGLType(IndexFormat format);
+		static u32 IndexFormatSize(IndexFormat format);
+		static u32 IndexFormatToGLType(IndexFormat format);
 
-		static uint32_t BufferUsageGLUsage(BufferUsage usage);
+		static u32 BufferUsageGLUsage(BufferUsage usage);
 
-		static uint32_t TextureWrapToGL(TextureWrap wrap);
-		static uint32_t TextureFormatToGL(TextureFormat format);
-		static uint32_t TextureFormatToInternalFormat(uint32_t format);
-		static TextureFormat BitsToTextureFormat(uint32_t bits);
+		static u32 TextureWrapToGL(TextureWrap wrap);
+		static u32 TextureFormatToGL(TextureFormat format);
+		static u32 TextureFormatToInternalFormat(u32 format);
+		static TextureFormat BitsToTextureFormat(u32 bits);
 	};
 }

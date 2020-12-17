@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include "SemperEngine/Core/Types.h"
 
 
 namespace SemperEngine
@@ -102,11 +102,11 @@ namespace SemperEngine
 
 		virtual void *GetHandle() const noexcept = 0;
 
-		virtual uint32_t GetWidth() const noexcept = 0;
-		virtual uint32_t GetHeight() const noexcept = 0;
+		virtual u32 GetWidth() const noexcept = 0;
+		virtual u32 GetHeight() const noexcept = 0;
 
-		virtual void Bind(uint32_t slot = 0) const noexcept = 0;
-		virtual void UnBind(uint32_t slot = 0) const noexcept = 0;
+		virtual void Bind(u32 slot = 0) const noexcept = 0;
+		virtual void UnBind(u32 slot = 0) const noexcept = 0;
 	};
 
 	class Texture2D : public Texture
@@ -114,6 +114,6 @@ namespace SemperEngine
 	public:
 		static Texture2D *Create(TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
 		static Texture2D *Create(const std::string &filepath, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
-		static Texture2D *Create(uint32_t width, uint32_t height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
+		static Texture2D *Create(u32 width, u32 height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
 	};
 }

@@ -1,5 +1,6 @@
 #pragma once
-#include <iostream>
+#include "SemperEngine/Core/Types.h"
+
 
 namespace SemperEngine
 {
@@ -12,10 +13,10 @@ namespace SemperEngine
 		VertexFormat format;
 		bool normalized = false;
 
-		mutable uint32_t offset;
+		mutable u32 offset;
 
-		uint32_t GetSize() const noexcept;
-		uint32_t GetComponentCount() const noexcept;
-		uint32_t GetComponentOpenGLDataType() const noexcept;
+		u32 GetSize() const noexcept;
+		u32 GetComponentCount() const noexcept;
+		u32 GetComponentOpenGLDataType() const noexcept;
 	};
 }
