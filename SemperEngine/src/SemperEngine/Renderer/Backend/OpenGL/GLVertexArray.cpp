@@ -5,7 +5,8 @@
 
 namespace SemperEngine
 {
-	GLVertexArray::GLVertexArray()
+	GLVertexArray::GLVertexArray() : 
+		m_IndexBuffer(nullptr)
 	{
 		glCreateVertexArrays(1, &m_RendererID);
 	}
