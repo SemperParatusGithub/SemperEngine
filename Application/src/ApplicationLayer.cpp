@@ -38,15 +38,16 @@ ApplicationLayer::ApplicationLayer() :
 		"o_Color = texture(u_Texture, v_TexCoords);\n"
 		"}\n"
 	};
-
+	
 	m_Shader = SemperEngine::Shader::Create({ vertexShader, fragmentShader });
 	m_Shader->Bind();
-	m_Shader->SetUniform1i("u_Texture", 0);
+	m_Shader->SetUniformInt("u_Texture", 0);
 	
 	SemperEngine::TextureData data;
 	data.minFilter = SemperEngine::TextureFilter::Nearest;
 	data.magFilter = SemperEngine::TextureFilter::Nearest;
-	m_BackgroundTexture = SemperEngine::Texture2D::Create("BackgroundTexture.jpg", data);
+	m_BackgroundTexture = SemperEngine::Texture2D::Create("StoneTex.jpg", data);
+	m_BackgroundTexture->Bind();
 
 	m_IndexBuffer = SemperEngine::IndexBuffer::Create(indices, SemperEngine::IndexFormat::Uint8, sizeof(indices), SemperEngine::BufferUsage::Static);
 	m_VertexBuffer = SemperEngine::VertexBuffer::Create(vertices, sizeof(vertices), SemperEngine::BufferUsage::Static);

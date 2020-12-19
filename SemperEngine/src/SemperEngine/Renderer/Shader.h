@@ -1,64 +1,45 @@
 #pragma once
-#include <string>
-#include <unordered_map>
+#include "ShaderManager.h"
 
 #include <glm/glm.hpp>
 
 
-//  Basic shader class for OpenGL Shaders
-// USAGE: 
-//	Shader shader(Shader::LoadFromGLSLFiles("res/shaders/Basic.vert.glsl", "res/shaders/Basic.frag.glsl"));
-//  shader->Bind();
-//	shader->SetUniformMat4("u_Uniform", glm::mat4(1));
-//	shader->UnBind();
-
 namespace SemperEngine
 {
-	struct ShaderSource
-	{
-		std::string vertexSource;
-		std::string fragmentSource;
-	};
-
 	class Shader
 	{
 	public:
-		Shader(const ShaderSource &source);
-		~Shader();
+		virtual ~Shader() = default;
 
-		void Bind() const;
-		void UnBind() const;
-		inline unsigned int GetID() const { return m_ShaderID; }
+		static Shader *Create(const ShaderManager::ShaderSource &shaderSource);
 
-		void SetUniform1i(const std::string &name, int value);
-		void SetUniform1f(const std::string &name, float value);
-		void SetUniform1d(const std::string &name, double value);
+		virtual void Bind() const noexcept = 0;
+		virtual void UnBind() const noexcept = 0;
 
-		void SetUniform2i(const std::string &name, int v1, int v2);
-		void SetUniform2f(const std::string &name, float v1, float v2);
-		void SetUniform2d(const std::string &name, double v1, double v2);
+		virtual void *GetNativeHandle()	const noexcept = 0;
+		virtual const std::string &GetName() const noexcept = 0;
 
-		void SetUniform3f(const std::string &name, float v1, float v2, float v3);
+		virtual void SetUniformMat2f(const std::string &name, const glm::mat2 &matrix) = 0;
+		virtual void SetUniformMat3f(const std::string &name, const glm::mat3 &matrix) = 0;
+		virtual void SetUniformMat4f(const std::string &name, const glm::mat4 &matrix) = 0;
 
-		void SetUniform4i(const std::string &name, int v0, int v1, int v2, int v3);
-		void SetUniform4f(const std::string &name, float v0, float v1, float v2, float v3);
-		void SetUniform4d(const std::string &name, double v0, double v1, double v2, double v3);
+		virtual void SetUniformInt(const std::string &name, int value) = 0;
+		virtual void SetUniformInt2(const std::string &name, const glm::ivec2& values) = 0;
+		virtual void SetUniformInt3(const std::string &name, const glm::ivec3& values) = 0;
+		virtual void SetUniformInt4(const std::string &name, const glm::ivec4& values) = 0;
 
-		void SetUniformMat2f(const std::string &name, const glm::mat2 &matrix);
-		void SetUniformMat3f(const std::string &name, const glm::mat3 &matrix);
-		void SetUniformMat4f(const std::string &name, const glm::mat4 &matrix);
+		virtual void SetUniformFloat(const std::string &name, float value) = 0;
+		virtual void SetUniformFloat2(const std::string &name, const glm::fvec2 &values) = 0;
+		virtual void SetUniformFloat3(const std::string &name, const glm::fvec3 &values) = 0;
+		virtual void SetUniformFloat4(const std::string &name, const glm::fvec4 &values) = 0;
 
-		static Shader *Create(const ShaderSource &source);
-		static ShaderSource LoadFromGLSLFile(std::string filepath);
-		static ShaderSource LoadFromGLSLFiles(std::string vertexPath, std::string fragmentPath);
+		virtual void SetUniformDouble(const std::string &name, double value) = 0;
+		virtual void SetUniformDouble2(const std::string &name, const glm::dvec2 &values) = 0;
+		virtual void SetUniformDouble3(const std::string &name, const glm::dvec3 &values) = 0;
+		virtual void SetUniformDouble4(const std::string &name, const glm::dvec4 &values) = 0;
 
-	private:
-		unsigned int CreateShader(const std::string &vertexShader, const std::string &fragmentShader);
-		unsigned int CompileShader(unsigned int type, const std::string &source);
-		int GetUniformLocation(const std::string &name) const;
-
-	private:
-		unsigned int m_ShaderID;
-		mutable std::unordered_map<std::string, int> m_UniformLocationCache;
+		virtual void SetUniformIntArray(const std::string &name, int *values, u32 count) = 0;
+		virtual void SetUniformFloatArray(const std::string &name, float *values, u32 count) = 0;
+		virtual void SetUniformDoubleArray(const std::string &name, double *values, u32 count) = 0;
 	};
 }

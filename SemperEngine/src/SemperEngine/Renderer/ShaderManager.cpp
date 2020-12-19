@@ -2,6 +2,7 @@
 #include "ShaderManager.h"
 
 #include "SemperEngine/Core/Assert.h"
+#include "SemperEngine/Renderer/Backend/OpenGL/GLShader.h"
 
 #include <string>
 #include <fstream>
@@ -32,7 +33,7 @@ namespace SemperEngine
 		return m_ShaderStorage[name];
 	}
 
-	ShaderSource ShaderManager::LoadFromFile(const std::string &filepath)
+	ShaderManager::ShaderSource ShaderManager::LoadFromFile(const std::string &filepath)
 	{
 		std::ifstream stream(filepath);
 
@@ -62,7 +63,7 @@ namespace SemperEngine
 		return { ss[(int) ShaderType::VERTEX].str(), ss[(int) ShaderType::FRAGMENT].str() };
 	}
 
-	ShaderSource ShaderManager::LoadFromFiles(const std::string &vertexPath, const std::string &fragmentPath)
+	ShaderManager::ShaderSource ShaderManager::LoadFromFiles(const std::string &vertexPath, const std::string &fragmentPath)
 	{
 		std::ifstream vertexStream(vertexPath);
 		std::ifstream fragmentStream(fragmentPath);

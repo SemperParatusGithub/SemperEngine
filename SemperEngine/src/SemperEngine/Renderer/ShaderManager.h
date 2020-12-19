@@ -1,20 +1,22 @@
 #pragma once
 #include "SemperEngine/Core/Types.h"
-#include "Shader.h"
 
 #include <unordered_map>
 
 
 namespace SemperEngine
 {
-	struct ShaderSource
-	{
-		std::string vertexSource;
-		std::string fragmentSource;
-	};
+	class Shader;
 
 	class ShaderManager
 	{
+	public:
+		struct ShaderSource
+		{
+			std::string vertexSource;
+			std::string fragmentSource;
+		};
+
 	public:
 		ShaderManager() = default;
 		~ShaderManager() = default;
