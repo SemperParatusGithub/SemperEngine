@@ -15,10 +15,13 @@ public:
 private:
     float m_Color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 
+    SemperEngine::OrthographicCamera m_Camera;
+
     SemperEngine::VertexArray *m_VertexArray;
     SemperEngine::VertexBuffer *m_VertexBuffer;
     SemperEngine::IndexBuffer *m_IndexBuffer;
-    SemperEngine::Texture2D *m_BackgroundTexture;
+    SemperEngine::Texture2D *m_Texture;
 
     SemperEngine::Shader *m_Shader;
+    SemperEngine::Shader *m_FlatColorShader;
 };
