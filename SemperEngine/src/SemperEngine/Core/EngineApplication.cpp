@@ -69,6 +69,13 @@ namespace SemperEngine
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(SE_BIND_EVENT_FN(EngineApplication::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(SE_BIND_EVENT_FN(EngineApplication::OnWindowResize));
+
+		for (const auto &layer : m_LayerStack)
+		{
+			if (e.Handled)
+				break;
+			layer->OnEvent(e);
+		}
 	}
 
 	void EngineApplication::PushLayer(Layer *layer)
