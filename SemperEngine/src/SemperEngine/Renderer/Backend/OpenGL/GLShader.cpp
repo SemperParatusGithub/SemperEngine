@@ -102,30 +102,30 @@ namespace SemperEngine
 		glUniform4d(glGetUniformLocation(m_RendererID, name.c_str()), values.x, values.y, values.z, values.w);
 	}
 
-	void GLShader::SetUniformIntArray(const std::string &name, int *values, u32 count)
+	void GLShader::SetUniformIntArray(const std::string &name, int *values, U32 count)
 	{
 		glUniform1iv(glGetUniformLocation(m_RendererID, name.c_str()), count, values);
 	}
-	void GLShader::SetUniformFloatArray(const std::string &name, float *values, u32 count)
+	void GLShader::SetUniformFloatArray(const std::string &name, float *values, U32 count)
 	{
 		glUniform1fv(glGetUniformLocation(m_RendererID, name.c_str()), count, values);
 	}
-	void GLShader::SetUniformDoubleArray(const std::string &name, double *values, u32 count)
+	void GLShader::SetUniformDoubleArray(const std::string &name, double *values, U32 count)
 	{
 		glUniform1dv(glGetUniformLocation(m_RendererID, name.c_str()), count, values);
 	}
 
-	u32 GLShader::CreateShader(const std::string &vertexShader, const std::string &fragmentShader)
+	U32 GLShader::CreateShader(const std::string &vertexShader, const std::string &fragmentShader)
 	{
-		u32 shaderProgram = glCreateProgram();
+		U32 shaderProgram = glCreateProgram();
 		std::string errorLog;
 
-		u32 vertexProgram = TryCompileShader(GL_VERTEX_SHADER, vertexShader, errorLog);
+		U32 vertexProgram = TryCompileShader(GL_VERTEX_SHADER, vertexShader, errorLog);
 		SE_ASSERT_MSG(vertexProgram, errorLog.c_str());
 
 		errorLog.clear();
 
-		u32 fragmentProgram = TryCompileShader(GL_FRAGMENT_SHADER, fragmentShader, errorLog);
+		U32 fragmentProgram = TryCompileShader(GL_FRAGMENT_SHADER, fragmentShader, errorLog);
 		SE_ASSERT_MSG(fragmentProgram, errorLog.c_str());
 
 		glAttachShader(shaderProgram, vertexProgram);
@@ -139,9 +139,9 @@ namespace SemperEngine
 
 		return shaderProgram;
 	}
-	u32 GLShader::TryCompileShader(u32 shaderType, const std::string &shaderSource, std::string &errorLog)
+	U32 GLShader::TryCompileShader(U32 shaderType, const std::string &shaderSource, std::string &errorLog)
 	{
-		u32 shaderID = glCreateShader(shaderType);
+		U32 shaderID = glCreateShader(shaderType);
 		const char *src = shaderSource.c_str();
 
 		glShaderSource(shaderID, 1, &src, nullptr);

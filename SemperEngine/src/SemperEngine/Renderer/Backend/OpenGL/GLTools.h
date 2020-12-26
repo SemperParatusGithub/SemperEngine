@@ -4,7 +4,7 @@
 
 namespace SemperEngine
 {
-	using RendererID = u32;
+	using RendererID = U32;
 
 	// Forward Declarations
 	class VertexBuffer;
@@ -21,14 +21,14 @@ namespace SemperEngine
 	class GLTools
 	{
 	public:
-		static u32 IndexFormatSize(IndexFormat format);
-		static u32 IndexFormatToGLType(IndexFormat format);
+		static U32 IndexFormatSize(IndexFormat format);
+		static U32 IndexFormatToGLType(IndexFormat format);
 
-		static u32 BufferUsageGLUsage(BufferUsage usage);
+		static U32 BufferUsageGLUsage(BufferUsage usage);
 
-		static u32 TextureWrapToGL(TextureWrap wrap);
-		static u32 TextureFormatToGL(TextureFormat format);
-		static u32 TextureFormatToInternalFormat(u32 format);
-		static TextureFormat BitsToTextureFormat(u32 bits);
+		static U32 TextureWrapToGL(TextureWrap wrap);
+		static U32 TextureFormatToGL(TextureFormat format);
+		static U32 TextureFormatToInternalFormat(U32 format);
+		static TextureFormat BitsToTextureFormat(U32 bits);
 	};
 }

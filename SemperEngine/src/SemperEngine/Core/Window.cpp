@@ -9,7 +9,7 @@
 namespace SemperEngine
 {
 
-    Window *Window::Create(u32 width, u32 height, const std::string &title)
+    Window *Window::Create(U32 width, U32 height, const std::string &title)
     {
         #if defined(SE_PLATFORM_WINDOWS)
             return new WindowGLFW(width, height, title);

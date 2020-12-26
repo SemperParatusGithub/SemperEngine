@@ -38,8 +38,8 @@ namespace SemperEngine
 		virtual void SetUniformDouble3(const std::string &name, const glm::dvec3 &values) = 0;
 		virtual void SetUniformDouble4(const std::string &name, const glm::dvec4 &values) = 0;
 
-		virtual void SetUniformIntArray(const std::string &name, int *values, u32 count) = 0;
-		virtual void SetUniformFloatArray(const std::string &name, float *values, u32 count) = 0;
-		virtual void SetUniformDoubleArray(const std::string &name, double *values, u32 count) = 0;
+		virtual void SetUniformIntArray(const std::string &name, int *values, U32 count) = 0;
+		virtual void SetUniformFloatArray(const std::string &name, float *values, U32 count) = 0;
+		virtual void SetUniformDoubleArray(const std::string &name, double *values, U32 count) = 0;
 	};
 }

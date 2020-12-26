@@ -9,7 +9,7 @@ namespace SemperEngine
 	public:
 		GLTexture2D(TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
 		GLTexture2D(const std::string &filepath, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
-		GLTexture2D(u32 width, u32 height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
+		GLTexture2D(U32 width, U32 height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
 
 		~GLTexture2D();
 
@@ -18,8 +18,8 @@ namespace SemperEngine
 		virtual uint32_t GetWidth() const noexcept override;
 		virtual uint32_t GetHeight() const noexcept override;
 
-		virtual void Bind(u32 slot = 0) const noexcept override;
-		virtual void UnBind(u32 slot = 0) const noexcept override;
+		virtual void Bind(U32 slot = 0) const noexcept override;
+		virtual void UnBind(U32 slot = 0) const noexcept override;
 
 	private:
 		RendererID LoadFromFile();

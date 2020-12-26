@@ -47,7 +47,7 @@ namespace SemperEngine
 			return nullptr;
 		}
 	}
-	Texture2D *Texture2D::Create(u32 width, u32 height, TextureData data, TextureLoadOptions loadOptions)
+	Texture2D *Texture2D::Create(U32 width, U32 height, TextureData data, TextureLoadOptions loadOptions)
 	{
 		switch (Backend::GetRenderAPI())
 		{

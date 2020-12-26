@@ -39,13 +39,13 @@ namespace SemperEngine
 		virtual void SetUniformDouble3(const std::string &name, const glm::dvec3 &values) override;
 		virtual void SetUniformDouble4(const std::string &name, const glm::dvec4 &values) override;
 
-		virtual void SetUniformIntArray(const std::string &name, int *values, u32 count) override;
-		virtual void SetUniformFloatArray(const std::string &name, float *values, u32 count) override;
-		virtual void SetUniformDoubleArray(const std::string &name, double *values, u32 count) override;
+		virtual void SetUniformIntArray(const std::string &name, int *values, U32 count) override;
+		virtual void SetUniformFloatArray(const std::string &name, float *values, U32 count) override;
+		virtual void SetUniformDoubleArray(const std::string &name, double *values, U32 count) override;
 
 	private:
-		u32 CreateShader(const std::string &vertexShader, const std::string &fragmentShader);
-		u32 TryCompileShader(u32 shaderType, const std::string &shaderSource, std::string &errorLog);
+		U32 CreateShader(const std::string &vertexShader, const std::string &fragmentShader);
+		U32 TryCompileShader(U32 shaderType, const std::string &shaderSource, std::string &errorLog);
 
 	private:
 		RendererID m_RendererID;

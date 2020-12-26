@@ -4,7 +4,7 @@
 
 namespace SemperEngine
 {
-	using KeyCode = u16;
+	using KeyCode = U16;
 
 	namespace Key
 	{

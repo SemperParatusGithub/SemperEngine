@@ -8,7 +8,7 @@
 
 namespace SemperEngine
 {
-	u32 VertexAttribute::GetSize() const noexcept
+	U32 VertexAttribute::GetSize() const noexcept
 	{
 		switch (format)
 		{
@@ -24,7 +24,7 @@ namespace SemperEngine
 		}
 	}
 
-	u32 VertexAttribute::GetComponentCount() const noexcept
+	U32 VertexAttribute::GetComponentCount() const noexcept
 	{
 		switch (format)
 		{
@@ -40,7 +40,7 @@ namespace SemperEngine
 		}
 	}
 
-	u32 VertexAttribute::GetComponentOpenGLDataType() const noexcept
+	U32 VertexAttribute::GetComponentOpenGLDataType() const noexcept
 	{
 		switch (format)
 		{

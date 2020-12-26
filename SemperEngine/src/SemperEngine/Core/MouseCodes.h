@@ -4,7 +4,7 @@
 
 namespace SemperEngine
 {
-	using MouseCode = u16;
+	using MouseCode = U16;
 
 	namespace Mouse
 	{

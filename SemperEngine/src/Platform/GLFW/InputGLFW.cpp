@@ -11,7 +11,7 @@ namespace SemperEngine
 	{
 		GLFWwindow *window = static_cast<GLFWwindow *>(EngineApplication::Instance().GetWindow().GetNativeWindow());
 
-		auto state = glfwGetKey(window, static_cast<u32>(key));
+		auto state = glfwGetKey(window, static_cast<U32>(key));
 		return state == GLFW_PRESS;
 	}
 
@@ -19,7 +19,7 @@ namespace SemperEngine
 	{
 		GLFWwindow *window = static_cast<GLFWwindow *>(EngineApplication::Instance().GetWindow().GetNativeWindow());
 
-		int state = glfwGetMouseButton(window, static_cast<u32>(button));
+		int state = glfwGetMouseButton(window, static_cast<U32>(button));
 		return state == GLFW_PRESS;
 	}
 

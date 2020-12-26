@@ -29,7 +29,7 @@ namespace SemperEngine
 		SE_ASSERT_MSG(false, "Unknown Render API");
 		return nullptr;
 	}
-	VertexBuffer *VertexBuffer::Create(const void *vertices, u32 size, BufferUsage usage)
+	VertexBuffer *VertexBuffer::Create(const void *vertices, U32 size, BufferUsage usage)
 	{
 		switch (Backend::GetRenderAPI())
 		{

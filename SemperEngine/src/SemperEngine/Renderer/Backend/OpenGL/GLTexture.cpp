@@ -24,7 +24,7 @@ namespace SemperEngine
 	{
 		m_RendererID = LoadFromFile();
 	}
-	GLTexture2D::GLTexture2D(u32 width, u32 height, TextureData data, TextureLoadOptions loadOptions)
+	GLTexture2D::GLTexture2D(U32 width, U32 height, TextureData data, TextureLoadOptions loadOptions)
 	{
 		m_Width = 0;
 		m_Height = 0;
@@ -47,20 +47,20 @@ namespace SemperEngine
 		return (void *) m_RendererID;
 	}
 
-	u32 GLTexture2D::GetWidth() const noexcept
+	U32 GLTexture2D::GetWidth() const noexcept
 	{
 		return m_Width;
 	}
-	u32 GLTexture2D::GetHeight() const noexcept
+	U32 GLTexture2D::GetHeight() const noexcept
 	{
 		return m_Height;
 	}
 
-	void GLTexture2D::Bind(u32 slot) const noexcept
+	void GLTexture2D::Bind(U32 slot) const noexcept
 	{
 		glBindTextureUnit(slot, m_RendererID);
 	}
-	void GLTexture2D::UnBind(u32 slot) const noexcept
+	void GLTexture2D::UnBind(U32 slot) const noexcept
 	{
 		glBindTextureUnit(slot, 0);
 	}
@@ -79,17 +79,17 @@ namespace SemperEngine
 
 		SE_ASSERT_MSG(localBuffer, "Failed to load Texture %s", m_Filepath.c_str());
 
-		m_Width = static_cast<u32>(texWidth);
-		m_Height = static_cast<u32>(texHeight);
+		m_Width = static_cast<U32>(texWidth);
+		m_Height = static_cast<U32>(texHeight);
 
 		//TODO support different texChannels
 		if (texChannels != 4)
 			texChannels = 4;
 
 		int bits = texChannels * sizeofChannel; // texChannels;	  //32 bits for 4 bytes r g b a
-		m_TextureData.textureFormat = GLTools::BitsToTextureFormat(static_cast<u32>(bits));
+		m_TextureData.textureFormat = GLTools::BitsToTextureFormat(static_cast<U32>(bits));
 
-		u32 localHandle;
+		U32 localHandle;
 		glCreateTextures(GL_TEXTURE_2D, 1, &localHandle);
 		glTextureStorage2D(localHandle, 1, GL_RGBA8, m_Width, m_Height);
 

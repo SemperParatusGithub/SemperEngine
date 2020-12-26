@@ -102,11 +102,11 @@ namespace SemperEngine
 
 		virtual void *GetHandle() const noexcept = 0;
 
-		virtual u32 GetWidth() const noexcept = 0;
-		virtual u32 GetHeight() const noexcept = 0;
+		virtual U32 GetWidth() const noexcept = 0;
+		virtual U32 GetHeight() const noexcept = 0;
 
-		virtual void Bind(u32 slot = 0) const noexcept = 0;
-		virtual void UnBind(u32 slot = 0) const noexcept = 0;
+		virtual void Bind(U32 slot = 0) const noexcept = 0;
+		virtual void UnBind(U32 slot = 0) const noexcept = 0;
 	};
 
 	class Texture2D : public Texture
@@ -114,6 +114,6 @@ namespace SemperEngine
 	public:
 		static Texture2D *Create(TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
 		static Texture2D *Create(const std::string &filepath, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
-		static Texture2D *Create(u32 width, u32 height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
+		static Texture2D *Create(U32 width, U32 height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
 	};
 }

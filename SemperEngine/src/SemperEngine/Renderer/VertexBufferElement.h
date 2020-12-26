@@ -13,10 +13,10 @@ namespace SemperEngine
 		VertexFormat format;
 		bool normalized = false;
 
-		mutable u32 offset;
+		mutable U32 offset;
 
-		u32 GetSize() const noexcept;
-		u32 GetComponentCount() const noexcept;
-		u32 GetComponentOpenGLDataType() const noexcept;
+		U32 GetSize() const noexcept;
+		U32 GetComponentCount() const noexcept;
+		U32 GetComponentOpenGLDataType() const noexcept;
 	};
 }
