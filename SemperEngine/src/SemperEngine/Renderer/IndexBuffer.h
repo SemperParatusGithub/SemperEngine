@@ -17,7 +17,7 @@ namespace SemperEngine
 		virtual ~IndexBuffer() = default;
 
 		static IndexBuffer *Create(BufferUsage usage);
-		static IndexBuffer *Create(void *indices, IndexFormat format, u32 count, BufferUsage usage);
+		static IndexBuffer *Create(void *indices, IndexFormat format, u32 size, BufferUsage usage);
 
 		virtual IndexFormat GetFormat() const noexcept = 0;
 		virtual u32 GetCount() const noexcept = 0;
