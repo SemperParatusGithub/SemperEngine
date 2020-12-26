@@ -1,6 +1,9 @@
 #pragma once
 
+#include <iostream>
+
 #include "Platforms.h"
+
 
 #ifdef SE_DEBUG
 
@@ -14,6 +17,10 @@
 	#else
 		#error "Debugbreack not supported"
 	#endif
+
+#else
+
+	#define SE_DEBUGBREAK throw std::runtime_error("Assertion failed");
 
 #endif
 
