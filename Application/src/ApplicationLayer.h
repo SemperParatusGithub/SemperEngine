@@ -1,4 +1,4 @@
-#include "SemperEngine.h"
+#include <SemperEngine.h>
 
 class ApplicationLayer : public SemperEngine::Layer
 {
@@ -15,7 +15,7 @@ public:
 private:
     float m_Color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    SemperEngine::OrthographicCamera m_Camera;
+    SemperEngine::OrthographicCameraController m_CameraController;
 
     SemperEngine::VertexArray *m_VertexArray;
     SemperEngine::VertexBuffer *m_VertexBuffer;
