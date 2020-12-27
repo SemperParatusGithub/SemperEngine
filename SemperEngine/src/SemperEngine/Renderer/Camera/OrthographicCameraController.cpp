@@ -54,7 +54,8 @@ namespace SemperEngine
 
 	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent &e)
 	{
-		m_AspectRatio = e.GetWidth()/ e.GetHeight();
+		// adding +1 prevents dividing by 0 - aspect ratio stays the same
+		m_AspectRatio = (e.GetWidth() + 1.0f) / (e.GetHeight() + 1.0f);
 		m_Camera.SetProjection(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom);
 
 		return false;
