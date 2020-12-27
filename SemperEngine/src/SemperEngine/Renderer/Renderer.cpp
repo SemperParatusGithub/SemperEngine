@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "Renderer.h"
 
+#include "Batcher2D.h"
+
 #include <glad/glad.h>
+
 
 namespace SemperEngine
 {
@@ -11,10 +14,13 @@ namespace SemperEngine
 	{
 		s_CurrentBackend = backend;
 		s_CurrentBackend->Init();
+
+		Batcher2D::Init();
 	}
 
 	void Renderer::Shutdown()
 	{
+		Batcher2D::Shutdown();
 	}
 
 	void Renderer::SetClearColor(const glm::vec4 &clearColor)

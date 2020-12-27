@@ -112,6 +112,8 @@ namespace SemperEngine
 
 	bool EngineApplication::OnWindowResize(WindowResizeEvent &e)
 	{
+		Renderer::SetViewport(0.0f, 0.0f, e.GetWidth(), e.GetHeight());
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;
@@ -120,5 +122,4 @@ namespace SemperEngine
 		m_Minimized = false;
 		return false;
 	}
-
 }
