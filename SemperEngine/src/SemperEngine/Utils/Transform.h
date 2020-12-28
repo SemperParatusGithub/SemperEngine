@@ -4,6 +4,10 @@
 
 namespace SemperEngine
 {
+	// Rotation is always in radians
+	// glm::radians(valueDegrees) converts degrees in radians
+	// glm::degrees(valueRadians) converts radians in degrees
+
 	class Transform
 	{
 	public:

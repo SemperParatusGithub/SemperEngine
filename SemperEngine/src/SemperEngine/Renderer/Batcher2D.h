@@ -10,6 +10,15 @@
 
 namespace SemperEngine
 {
+	static constexpr U32 MaxCombinedTextureUnits = 16;
+
+	static constexpr U32 MaxTriangleCount = 1000;
+	static constexpr U32 MaxTriangleVertexCount = MaxTriangleCount * 3;
+
+	static constexpr U32 MaxQuadCount = MaxTriangleCount * 2;
+	static constexpr U32 MaxVertexCount = MaxQuadCount * 4;
+	static constexpr U32 MaxIndexCount = MaxQuadCount * 6;
+
 	class Batcher2D
 	{
 	public:

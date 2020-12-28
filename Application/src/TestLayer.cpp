@@ -34,20 +34,20 @@ void TestLayer::OnUpdate(float deltaTime)
 	SemperEngine::Transform transform;
 	transform.SetRotation(SemperEngine::Vec3(0.0f, 0.0f, (float) glfwGetTime()));
 
-	for(int y = 0; y < 10; y++)
-		for (int x = 0; x < 10; x++)
+	for(float y = 0; y < 10.0f; y += 1.0f)
+		for (float x = 0; x < 10.0f; x += 1.0f)
 		{
-			transform.SetTranslation(SemperEngine::Vec3((float) y, (float) x, 0.0f));
-			SemperEngine::Batcher2D::DrawQuad(transform, SemperEngine::Vec4((float) x / 10.0f, (float) y / 10.0f, 0.0f, 1.0f));
+			transform.SetTranslation({ x, y, 0.0f });
+			SemperEngine::Batcher2D::DrawQuad(transform, { x / 10.0f, y / 10.0f, 0.0f, 1.0f });
 		}
 
 	SemperEngine::Transform textureTransform;
-	textureTransform.SetScale(SemperEngine::Vec3(2.0f, 2.0f, 1.0f));
+	textureTransform.SetScale({ 2.0f, 2.0f, 1.0f });
 
-	textureTransform.SetTranslation(SemperEngine::Vec3(-2.0f, 0.0f, 0.0f));
+	textureTransform.SetTranslation({ -2.0f, 3.0f, 0.0f });
 	SemperEngine::Batcher2D::DrawQuad(textureTransform, m_StoneTexture);
 
-	textureTransform.SetTranslation(SemperEngine::Vec3(-2.0f, 3.0f, 0.0f));
+	textureTransform.SetTranslation({ -2.0f, 6.0f, 0.0f });
 	SemperEngine::Batcher2D::DrawQuad(textureTransform, m_BrickTexture);
 
 	SemperEngine::Batcher2D::EndScene();
