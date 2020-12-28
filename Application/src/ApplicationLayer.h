@@ -1,4 +1,6 @@
-#include <SemperEngine.h>
+#pragma once
+#include "SemperEngine.h"
+
 
 class ApplicationLayer : public SemperEngine::Layer
 {

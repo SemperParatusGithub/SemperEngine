@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <string>
 
+
 namespace SemperEngine
 {
-
     class Logger
     {
 	public:
@@ -64,5 +64,4 @@ namespace SemperEngine
     private:
         std::string m_LoggerName;
     };
-
 }

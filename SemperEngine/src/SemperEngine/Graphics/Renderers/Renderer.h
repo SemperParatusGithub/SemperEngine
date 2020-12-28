@@ -1,0 +1,24 @@
+#pragma once
+
+#include "SemperEngine/Graphics/Backend/API/Backend.h"
+#include "SemperEngine/Graphics/Backend/API/VertexArray.h"
+#include "SemperEngine/Graphics/Backend/API/Shader.h"
+
+#include <glm/glm.hpp>
+
+
+namespace SemperEngine
+{
+	class Renderer
+	{
+	public:
+		static void Init(Backend *backend);
+		static void Shutdown();
+
+		static void SetClearColor(const glm::vec4 &clearColor);
+		static void SetViewport(float x, float y, float width, float height);
+		static void Clear();
+
+		static void DrawIndexed(VertexArray *vertexArray, Shader *shader);
+	};
+}

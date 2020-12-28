@@ -1,12 +1,12 @@
-#include "pch.h"
+#include "Precompiled.h"
 #include <GLFW/glfw3.h>
 
 #include "SemperEngine/Core/Input.h"
 #include "SemperEngine/Core/EngineApplication.h"
 
+
 namespace SemperEngine
 {
-
 	bool Input::IsKeyPressed(KeyCode key)
 	{
 		GLFWwindow *window = static_cast<GLFWwindow *>(EngineApplication::Instance().GetWindow().GetNativeWindow());
@@ -23,7 +23,7 @@ namespace SemperEngine
 		return state == GLFW_PRESS;
 	}
 
-	glm::vec2 Input::GetMousePosition()
+	Vec2 Input::GetMousePosition()
 	{
 		GLFWwindow *window = static_cast<GLFWwindow *>(EngineApplication::Instance().GetWindow().GetNativeWindow());
 
@@ -42,5 +42,4 @@ namespace SemperEngine
 	{
 		return GetMousePosition().y;
 	}
-
 }

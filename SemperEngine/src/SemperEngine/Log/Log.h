@@ -5,9 +5,9 @@
 
 #include "SemperEngine/Core/Defines.h"
 
+
 namespace SemperEngine
 {
-
 	class Log
 	{
 	public:
@@ -20,7 +20,6 @@ namespace SemperEngine
 		static std::shared_ptr<Logger> s_CoreLogger;
 		static std::shared_ptr<Logger> s_ClientLogger;
 	};
-
 }
 
 #if defined(SE_DEBUG) || defined(SE_RELEASE)

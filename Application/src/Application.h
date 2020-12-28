@@ -1,3 +1,4 @@
+#pragma once
 #include "ApplicationLayer.h"
 #include "TestLayer.h"
 

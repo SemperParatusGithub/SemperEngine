@@ -1,39 +1,42 @@
 #pragma once
+#include "Precompiled.h"
 
-// Precompiled Headers
-#include "pch.h"
+/* ----------------------------- Third Party ----------------------------- */
+	#include "../imgui/imgui.h"
 
-// ImGui
-#include "../imgui/imgui.h"
+	#include <glm/glm.hpp>
+	#include <glm/gtc/matrix_transform.hpp>
+/* ----------------------------------------------------------------------- */
 
-// glm
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+/* --------------------------------- Core -------------------------------- */
+	#include "SemperEngine/Core/Assert.h"
+	#include "SemperEngine/Core/EngineApplication.h"
+	#include "SemperEngine/Core/Types.h"
+	#include "SemperEngine/Core/Input.h"
+/* ----------------------------------------------------------------------- */
 
-// Core 
-#include "SemperEngine/Core/EngineApplication.h"
-#include "SemperEngine/Core/Types.h"
-#include "SemperEngine/Core/Input.h"
-#include "SemperEngine/Core/Assert.h"
+/* --------------------------------- Log --------------------------------- */
+	#include "SemperEngine/Log/Log.h"
+/* ----------------------------------------------------------------------- */
 
-// Log
-#include "SemperEngine/Log/Log.h"
+/* ------------------------------ Graphics ------------------------------- */
+	#include "SemperEngine/Graphics/Sprite.h"
+	#include "SemperEngine/Graphics/Sprite.h"
+	#include "SemperEngine/Graphics/ShaderManager.h"
 
-// Renderer 
-#include "SemperEngine/Renderer/Renderer.h"
-#include "SemperEngine/Renderer/Batcher2D.h"
+	#include "SemperEngine/Graphics/Renderers/Renderer.h"
+	#include "SemperEngine/Graphics/Renderers/Batcher2D.h"
 
-#include "SemperEngine/Renderer/VertexArray.h"
-#include "SemperEngine/Renderer/VertexBuffer.h"
-#include "SemperEngine/Renderer/IndexBuffer.h"
-#include "SemperEngine/Renderer/Texture.h"
-#include "SemperEngine/Renderer/Shader.h"
+/* ------------------------------ Backend -------------------------------- */
+	#include "SemperEngine/Graphics/Backend/API/VertexArray.h"
+	#include "SemperEngine/Graphics/Backend/API/VertexBuffer.h"
+	#include "SemperEngine/Graphics/Backend/API/IndexBuffer.h"
+	#include "SemperEngine/Graphics/Backend/API/Texture.h"
+	#include "SemperEngine/Graphics/Backend/API/Shader.h"
 
-// Camera
-#include "SemperEngine/Renderer/Camera/Camera.h"
-// #include "SemperEngine/Renderer/Camera/EditorCamera.h"
-#include "SemperEngine/Renderer/Camera/OrthographicCamera.h"
-#include "SemperEngine/Renderer/Camera/OrthographicCameraController.h"
-
-// Utils
-#include "SemperEngine/Utils/Transform.h"
+/* ------------------------------ Camera --------------------------------- */
+	#include "SemperEngine/Graphics/Camera/Camera.h"
+	#include "SemperEngine/Graphics/Camera/EditorCamera.h"
+	#include "SemperEngine/Graphics/Camera/OrthographicCamera.h"
+	#include "SemperEngine/Graphics/Camera/OrthographicCameraController.h"
+/* ----------------------------------------------------------------------- */

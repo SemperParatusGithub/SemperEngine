@@ -1,11 +1,10 @@
 #pragma once
 #include "SemperEngine/Events/Event.h"
 #include "Defines.h"
-#include <iostream>
+
 
 namespace SemperEngine
 {
-
     class Layer
     {
     public:
@@ -36,5 +35,4 @@ namespace SemperEngine
     protected:
         std::string m_Name;
     };
-
 }

@@ -4,9 +4,9 @@
 #include "Defines.h"
 #include "SemperEngine/Events/Event.h"
 
+
 namespace SemperEngine
 {
-
     class Window
     {
     public:
@@ -25,5 +25,4 @@ namespace SemperEngine
 
         static Window *Create(U32 width = 1280, U32 height = 720, const std::string &title = "Semper Engine");
     };
-
 }

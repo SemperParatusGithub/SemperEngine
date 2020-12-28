@@ -2,9 +2,9 @@
 
 #include "Layer.h"
 
+
 namespace SemperEngine
 {
-
     using LayerStackIterator = std::vector<Layer *>::iterator;
     using LayerStackConstIterator = std::vector<Layer *>::const_iterator;
     using LayerStackReverseIterator = std::vector<Layer *>::reverse_iterator;
@@ -35,5 +35,4 @@ namespace SemperEngine
         std::vector<Layer *> m_LayerStack;
         uint32_t m_LayerInsertIndex;
     };
-
 }

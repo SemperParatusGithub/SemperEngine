@@ -1,5 +1,6 @@
-#include "pch.h"
+#include "Precompiled.h"
 #include "WindowGLFW.h"
+
 #include "SemperEngine/Log/Log.h"
 #include "SemperEngine/Core/Assert.h"
 
@@ -9,6 +10,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 
 namespace SemperEngine
 {
@@ -173,5 +175,4 @@ namespace SemperEngine
 				data.callback(event);
 			});
 	}
-
 }

@@ -1,12 +1,12 @@
-#include "pch.h"
+#include "Precompiled.h"
 #include "Logger.h"
 
 #include <time.h>
 #include <sstream>
 
+
 namespace SemperEngine
 {
-
     Logger::Logger(const std::string &&name) :
         m_LoggerName(name)
     {

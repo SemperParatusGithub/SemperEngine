@@ -1,13 +1,13 @@
 #pragma once
 
 #include "SemperEngine/Core/Window.h"
-#include "SemperEngine/Renderer/RenderContext.h"
+#include "SemperEngine/Graphics/Backend/API/RenderContext.h"
+
 
 struct GLFWwindow;
 
 namespace SemperEngine
 {
-
     class WindowGLFW : public Window
     {
     public:
@@ -39,5 +39,4 @@ namespace SemperEngine
         };
         WindowData m_WindowData;
     };
-
 }

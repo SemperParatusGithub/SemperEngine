@@ -8,8 +8,8 @@ project "SemperEngine"
 	targetdir   ("../bin/"      .. outputdir .. "/%{prj.name}")
 	objdir      ("../bin-int/"  .. outputdir .. "/%{prj.name}")
 
-	pchheader "pch.h"
-	pchsource "src/pch.cpp"
+	pchheader "Precompiled.h"
+	pchsource "src/Precompiled.cpp"
 
 	files
 	{
@@ -29,6 +29,8 @@ project "SemperEngine"
 	includedirs
 	{
 		"src",
+		"src/SemperEngine/Graphics/ImGui",
+		"src/SemperEngine/Graphics/Backend",
         "../SemperEngine/vendor/GLFW/include",
         "../SemperEngine/vendor/Glad/include",
         "../SemperEngine/vendor/imgui",

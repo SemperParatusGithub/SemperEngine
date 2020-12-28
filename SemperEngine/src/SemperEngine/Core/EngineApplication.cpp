@@ -1,15 +1,14 @@
-#include "pch.h"
+#include "Precompiled.h"
 #include "EngineApplication.h"
 #include "SemperEngine/Log/Log.h"
 
 #include "SemperEngine/Events/EventDispatcher.h"
-#include "SemperEngine/Renderer/Renderer.h"
+#include "SemperEngine/Graphics/Renderers/Renderer.h"
 
 // TEMP
-#undef GLFW_INCLUDE_NONE
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#define GLFW_INCLUDE_NONE
+
 
 namespace SemperEngine
 {
