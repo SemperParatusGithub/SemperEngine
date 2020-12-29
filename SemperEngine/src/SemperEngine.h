@@ -21,7 +21,8 @@
 
 /* ------------------------------ Graphics ------------------------------- */
 	#include "SemperEngine/Graphics/Sprite.h"
-	#include "SemperEngine/Graphics/Sprite.h"
+	#include "SemperEngine/Graphics/Transform.h"
+	#include "SemperEngine/Graphics/Renderable2D.h"
 	#include "SemperEngine/Graphics/ShaderManager.h"
 
 	#include "SemperEngine/Graphics/Renderers/Renderer.h"

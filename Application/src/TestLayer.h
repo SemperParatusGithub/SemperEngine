@@ -20,4 +20,15 @@ private:
     SemperEngine::Texture2D *m_GridTexture;
     SemperEngine::Texture2D *m_StoneTexture;
     SemperEngine::Texture2D *m_BrickTexture;
+
+    SemperEngine::Texture2D *m_SpriteSheet;
+
+    struct SpriteObject
+    {
+        std::string name;
+        SemperEngine::Sprite sprite;
+        float posX = 0.0f, posY = 0.0f;
+        int indexX = 0, indexY = 0;
+    };
+    std::vector<SpriteObject> m_Sprites;
 };

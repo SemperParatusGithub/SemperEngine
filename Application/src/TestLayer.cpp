@@ -7,7 +7,8 @@ TestLayer::TestLayer() : Layer("Test Layer"),
 	m_CameraController(1280.0f / 720.0f, 0.0f, 0.0f),
 	m_GridTexture(nullptr),
 	m_StoneTexture(nullptr),
-	m_BrickTexture(nullptr)
+	m_BrickTexture(nullptr),
+	m_SpriteSheet(nullptr)
 {
 }
 
@@ -16,6 +17,11 @@ void TestLayer::OnAttach()
 	m_GridTexture = SemperEngine::Texture2D::Create("Grid.png");
 	m_StoneTexture = SemperEngine::Texture2D::Create("StoneTex.jpg");
 	m_BrickTexture = SemperEngine::Texture2D::Create("BrickTex.png");
+
+	SemperEngine::TextureData data;
+	data.magFilter = SemperEngine::TextureFilter::Nearest;
+	data.minFilter = SemperEngine::TextureFilter::Nearest;
+	m_SpriteSheet = SemperEngine::Texture2D::Create("roadTextures_tilesheet.png", data);
 
 	SemperEngine::Renderer::SetClearColor(SemperEngine::Vec4(0.7f, 0.7f, 0.7f, 0.7f));
 }
@@ -37,18 +43,18 @@ void TestLayer::OnUpdate(float deltaTime)
 	for(float y = 0; y < 10.0f; y += 1.0f)
 		for (float x = 0; x < 10.0f; x += 1.0f)
 		{
-			transform.SetTranslation({ x, y, 0.0f });
+			transform.SetTranslation({ x + 3.0f, y, 0.0f });
 			SemperEngine::Batcher2D::DrawQuad(transform, { x / 10.0f, y / 10.0f, 0.0f, 1.0f });
 		}
 
-	SemperEngine::Transform textureTransform;
-	textureTransform.SetScale({ 2.0f, 2.0f, 1.0f });
+	SemperEngine::Transform gridTransform({ -10.0f, 5.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 1.0f });
+	SemperEngine::Batcher2D::DrawQuad(gridTransform, m_GridTexture);
 
-	textureTransform.SetTranslation({ -2.0f, 3.0f, 0.0f });
-	SemperEngine::Batcher2D::DrawQuad(textureTransform, m_StoneTexture);
+	SemperEngine::Transform brickTransform({ 1.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f });
+	SemperEngine::Batcher2D::DrawQuad(brickTransform, m_BrickTexture);
 
-	textureTransform.SetTranslation({ -2.0f, 6.0f, 0.0f });
-	SemperEngine::Batcher2D::DrawQuad(textureTransform, m_BrickTexture);
+	for(auto &s : m_Sprites)
+		SemperEngine::Batcher2D::Draw(&s.sprite);
 
 	SemperEngine::Batcher2D::EndScene();
 }
@@ -57,6 +63,40 @@ void TestLayer::OnImGuiRender()
 {
 	ImGui::Begin("Test Layer");
 	ImGui::Text("Framerate: %.2f FPS", ImGui::GetIO().Framerate);
+
+	ImGui::Separator();
+	if (ImGui::Button("Create Sprite"))
+	{
+		static SemperEngine::U32 id = 0;
+		id++;
+
+		std::string name = std::string("Sprite" + std::to_string(id));
+		SemperEngine::Sprite sprite = { m_SpriteSheet, { 0.0f, 6.0f }, { 64.0f, 64.0f }, { 1.0f, 1.0f } };
+
+		m_Sprites.push_back({ name, sprite });
+	}
+	ImGui::Separator();
+
+	for (auto &s : m_Sprites)
+	{
+		if (ImGui::CollapsingHeader(s.name.c_str()))
+		{
+			std::string nameX = "Position (x): ##" + s.name;
+			std::string nameY = "Position (y): ##" + s.name;
+
+			ImGui::DragFloat(nameX.c_str(), &s.posX, 0.1f, -10.0f, 10.0f);
+			ImGui::DragFloat(nameY.c_str(), &s.posY, 0.1f, -10.0f, 10.0f);
+
+			std::string indexX = "Index (x): ##" + s.name;
+			std::string indexY = "Index (y): ##" + s.name;
+
+			ImGui::DragInt(indexX.c_str(), &s.indexX, 0.1f, 0, 20);
+			ImGui::DragInt(indexY.c_str(), &s.indexY, 0.1f, 0, 20);
+
+			s.sprite.SetPosition({ s.posX, s.posY });
+			s.sprite.SetSpriteSheet(m_SpriteSheet, { s.indexX, s.indexY }, { 64.0f, 64.0f }, { 1.0f, 1.0f });
+		}
+	}
 	ImGui::End();
 }
 

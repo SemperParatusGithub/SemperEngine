@@ -178,6 +178,48 @@ namespace SemperEngine
 		s_RenderData.indexCount += 6;
 	}
 
+	void Batcher2D::Draw(Renderable2D *renderable)
+	{
+		auto &transform = renderable->GetTransform();
+		auto &tintColor = renderable->GetColor();
+		auto *texture = renderable->GetTexture();
+
+		if (s_RenderData.indexCount >= MaxIndexCount)
+		{
+			Flush();
+			BeginScene();
+		}
+
+		float textureIndex = 0.0f;
+
+		if (texture != nullptr)
+		{
+			for (std::size_t i = 1; i < s_RenderData.textures.size(); i++)
+			{
+				if (s_RenderData.textures[i]->GetHandle() == texture->GetHandle()) {
+					textureIndex = static_cast<float>(i);
+					break;
+				}
+				else if (s_RenderData.textures[i]->GetHandle() == s_RenderData.whiteTexture->GetHandle()) {
+					textureIndex = static_cast<float>(i);
+					s_RenderData.textures[i] = texture;
+					break;
+				}
+			}
+		}
+
+		for (U32 i = 0; i < 4; i++)
+		{
+			s_RenderData.bufferPtr->position = transform.GetTransform() * s_RenderData.vertexPositions[i];
+			s_RenderData.bufferPtr->color = tintColor;
+			s_RenderData.bufferPtr->texCoords = renderable->GetTextureCoordinates()[i];
+			s_RenderData.bufferPtr->texIndex = textureIndex;
+			s_RenderData.bufferPtr++;
+		}
+
+		s_RenderData.indexCount += 6;
+	}
+
 	void Batcher2D::BeginScene()
 	{
 		s_RenderData.indexCount = 0;
