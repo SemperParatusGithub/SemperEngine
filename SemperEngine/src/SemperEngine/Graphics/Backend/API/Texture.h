@@ -83,14 +83,14 @@ namespace SemperEngine
 		TextureLoadOptions()
 		{
 			flipX = false;
-			flipY = false;
+			flipY = true;
 			generateMipMaps = false;
 		}
 
-		TextureLoadOptions(bool flipX, bool flipY, bool genMips = true)
-			: flipX(flipX)
-			, flipY(flipY)
-			, generateMipMaps(genMips)
+		TextureLoadOptions(bool flipX, bool flipY, bool genMips = true) :
+			flipX(flipX),
+			flipY(flipY),
+			generateMipMaps(genMips)
 		{
 		}
 	};
