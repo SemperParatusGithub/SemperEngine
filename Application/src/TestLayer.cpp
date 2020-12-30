@@ -65,39 +65,45 @@ void TestLayer::OnImGuiRender()
 	ImGui::Text("Framerate: %.2f FPS", ImGui::GetIO().Framerate);
 
 	ImGui::Separator();
+
+	static int index[2] = { 0, 0 };
+	static float pos[2] = { 0.0f, 0.0f };
+	ImGui::InputFloat2("Position##Initial", pos);
+	ImGui::InputInt2("Index##Initial", index);
+
 	if (ImGui::Button("Create Sprite"))
 	{
 		static SemperEngine::U32 id = 0;
 		id++;
 
 		std::string name = std::string("Sprite" + std::to_string(id));
-		SemperEngine::Sprite sprite = { m_SpriteSheet, { 0.0f, 6.0f }, { 64.0f, 64.0f }, { 1.0f, 1.0f } };
+		SemperEngine::Sprite sprite = { m_SpriteSheet, { index[0], index[1] }, { 64.0f, 64.0f }, { 1.0f, 1.0f } };
+		sprite.SetPosition({ pos[0], pos[1] });
 
-		m_Sprites.push_back({ name, sprite });
-	}
-	ImGui::Separator();
-
-	for (auto &s : m_Sprites)
-	{
-		if (ImGui::CollapsingHeader(s.name.c_str()))
-		{
-			std::string nameX = "Position (x): ##" + s.name;
-			std::string nameY = "Position (y): ##" + s.name;
-
-			ImGui::DragFloat(nameX.c_str(), &s.posX, 0.1f, -10.0f, 10.0f);
-			ImGui::DragFloat(nameY.c_str(), &s.posY, 0.1f, -10.0f, 10.0f);
-
-			std::string indexX = "Index (x): ##" + s.name;
-			std::string indexY = "Index (y): ##" + s.name;
-
-			ImGui::DragInt(indexX.c_str(), &s.indexX, 0.1f, 0, 20);
-			ImGui::DragInt(indexY.c_str(), &s.indexY, 0.1f, 0, 20);
-
-			s.sprite.SetPosition({ s.posX, s.posY });
-			s.sprite.SetSpriteSheet(m_SpriteSheet, { s.indexX, s.indexY }, { 64.0f, 64.0f }, { 1.0f, 1.0f });
-		}
+		m_Sprites.push_back({ name, sprite, pos[0], pos[1], index[0], index[1] });
+		
 	}
 	ImGui::End();
+
+	if (!m_Sprites.empty())
+	{
+		ImGui::Begin("Sprites");
+		for (auto &s : m_Sprites)
+		{
+			if (ImGui::CollapsingHeader(s.name.c_str()))
+			{
+				std::string nameX = "Position (x): ##" + s.name;
+				std::string nameY = "Position (y): ##" + s.name;
+
+				ImGui::DragFloat(nameX.c_str(), &s.posX, 0.1f, -10.0f, 10.0f);
+				ImGui::DragFloat(nameY.c_str(), &s.posY, 0.1f, -10.0f, 10.0f);
+
+				s.sprite.SetPosition({ s.posX, s.posY });
+				s.sprite.SetSpriteSheet(m_SpriteSheet, { s.indexX, s.indexY }, { 64.0f, 64.0f }, { 1.0f, 1.0f });
+			}
+		}
+		ImGui::End();
+	}
 }
 
 void TestLayer::OnEvent(SemperEngine::Event &e)

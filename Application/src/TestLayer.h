@@ -7,10 +7,11 @@ class TestLayer : public SemperEngine::Layer
 {
 public:
     TestLayer();
-    ~TestLayer() = default;
+    virtual ~TestLayer() override = default;
 
     virtual void OnAttach() override;
     virtual void OnDetach() override;
+
     virtual void OnUpdate(float deltaTime) override;
     virtual void OnImGuiRender() override;
     virtual void OnEvent(SemperEngine::Event & e) override;
