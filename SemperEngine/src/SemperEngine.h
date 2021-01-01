@@ -32,6 +32,7 @@
 	#include "SemperEngine/Graphics/Backend/API/VertexArray.h"
 	#include "SemperEngine/Graphics/Backend/API/VertexBuffer.h"
 	#include "SemperEngine/Graphics/Backend/API/IndexBuffer.h"
+	#include "SemperEngine/Graphics/Backend/API/Framebuffer.h"
 	#include "SemperEngine/Graphics/Backend/API/Texture.h"
 	#include "SemperEngine/Graphics/Backend/API/Shader.h"
 
