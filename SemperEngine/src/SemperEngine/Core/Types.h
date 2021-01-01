@@ -48,6 +48,9 @@ namespace SemperEngine
 	using Mat4x2 = glm::mat4x2;
 	using Mat4x3 = glm::mat4x3;
 
+	// Renderer ID
+	using RendererID = U32;
+
 
 	// Pointers and References
 	template<typename Type>

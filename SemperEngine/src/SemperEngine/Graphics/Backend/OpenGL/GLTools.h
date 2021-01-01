@@ -4,8 +4,6 @@
 
 namespace SemperEngine
 {
-	using RendererID = U32;
-
 	// Forward Declarations
 	class VertexBuffer;
 	enum class VertexFormat;
