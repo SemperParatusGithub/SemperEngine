@@ -21,6 +21,7 @@ namespace SemperEngine
 
         virtual void *GetNativeWindow() = 0;
 
+        virtual void SetMinimumSize(U32 width, U32 height) = 0;
         virtual void SetInterval(I32 interval) = 0;
 
         static Window *Create(U32 width = 1280, U32 height = 720, const std::string &title = "Semper Engine");

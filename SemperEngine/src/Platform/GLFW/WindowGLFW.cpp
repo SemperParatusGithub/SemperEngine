@@ -78,6 +78,11 @@ namespace SemperEngine
 		return m_Window;
 	}
 
+	void WindowGLFW::SetMinimumSize(U32 width, U32 height)
+	{
+		glfwSetWindowSizeLimits(m_Window, width, height, GLFW_DONT_CARE, GLFW_DONT_CARE);
+	}
+
 	void WindowGLFW::SetInterval(I32 interval)
 	{
 		glfwSwapInterval(interval);

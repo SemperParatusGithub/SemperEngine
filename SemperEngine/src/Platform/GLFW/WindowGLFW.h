@@ -22,6 +22,8 @@ namespace SemperEngine
         virtual inline U32 GetHeight() const noexcept override { return m_WindowData.height; }
 
         virtual void *GetNativeWindow() override;
+
+        virtual void SetMinimumSize(U32 width, U32 height) override;
         virtual void SetInterval(I32 interval) override;
 
     private:
