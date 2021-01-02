@@ -39,8 +39,7 @@ namespace SemperEngine
 
 	void *GLFramebuffer::GetColorAttachmentHandle() const noexcept
 	{
-		std::cout << m_RendererID << std::endl;
-		return reinterpret_cast<void *>(m_RendererID);
+		return reinterpret_cast<void *>(m_ColorAttachment);
 	}
 
 	void GLFramebuffer::Invalidate()
