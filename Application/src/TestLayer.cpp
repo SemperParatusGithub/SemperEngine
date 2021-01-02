@@ -77,7 +77,7 @@ void TestLayer::OnImGuiRender()
 		id++;
 
 		std::string name = std::string("Sprite" + std::to_string(id));
-		SemperEngine::Sprite sprite = { m_SpriteSheet, { index[0], index[1] }, { 64.0f, 64.0f }, { 1.0f, 1.0f } };
+		SemperEngine::Sprite sprite = { m_SpriteSheet, { index[0], index[1] }, { 64.0f, 64.0f }, { 1.0f, 2.0f } };
 		sprite.SetPosition({ pos[0], pos[1] });
 
 		m_Sprites.push_back({ name, sprite, pos[0], pos[1], index[0], index[1] });

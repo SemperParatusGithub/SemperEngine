@@ -23,11 +23,7 @@ project "Application"
 		"../SemperEngine/vendor/Glad/include"
 	}
 
-	links
-	{
-		"SemperEngine",
-		"Glad"
-	}
+	links { "SemperEngine" }
 
 	filter "system:windows"
 		systemversion "latest"

@@ -18,8 +18,9 @@ project "Editor"
 	{
 		"../SemperEngine/src",
 		"../SemperEngine/vendor",
-		"../Hazel/vendor/glm",
-		"../Hazel/vendor/entt/include"
+		"../SemperEngine/vendor/glm",
+		"../SemperEngine/vendor/entt/include",
+		"../SemperEngine/vendor/Glad/include"
 	}
 
 	links { "SemperEngine" }

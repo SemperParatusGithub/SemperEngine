@@ -27,8 +27,6 @@ namespace SemperEngine
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
 		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		ImGui::StyleColorsClassic();
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle &style = ImGui::GetStyle();
@@ -71,6 +69,10 @@ namespace SemperEngine
 		colors[ImGuiCol_TitleBg] = ImVec4 { 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgActive] = ImVec4 { 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4 { 0.15f, 0.1505f, 0.151f, 1.0f };
+
+		/* Menu bar */
+		colors[ImGuiCol_MenuBarBg] = ImVec4 { 0.1f, 0.105f, 0.11f, 1.0f };
+		colors[ImGuiCol_DockingPreview] = ImVec4 { 0.58f, 1.0f, 1.0f, 1.0f };
 	}
 
 	void ImGuiLayer::OnDetach()

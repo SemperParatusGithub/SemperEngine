@@ -1,8 +1,15 @@
-#include <iostream>
+#include "Editor.h"
 
-int main()
+
+int main(int argc, char *argv[])
 {
-	static_assert(false);
+	SemperEngine::Log::Init();
 
-	return 0;
+	auto *Editor = Editor::CreateApplication("Semper Editor");
+
+	Editor->Run();
+
+	delete Editor;
+
+	return EXIT_SUCCESS;
 }

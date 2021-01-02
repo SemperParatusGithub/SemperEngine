@@ -37,7 +37,6 @@ project "SemperEngine"
         "../SemperEngine/vendor/glm",
         "../SemperEngine/vendor/stb_image",
         "../SemperEngine/vendor/entt/include",
-        "../SemperEngine/vendor/yaml-cpp/include"
 	}
 
 	links
@@ -45,7 +44,6 @@ project "SemperEngine"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"yaml-cpp",
 		"opengl32.lib"
 	}
 

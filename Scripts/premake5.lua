@@ -11,7 +11,6 @@ group "Dependencies"
 	include "../SemperEngine/vendor/GLFW"
 	include "../SemperEngine/vendor/Glad"
 	include "../SemperEngine/vendor/imgui"
-	include "../SemperEngine/vendor/yaml-cpp"
 group ""
 
 group "Engine"
