@@ -39,6 +39,7 @@ namespace SemperEngine
 
 	void *GLFramebuffer::GetColorAttachmentHandle() const noexcept
 	{
+		std::cout << m_RendererID << std::endl;
 		return reinterpret_cast<void *>(m_RendererID);
 	}
 
@@ -64,7 +65,7 @@ namespace SemperEngine
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
-		glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_Info.width, m_Info.width);
+		glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_Info.width, m_Info.height);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
 		SE_ASSERT_MSG(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
