@@ -93,6 +93,11 @@ namespace SemperEngine
 		layer->OnAttach();
 	}
 
+	void EngineApplication::BlockImGuiEvents(bool block)
+	{
+		m_ImGuiLayer->BlockEvents(block);
+	}
+
 	Window &EngineApplication::GetWindow()
 	{
 		return *m_Window;

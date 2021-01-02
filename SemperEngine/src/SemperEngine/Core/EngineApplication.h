@@ -27,6 +27,8 @@ namespace SemperEngine
 		void PushLayer(Layer *layer);
 		void PushOverlay(Layer *layer);
 
+		void BlockImGuiEvents(bool block);
+
 		Window &GetWindow();
 
 		static EngineApplication &Instance();
