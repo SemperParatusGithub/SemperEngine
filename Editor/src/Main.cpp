@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[])
 {
-	SemperEngine::Log::Init();
+	SemperEngine::Log::Init(true, false);
 
 	auto *Editor = Editor::CreateApplication("Semper Editor");
 

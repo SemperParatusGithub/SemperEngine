@@ -1,9 +1,12 @@
 #pragma once
 
-#include "Logger.h"
+#include "ConsoleLogger.h"
+#include "FileLogger.h"
 
 #include "SemperEngine/Core/Defines.h"
 #include "SemperEngine/Core/Types.h"
+
+#include <sstream>
 
 
 namespace SemperEngine
@@ -11,27 +14,44 @@ namespace SemperEngine
 	class Log
 	{
 	public:
-		static void Init();
+		static void Init(bool logToFile, bool logToConsole);
 
 		template<Severity severity, LoggerType loggerType, typename ... Args>
 		static void LogMessage(Args && ... args)
 		{
-			if(loggerType == LoggerType::Core)
-				s_CoreLogger->LogMessage<severity>(std::forward<Args>(args)...);
+			std::stringstream messageStream;
 
-			else if(loggerType == LoggerType::Client)
-				s_ClientLogger->LogMessage<severity>(std::forward<Args>(args)...);
+			std::string time = "[" + LogBase::GetTimeAsString() + "]";
 
-			else
-				s_CoreLogger->LogMessage<Severity::Warn>("Can't log Message - Unknown Logger");
+			std::string loggerName = loggerType == LoggerType::Core ? "[CORE]" : "[CLIENT]";
+
+			std::string severityString = LogBase::SeverityToString(severity) + ": ";
+
+			char *localBuffer = new char[256];
+			sprintf_s(localBuffer, 255, std::forward<Args>(args)...);
+			std::string message = std::string(localBuffer);
+
+			messageStream << time;
+			messageStream << loggerName;
+			messageStream << severityString;
+			messageStream << message;
+
+			s_ConsoleLogger->LogMessage<severity>(messageStream.str());
+
+			if (s_LogToFile) {
+				s_FileLogger->LogMessage(messageStream.str());
+				s_FileLogger->Flush();
+			}
 
 			// TODO Log to console (Editor)
-			// Log to file
 		}
 
 	private:
-		static SharedPtr<Logger> s_CoreLogger;
-		static SharedPtr<Logger> s_ClientLogger;
+		static bool s_LogToFile;
+		static bool s_LogToConsole;
+
+		static SharedPtr<ConsoleLogger> s_ConsoleLogger;
+		static SharedPtr<FileLogger> s_FileLogger;
 	};
 }
 

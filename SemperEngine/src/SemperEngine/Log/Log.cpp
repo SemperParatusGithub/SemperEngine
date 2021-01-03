@@ -4,12 +4,18 @@
 
 namespace SemperEngine
 {
-	SharedPtr<Logger> Log::s_ClientLogger;
-	SharedPtr<Logger> Log::s_CoreLogger;
+	bool Log::s_LogToFile = false;
+	bool Log::s_LogToConsole = false;
 
-	void Log::Init()
+	SharedPtr<ConsoleLogger> Log::s_ConsoleLogger;
+	SharedPtr<FileLogger> Log::s_FileLogger;
+
+	void Log::Init(bool logToFile, bool logToConsole)
 	{
-		s_CoreLogger = MakeShared<Logger>("ENGINE");
-		s_ClientLogger = MakeShared<Logger>("CLIENT");
+		s_LogToFile = logToFile;
+		s_LogToConsole = logToConsole;
+
+		s_ConsoleLogger = MakeShared<ConsoleLogger>();
+		s_FileLogger = MakeShared<FileLogger>("Semper.log");
 	}
 }

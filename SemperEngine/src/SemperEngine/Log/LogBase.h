@@ -5,6 +5,12 @@
 
 namespace SemperEngine
 {
+	enum LoggerType
+	{
+		Core = 0,
+		Client
+	};
+
 	enum class Severity
 	{
 		Info = 0,
@@ -26,7 +32,7 @@ namespace SemperEngine
 	class LogBase
 	{
 	public:
-		static void SetLogColor(Severity severity)
+		static inline void SetLogColor(Severity severity)
 		{
 			switch (severity)
 			{
@@ -39,7 +45,7 @@ namespace SemperEngine
 			}
 		}
 
-		static std::string SeverityToString(Severity severity)
+		static inline std::string SeverityToString(Severity severity)
 		{
 			switch (severity)
 			{
@@ -52,12 +58,12 @@ namespace SemperEngine
 			}
 		}
 
-		static void ResetLogColor()
+		static inline void ResetLogColor()
 		{
 			printf(ColorCodes::Reset);
 		}
 
-		static std::string GetTimeAsString()
+		static inline std::string GetTimeAsString()
 		{
 			time_t theTime = time(nullptr);
 			struct tm aTime;
