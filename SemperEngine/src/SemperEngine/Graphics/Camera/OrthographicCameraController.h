@@ -16,6 +16,8 @@ namespace SemperEngine
 		inline OrthographicCamera &GetCamera() { return m_Camera; }
 		inline const OrthographicCamera &GetCamera() const noexcept { return m_Camera; }
 
+		inline void SetZoom(float zoom) { m_Zoom = zoom; }
+
 		void OnUpdate(float deltaTime);
 		void OnEvent(Event &e);
 
