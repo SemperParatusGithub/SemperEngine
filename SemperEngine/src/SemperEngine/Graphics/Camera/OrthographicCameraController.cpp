@@ -19,6 +19,12 @@ namespace SemperEngine
 	{
 	}
 
+	void OrthographicCameraController::SetZoom(float zoom)
+	{
+		m_Zoom = zoom;;
+		m_Camera.SetProjection(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom);
+	}
+
 	void OrthographicCameraController::OnUpdate(float deltaTime)
 	{
 		if (Input::IsKeyPressed(Key::A))
