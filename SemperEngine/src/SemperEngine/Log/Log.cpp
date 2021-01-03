@@ -4,12 +4,12 @@
 
 namespace SemperEngine
 {
-	std::shared_ptr<Logger> Log::s_ClientLogger;
-	std::shared_ptr<Logger> Log::s_CoreLogger;
+	SharedPtr<Logger> Log::s_ClientLogger;
+	SharedPtr<Logger> Log::s_CoreLogger;
 
 	void Log::Init()
 	{
-		s_CoreLogger = std::make_shared<Logger>("ENGINE");
-		s_ClientLogger = std::make_shared<Logger>("CLIENT");
+		s_CoreLogger = MakeShared<Logger>("ENGINE");
+		s_ClientLogger = MakeShared<Logger>("CLIENT");
 	}
 }
