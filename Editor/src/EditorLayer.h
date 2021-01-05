@@ -21,4 +21,6 @@ private:
 	SemperEngine::Framebuffer *m_Framebuffer;
 	SemperEngine::OrthographicCameraController m_CameraController;
 	SemperEngine::Texture2D *m_TestTexture;
+
+	SemperEngine::SharedPtr<SemperEngine::LogConsole> m_LogConsole;
 };

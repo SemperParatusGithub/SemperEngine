@@ -5,7 +5,7 @@
 
 namespace SemperEngine
 {
-	enum LoggerType
+	enum class LoggerType
 	{
 		Core = 0,
 		Client
@@ -17,6 +17,14 @@ namespace SemperEngine
 		Warn,
 		Error,
 		Critical
+	};
+
+	struct LogElement
+	{
+		std::string time;
+		LoggerType type;
+		Severity severity;
+		std::string message;
 	};
 
 	namespace ColorCodes
@@ -55,6 +63,17 @@ namespace SemperEngine
 				case Severity::Critical:	return "Critical";	break;
 
 				default: return "Unknown Severity";				break;
+			}
+		}
+
+		static inline std::string LoggerTypeToString(LoggerType type)
+		{
+			switch (type)
+			{
+				case LoggerType::Core:		return "Core"; 		break;
+				case LoggerType::Client:	return "Client";	break;
+
+				default: return "Unknown LoggerType";			break;
 			}
 		}
 

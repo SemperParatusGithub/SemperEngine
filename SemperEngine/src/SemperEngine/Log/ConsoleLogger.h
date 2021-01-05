@@ -1,7 +1,6 @@
 #pragma once
-
-#include "LogBase.h"
 #include "SemperEngine/Core/Types.h"
+#include "LogBase.h"
 
 
 namespace SemperEngine
@@ -9,20 +8,9 @@ namespace SemperEngine
     class ConsoleLogger
     {
 	public:
-		ConsoleLogger() = default;
-        ~ConsoleLogger() = default;
+		ConsoleLogger();
+		~ConsoleLogger();
 
-		template<Severity severity>
-		inline void LogMessage(ConstRef<std::string> messageString)
-		{
-			LogBase::SetLogColor(severity);
-			
-			if (!messageString.empty())
-				printf("%s\n", messageString.c_str());
-			else
-				printf("empty message string\n");
-		
-			LogBase::ResetLogColor();
-		}
+		void LogMessage(ConstRef<LogElement> element);
     };
 }

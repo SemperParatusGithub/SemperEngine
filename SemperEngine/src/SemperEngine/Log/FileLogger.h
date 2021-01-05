@@ -1,6 +1,6 @@
 #pragma once
-#include "LogBase.h"
 #include "SemperEngine/Core/Types.h"
+#include "LogBase.h"
 
 #include <fstream>
 #include <sstream>
@@ -11,29 +11,11 @@ namespace SemperEngine
 	class FileLogger
 	{
 	public:
-		FileLogger(ConstRef<std::string> outputPath) : 
-			m_OutputPath(outputPath)
-		{
-		}
-		~FileLogger() = default;
+		FileLogger(ConstRef<std::string> outputPath);
+		~FileLogger();
 
-		inline void LogMessage(ConstRef<std::string> messageString)
-		{
-			m_Buffer.push_back(messageString);
-		}
-
-		inline void Flush()
-		{
-			m_OutputStream.open(m_OutputPath);
-
-			for (const auto &string : m_Buffer)
-			{
-				m_OutputStream << string << std::endl;
-			}
-
-			m_OutputStream.flush();
-			m_OutputStream.close();
-		}
+		void LogMessage(ConstRef<LogElement> element);
+		void Flush();
 
 	private:
 		std::string m_OutputPath;

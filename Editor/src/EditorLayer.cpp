@@ -1,21 +1,34 @@
 #include "EditorLayer.h"
 #include "SemperEngine/Core/EngineApplication.h"
 
+#include <GLFW/include/GLFW/glfw3.h>
+
 
 
 EditorLayer::EditorLayer() :
+	Layer("Editor Layer"),
 	m_CameraController(1280.0f / 720.0f, 0.0f, 0.0f),
 	m_SceneViewPortFocused(false),	m_SceneViewPortHovered(false)
 {
+	m_LogConsole = SemperEngine::MakeShared<SemperEngine::LogConsole>();
+	SemperEngine::Log::SetLogConsoleInstance(m_LogConsole);
+
+	m_CameraController.SetZoom(7.5f);
+
+	SE_CORE_INFO("Hello World");
+	SE_CORE_WARN("This is a Warning");
+	SE_CORE_ERROR("Error!");
+
 	SemperEngine::FramebufferInfo info = { 1280, 720 };
 	m_Framebuffer = SemperEngine::Framebuffer::Create(info);
 
-	m_TestTexture = SemperEngine::Texture2D::Create("roadTextures_tilesheet.png");
+	m_TestTexture = SemperEngine::Texture2D::Create("Checkerboard.png");
 }
 
 void EditorLayer::OnAttach()
 {
 	ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontFromFileTTF("bahnschrift.ttf", 24);
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("OpenSans-Regular.ttf", 20);
 }
 
 void EditorLayer::OnDetach()
@@ -24,7 +37,7 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(float deltaTime)
 {
-	if(m_SceneViewPortFocused && m_SceneViewPortHovered)
+	if (m_SceneViewPortFocused && m_SceneViewPortHovered)
 		m_CameraController.OnUpdate(deltaTime);
 
 	bool allowEvents = m_SceneViewPortHovered;
@@ -32,18 +45,34 @@ void EditorLayer::OnUpdate(float deltaTime)
 
 	SemperEngine::Transform quadTransform;
 	float ratio = (float) m_TestTexture->GetWidth() / (float) m_TestTexture->GetHeight();
-	quadTransform.SetScale({ ratio, 1.0f, 1.0f }); 
+	quadTransform.SetScale({ ratio, 1.0f, 1.0f });
 
-	m_Framebuffer->Bind();
+	{
+		m_Framebuffer->Bind();
 
-	SemperEngine::Renderer::SetClearColor({ 0.7f,  0.7f,  0.7f,  0.7f });
-	SemperEngine::Renderer::Clear();
+		SemperEngine::Renderer::SetClearColor({ 0.86f,  0.86f,  0.86f,  0.86f });
+		SemperEngine::Renderer::Clear();
 
-	SemperEngine::Batcher2D::BeginScene(m_CameraController.GetCamera());
-	SemperEngine::Batcher2D::DrawQuad(quadTransform, m_TestTexture);
-	SemperEngine::Batcher2D::EndScene();
+		SemperEngine::Batcher2D::BeginScene(m_CameraController.GetCamera());
 
-	m_Framebuffer->UnBind();
+		SemperEngine::Transform transform;
+		transform.SetRotation(SemperEngine::Vec3(0.0f, 0.0f, (float) glfwGetTime()));
+
+		for (float y = 0; y < 10.0f; y += 1.0f)
+			for (float x = 0; x < 10.0f; x += 1.0f)
+			{
+				transform.SetTranslation({ x + 3.0f, y, 0.0f });
+				SemperEngine::Batcher2D::DrawQuad(transform, { x / 10.0f, y / 10.0f, 0.0f, 1.0f });
+			}
+
+		SemperEngine::Transform checkerBoardTransform;
+		checkerBoardTransform.SetScale({ 30.0f, 30.0f, 1.0f });
+		SemperEngine::Batcher2D::DrawQuad(checkerBoardTransform, m_TestTexture);
+
+		SemperEngine::Batcher2D::EndScene();
+
+		m_Framebuffer->UnBind();
+	}
 }
 
 void EditorLayer::OnImGuiRender()
@@ -72,12 +101,14 @@ void EditorLayer::OnImGuiRender()
 			if (ImGui::MenuItem("New", "Ctrl+N"));
 			if (ImGui::MenuItem("Open...", "Ctrl+O"));
 			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"));
-			if (ImGui::MenuItem("Exit"));
+			if (ImGui::MenuItem("Exit"))
+				SemperEngine::EngineApplication::Instance().Close();
 				
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenuBar();
 	}
+	auto pos = SemperEngine::Input::GetMousePosition();
 
 	ImGui::Begin("Test Window 1");
 	ImGui::End();
@@ -85,8 +116,13 @@ void EditorLayer::OnImGuiRender()
 	ImGui::Begin("Test Window 2");
 	ImGui::End();
 
+	ImGui::ShowDemoWindow();
+
 	ImGui::Begin("Test Window 3");
+	ImGui::Text("Framerate: %d FPS", (int) ImGui::GetIO().Framerate);
 	ImGui::End();
+
+	m_LogConsole->OnImGuiRender();
 
 	ImGui::Begin("Scene Viewport");
 	m_SceneViewPortFocused = ImGui::IsWindowFocused();

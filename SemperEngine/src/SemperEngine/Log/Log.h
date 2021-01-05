@@ -1,12 +1,10 @@
 #pragma once
-
-#include "ConsoleLogger.h"
-#include "FileLogger.h"
-
 #include "SemperEngine/Core/Defines.h"
 #include "SemperEngine/Core/Types.h"
 
-#include <sstream>
+#include "ConsoleLogger.h"
+#include "LogConsole.h"
+#include "FileLogger.h"
 
 
 namespace SemperEngine
@@ -15,43 +13,53 @@ namespace SemperEngine
 	{
 	public:
 		static void Init(bool logToFile, bool logToConsole);
+		static void SetLogConsoleInstance(SharedPtr<LogConsole> instance);
 
 		template<Severity severity, LoggerType loggerType, typename ... Args>
-		static void LogMessage(Args && ... args)
+		static inline void LogMessage(Args && ... args)
 		{
-			std::stringstream messageStream;
-
-			std::string time = "[" + LogBase::GetTimeAsString() + "]";
-
-			std::string loggerName = loggerType == LoggerType::Core ? "[CORE]" : "[CLIENT]";
-
-			std::string severityString = LogBase::SeverityToString(severity) + ": ";
-
-			char *localBuffer = new char[256];
-			sprintf_s(localBuffer, 255, std::forward<Args>(args)...);
+			char *localBuffer = new char[1024];
+			sprintf_s(localBuffer, 1024, std::forward<Args>(args)...);
 			std::string message = std::string(localBuffer);
 
-			messageStream << time;
-			messageStream << loggerName;
-			messageStream << severityString;
-			messageStream << message;
+			LogElement element;
+			element.time = LogBase::GetTimeAsString();
+			element.type = loggerType;
+			element.severity = severity;
+			element.message = message;
 
-			s_ConsoleLogger->LogMessage<severity>(messageStream.str());
+			s_ConsoleLogger->LogMessage(element);
 
 			if (s_LogToFile) {
-				s_FileLogger->LogMessage(messageStream.str());
+				s_FileLogger->LogMessage(element);
 				s_FileLogger->Flush();
 			}
 
-			// TODO Log to console (Editor)
+			if (s_LogToConsole)
+			{
+				if (s_LogConsole) {
+					if (!s_TempBuffer.empty()) {
+						for (const auto &elem : s_TempBuffer)
+							s_LogConsole->LogMessage(elem);
+						s_TempBuffer.clear();
+					}
+					s_LogConsole->LogMessage(element);
+				}
+				else {
+					s_TempBuffer.push_back(element);
+				}
+			}
 		}
 
 	private:
 		static bool s_LogToFile;
 		static bool s_LogToConsole;
 
+		static std::vector<LogElement> s_TempBuffer;
+
 		static SharedPtr<ConsoleLogger> s_ConsoleLogger;
 		static SharedPtr<FileLogger> s_FileLogger;
+		static SharedPtr<LogConsole> s_LogConsole;
 	};
 }
 
