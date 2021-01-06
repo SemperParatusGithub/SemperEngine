@@ -1,6 +1,6 @@
 workspace "SemperEngine"
 	architecture "x86_64"
-	startproject "Application"
+	startproject "Editor"
 
 	configurations 	{ "Debug", "Release", "Dist" }
 	flags 			{ "MultiProcessorCompile" }
