@@ -46,7 +46,7 @@ namespace SemperEngine
 		{
 			ImGui::Checkbox("Autoscroll", &m_EnableAutoscroll);
 			ImGui::Checkbox("Info", &m_ShowInfos);
-			ImGui::Checkbox("Warn", &m_ShowErrors);
+			ImGui::Checkbox("Warn", &m_ShowWarnings);
 			ImGui::Checkbox("Error", &m_ShowErrors);
 			ImGui::Checkbox("Critical", &m_ShowCriticals);
 			ImGui::EndPopup();
@@ -62,8 +62,14 @@ namespace SemperEngine
 				if (elem.message.find(std::string(m_InputBuffer)) == std::string::npos)
 					continue;
 
-			// TODO: consider severity checkboxes
-
+			switch (elem.severity)
+			{
+				case Severity::Info:		if (!m_ShowInfos)		continue; break;
+				case Severity::Warn:		if (!m_ShowWarnings)	continue; break;
+				case Severity::Error:		if (!m_ShowErrors)		continue; break;
+				case Severity::Critical:	if (!m_ShowCriticals)	continue; break;
+			}
+			
 			SetLogColor(elem.severity);
 
 			char buf[1024];
