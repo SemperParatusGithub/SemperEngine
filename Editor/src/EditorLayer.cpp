@@ -108,10 +108,15 @@ void EditorLayer::OnImGuiRender()
 		}
 		ImGui::EndMenuBar();
 	}
-	auto pos = SemperEngine::Input::GetMousePosition();
 
-	ImGui::Begin("Test Window 1");
+	auto metrics = SemperEngine::Batcher2D::GetMetrics();
+	ImGui::Begin("Batcher 2D Metrics");
+	ImGui::Text("Batches: %d", metrics.batches);
+	ImGui::Text("Vertices: %d", metrics.vertices);
+	ImGui::Text("Indices: %d", metrics.indices);
+	ImGui::Text("Triangles: %d", metrics.triangles);
 	ImGui::End();
+	SemperEngine::Batcher2D::ResetMetrics();
 
 	ImGui::Begin("Test Window 2");
 	ImGui::End();
