@@ -17,6 +17,15 @@ namespace SemperEngine
 	static constexpr U32 MaxVertexCount = MaxQuadCount * 4;
 	static constexpr U32 MaxIndexCount = MaxQuadCount * 6;
 
+
+	struct Batcher2DMetrics
+	{
+		U32 batches = 0;
+		U32 vertices = 0;
+		U32 indices = 0;
+		U32 triangles = 0;
+	};
+
 	class Batcher2D
 	{
 	public:
@@ -31,6 +40,9 @@ namespace SemperEngine
 		static void DrawQuad(ConstRef<Transform> transform, Texture2D *texture, ConstRef<glm::vec4> tintColor = Vec4(1.0f));
 
 		static void Draw(Renderable2D *renderable);
+
+		static void ResetMetrics();
+		static Batcher2DMetrics GetMetrics();
 
 	private:
 		static void BeginScene();

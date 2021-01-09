@@ -33,6 +33,8 @@ namespace SemperEngine
 
 		Texture2D *whiteTexture;
 		std::array<const Texture2D *, MaxCombinedTextureUnits> textures;
+
+		Batcher2DMetrics metrics;
 	};
 
 	static RenderData s_RenderData;
@@ -120,6 +122,8 @@ namespace SemperEngine
 		s_RenderData.vertexBuffer->SetData(s_RenderData.buffer, size);
 
 		Renderer::DrawIndexed(s_RenderData.vertexArray, s_RenderData.shader);
+
+		s_RenderData.metrics.batches += 1;
 	}
 
 	void Batcher2D::DrawQuad(ConstRef<Transform> transform, ConstRef<Vec4> color)
@@ -141,6 +145,10 @@ namespace SemperEngine
 			s_RenderData.bufferPtr++;
 		}
 		s_RenderData.indexCount += 6;
+
+		s_RenderData.metrics.triangles += 2;
+		s_RenderData.metrics.vertices += 4;
+		s_RenderData.metrics.indices += 6;
 	}
 
 	void Batcher2D::DrawQuad(ConstRef<Transform> transform, Texture2D *texture, ConstRef<glm::vec4> tintColor)
@@ -176,6 +184,10 @@ namespace SemperEngine
 		}
 
 		s_RenderData.indexCount += 6;
+
+		s_RenderData.metrics.triangles += 2;
+		s_RenderData.metrics.vertices += 4;
+		s_RenderData.metrics.indices += 6;
 	}
 
 	void Batcher2D::Draw(Renderable2D *renderable)
@@ -218,6 +230,19 @@ namespace SemperEngine
 		}
 
 		s_RenderData.indexCount += 6;
+
+		s_RenderData.metrics.triangles += 2;
+		s_RenderData.metrics.vertices += 4;
+		s_RenderData.metrics.indices += 6;
+	}
+
+	void Batcher2D::ResetMetrics()
+	{
+		s_RenderData.metrics = Batcher2DMetrics();
+	}
+	Batcher2DMetrics Batcher2D::GetMetrics()
+	{
+		return s_RenderData.metrics;
 	}
 
 	void Batcher2D::BeginScene()
