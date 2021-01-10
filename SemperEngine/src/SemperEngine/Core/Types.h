@@ -17,9 +17,9 @@ namespace SemperEngine
 	using U32 = ::uint32_t;
 	using U64 = ::uint64_t;
 
-	using c8  = char;
-	using c16 = char16_t;
-	using c32 = char32_t;
+	using C8  = char;
+	using C16 = char16_t;
+	using C32 = char32_t;
 
 	// Vector types
 	using Vec2 = glm::vec2;
@@ -71,4 +71,19 @@ namespace SemperEngine
 	{
 		return std::make_shared<Type>(std::forward<Args>(args)...);
 	}
+
+	// Size checking
+	static_assert(sizeof(I8) == 1, "Size if I8 is not correct");
+	static_assert(sizeof(I16) == 2, "Size if I16 is not correct");
+	static_assert(sizeof(I32) == 4, "Size if I32 is not correct");
+	static_assert(sizeof(I64) == 8, "Size if I64 is not correct");
+
+	static_assert(sizeof(U8) == 1, "Size if I8 is not correct");
+	static_assert(sizeof(U16) == 2, "Size if I16 is not correct");
+	static_assert(sizeof(U32) == 4, "Size if I32 is not correct");
+	static_assert(sizeof(U64) == 8, "Size if I64 is not correct");
+
+	static_assert(sizeof(C8) == 1, "Size of C8 is not correct");
+	static_assert(sizeof(C16) == 2, "Size of C16 is not correct");
+	static_assert(sizeof(C32) == 4, "Size of C32 is not correct");
 }
