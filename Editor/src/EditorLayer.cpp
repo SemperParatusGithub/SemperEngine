@@ -27,7 +27,7 @@ EditorLayer::EditorLayer() :
 
 void EditorLayer::OnAttach()
 {
-	ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontFromFileTTF("bahnschrift.ttf", 24);
+	ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontFromFileTTF("bahnschrift.ttf", 21);
 	ImGui::GetIO().Fonts->AddFontFromFileTTF("OpenSans-Regular.ttf", 20);
 }
 
@@ -110,18 +110,20 @@ void EditorLayer::OnImGuiRender()
 	}
 
 	auto metrics = SemperEngine::Batcher2D::GetMetrics();
+	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);	// OpenSans-Regular
 	ImGui::Begin("Batcher 2D Metrics");
 	ImGui::Text("Batches: %d", metrics.batches);
 	ImGui::Text("Vertices: %d", metrics.vertices);
 	ImGui::Text("Indices: %d", metrics.indices);
 	ImGui::Text("Triangles: %d", metrics.triangles);
 	ImGui::End();
+	ImGui::PopFont();									// OpenSans-Regular
 	SemperEngine::Batcher2D::ResetMetrics();
 
 	ImGui::Begin("Test Window 2");
 	ImGui::End();
 
-	ImGui::ShowDemoWindow();
+	// ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Test Window 3");
 	ImGui::Text("Framerate: %d FPS", (int) ImGui::GetIO().Framerate);
@@ -129,12 +131,14 @@ void EditorLayer::OnImGuiRender()
 
 	m_LogConsole->OnImGuiRender();
 
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });
 	ImGui::Begin("Scene Viewport");
 	m_SceneViewPortFocused = ImGui::IsWindowFocused();
 	m_SceneViewPortHovered = ImGui::IsWindowHovered();
 	uint64_t textureID = reinterpret_cast<uint32_t>(m_Framebuffer->GetColorAttachmentHandle());
 	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), ImGui::GetContentRegionAvail(), ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 	ImGui::End();
+	ImGui::PopStyleVar();
 
 	ImGui::End(); // Dockspace
 }
