@@ -12,6 +12,7 @@ namespace SemperEngine
 		m_View = glm::mat4(1.0f);
 
 		m_ProjectionView = m_Projection * m_View;
+		m_ViewProjection = m_View * m_Projection;
 
 		m_Position = { 0.0f, 0.0f, 0.0f };
 		m_Rotation = 0.0f;
@@ -21,6 +22,7 @@ namespace SemperEngine
 		m_Projection = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
 
 		m_ProjectionView = m_Projection * m_View;
+		m_ViewProjection = m_View * m_Projection;
 	}
 
 	void OrthographicCamera::SetPosition(ConstRef<Vec3> position)
@@ -52,5 +54,6 @@ namespace SemperEngine
 
 		m_View = glm::inverse(transform);
 		m_ProjectionView = m_Projection * m_View;
+		m_ViewProjection = m_View * m_Projection;
 	}
 }

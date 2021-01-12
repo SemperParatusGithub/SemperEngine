@@ -8,7 +8,7 @@ namespace SemperEngine
 		m_Projection(projection),
 		m_View(view),
 		m_ProjectionView(projection * view),
-		m_ViewProjection(view *projection)
+		m_ViewProjection(view * projection)
 	{
 	}
 	Camera::Camera(ConstRef<Mat4> projection) :
@@ -22,10 +22,14 @@ namespace SemperEngine
 	void Camera::SetProjection(ConstRef<Mat4> projection)
 	{
 		m_Projection = projection;
+
+		Invalidate();
 	}
 	void Camera::SetView(ConstRef<Mat4> view)
 	{
 		m_View = view;
+
+		Invalidate();
 	}
 
 	ConstRef<Mat4> Camera::GetProjection() const noexcept
@@ -44,5 +48,11 @@ namespace SemperEngine
 	ConstRef<Mat4> Camera::GetViewProjection() const noexcept
 	{
 		return m_ViewProjection;
+	}
+
+	void Camera::Invalidate()
+	{
+		m_ProjectionView = m_Projection * m_View;
+		m_ViewProjection = m_View * m_Projection;
 	}
 }

@@ -26,10 +26,13 @@ namespace SemperEngine
 		// Returns view * projection
 		ConstRef<Mat4> GetViewProjection() const noexcept;
 
+	private:
+		void Invalidate();
+
 	protected:
-		Mat4 m_Projection;
-		Mat4 m_View;
-		Mat4 m_ProjectionView;	// proj * view
-		Mat4 m_ViewProjection;	// view * proj
+		Mat4 m_Projection = Mat4(1.0f);
+		Mat4 m_View = Mat4(1.0f);
+		Mat4 m_ProjectionView = Mat4(1.0f);	// projection * view
+		Mat4 m_ViewProjection = Mat4(1.0f);	// view * projection
 	};
 }
