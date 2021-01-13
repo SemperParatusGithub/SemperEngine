@@ -8,7 +8,6 @@
 
 namespace SemperEngine
 {
-
     Window *Window::Create(U32 width, U32 height, const std::string &title)
     {
         #if defined(SE_PLATFORM_WINDOWS)
@@ -36,5 +35,4 @@ namespace SemperEngine
 
         #endif
     }
-
 }
