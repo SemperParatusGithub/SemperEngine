@@ -76,7 +76,7 @@ namespace SemperEngine
 				if (m_Entities.find(handle) != m_Entities.end())
 				{
 					auto &entityElem = m_Entities[handle];
-					auto found = entityElem.find(Internal::<T>());
+					auto found = entityElem.find(Internal::GetTypeIndex<T>());
 
 					if (found != entityElem.end())
 						return reinterpret_cast<Internal::ComponentContainer<T> *>(entityElem[Internal::GetTypeIndex<T>()])->data;
