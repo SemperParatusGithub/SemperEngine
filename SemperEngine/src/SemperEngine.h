@@ -19,6 +19,11 @@
 	#include "SemperEngine/Log/Log.h"
 /* ----------------------------------------------------------------------- */
 
+/* -------------------------------- Scene -------------------------------- */
+	#include "SemperEngine/Scene/Scene.h"
+	#include "SemperEngine/Scene/Entity.h"
+/* ----------------------------------------------------------------------- */
+
 /* ------------------------------ Graphics ------------------------------- */
 	#include "SemperEngine/Graphics/Sprite.h"
 	#include "SemperEngine/Graphics/Transform.h"

@@ -1,3 +1,4 @@
+#pragma once
 #include "SemperEngine.h"
 
 
@@ -23,4 +24,7 @@ private:
 	SemperEngine::Texture2D *m_TestTexture;
 
 	SemperEngine::SharedPtr<SemperEngine::LogConsole> m_LogConsole;
+	SemperEngine::SharedPtr<SemperEngine::Scene> m_Scene;
+
+	SemperEngine::Entity m_TestEntity;
 };

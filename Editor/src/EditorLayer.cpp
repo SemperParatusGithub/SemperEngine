@@ -3,12 +3,16 @@
 
 #include <GLFW/include/GLFW/glfw3.h>
 
+struct TestComponent
+{
+	float x, y;
+};
 
 
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
 	m_CameraController(1280.0f / 720.0f, 0.0f, 0.0f),
-	m_SceneViewPortFocused(false),	m_SceneViewPortHovered(false)
+	m_SceneViewPortFocused(false), m_SceneViewPortHovered(false)
 {
 	m_LogConsole = SemperEngine::MakeShared<SemperEngine::LogConsole>();
 	SemperEngine::Log::SetLogConsoleInstance(m_LogConsole);
@@ -18,6 +22,16 @@ EditorLayer::EditorLayer() :
 	SE_CORE_INFO("Hello World");
 	SE_CORE_WARN("This is a Warning");
 	SE_CORE_ERROR("Error!");
+
+	m_Scene = SemperEngine::MakeUnique<SemperEngine::Scene>();
+
+	m_TestEntity = m_Scene->CreateEntity();
+	m_TestEntity.Add<TestComponent>(TestComponent { 12.0f, 27.0f });
+
+	SE_CLIENT_INFO("Test Entity has TestComponent: %d", m_TestEntity.Has<TestComponent>());
+
+	auto pos = m_TestEntity.Get<TestComponent>();
+	SE_CLIENT_INFO("Test Entity data: %.2f, %.2f", pos.x, pos.y);
 
 	SemperEngine::FramebufferInfo info = { 1280, 720 };
 	m_Framebuffer = SemperEngine::Framebuffer::Create(info);
