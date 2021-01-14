@@ -10,110 +10,113 @@
 
 namespace SemperEngine
 {
-	class World
+	namespace ECS
 	{
-	public:
-		using Iterator = WorldIterator;
-
-	public:
-		Iterator begin()
+		class World
 		{
-			return WorldIterator(m_Entities.begin());
-		}
-		Iterator end()
-		{
-			return WorldIterator(m_Entities.end());
-		}
+		public:
+			using Iterator = WorldIterator;
 
-		EntityHandle CreateEntity()
-		{
-			static U32 ID = 0;
-			ID++;
-
-			m_Entities.emplace(ID, Internal::EntityElem());
-
-			return ID;
-		}
-
-		template<typename T, typename ... Args>
-		T &Add(EntityHandle handle, Args && ... args)
-		{
-			if (m_Entities.find(handle) != m_Entities.end())
+		public:
+			Iterator begin()
 			{
-				auto &entityElem = m_Entities[handle];
-
-				ComponentContainer<T> *container = new ComponentContainer<T>(T(std::forward<Args>(args)...));
-				entityElem.emplace(GetTypeIndex<T>(), container);
-
-				return container->data;
+				return WorldIterator(m_Entities.begin());
 			}
-			else {
-				SE_ASSERT_MSG(false, "Invalid entity handle!");
-			}
-		}
-
-		template<typename T>
-		void Remove(EntityHandle handle)
-		{
-			if (m_Entities.find(handle) != m_Entities.end())
+			Iterator end()
 			{
-				auto &entityElem = m_Entities[handle];
-				auto found = entityElem.find(GetTypeIndex<T>());
-
-				if (found != entityElem.end())
-					entityElem.erase(found);
+				return WorldIterator(m_Entities.end());
 			}
-			else {
-				SE_ASSERT_MSG(false, "Invalid entity handle!");
-			}
-		}
 
-		template<typename T>
-		T &Get(EntityHandle handle)
-		{
-			if (m_Entities.find(handle) != m_Entities.end())
+			EntityHandle CreateEntity()
 			{
-				auto &entityElem = m_Entities[handle];
-				auto found = entityElem.find(GetTypeIndex<T>());
+				static U32 ID = 0;
+				ID++;
 
-				if (found != entityElem.end())
-					return reinterpret_cast<ComponentContainer<T> *>(entityElem[GetTypeIndex<T>()])->data;
-				else
-					SE_ASSERT_MSG(false, "Component doesn't exist!");
-			}
-			else {
-				SE_ASSERT_MSG(false, "Invalid entity handle!");
-			}
-		}
+				m_Entities.emplace(ID, Internal::EntityElem());
 
-		template<typename T>
-		bool Has(EntityHandle handle)
-		{
-			if (m_Entities.find(handle) != m_Entities.end())
+				return ID;
+			}
+
+			template<typename T, typename ... Args>
+			T &Add(EntityHandle handle, Args && ... args)
 			{
-				auto &entityElem = m_Entities[handle];
-				auto index = GetTypeIndex<T>();
+				if (m_Entities.find(handle) != m_Entities.end())
+				{
+					auto &entityElem = m_Entities[handle];
 
-				return entityElem.find(index) != entityElem.end();
-			}
-			else {
-				SE_ASSERT_MSG(false, "Invalid entity handle!");
-			}
-		}
+					Internal::ComponentContainer<T> *container = new Internal::ComponentContainer<T>(T(std::forward<Args>(args)...));
+					entityElem.emplace(Internal::GetTypeIndex<T>(), container);
 
-		template<typename T1, typename T2, typename ... Types>
-		bool Has(EntityHandle handle)
-		{
-			if (m_Entities.find(handle) != m_Entities.end())
+					return container->data;
+				}
+				else {
+					SE_ASSERT_MSG(false, "Invalid entity handle!");
+				}
+			}
+
+			template<typename T>
+			void Remove(EntityHandle handle)
 			{
-				return Has<T1>(handle) && Has<T2, Types...>(handle);
-			}
-			else {
-				SE_ASSERT_MSG(false, "Invalid entity handle!");
-			}
-		}
+				if (m_Entities.find(handle) != m_Entities.end())
+				{
+					auto &entityElem = m_Entities[handle];
+					auto found = entityElem.find(Internal::GetTypeIndex<T>());
 
-	private:
-		std::unordered_map<EntityHandle, Internal::EntityElem> m_Entities;
-	};
+					if (found != entityElem.end())
+						entityElem.erase(found);
+				}
+				else {
+					SE_ASSERT_MSG(false, "Invalid entity handle!");
+				}
+			}
+
+			template<typename T>
+			T &Get(EntityHandle handle)
+			{
+				if (m_Entities.find(handle) != m_Entities.end())
+				{
+					auto &entityElem = m_Entities[handle];
+					auto found = entityElem.find(Internal::<T>());
+
+					if (found != entityElem.end())
+						return reinterpret_cast<Internal::ComponentContainer<T> *>(entityElem[Internal::GetTypeIndex<T>()])->data;
+					else
+						SE_ASSERT_MSG(false, "Component doesn't exist!");
+				}
+				else {
+					SE_ASSERT_MSG(false, "Invalid entity handle!");
+				}
+			}
+
+			template<typename T>
+			bool Has(EntityHandle handle)
+			{
+				if (m_Entities.find(handle) != m_Entities.end())
+				{
+					auto &entityElem = m_Entities[handle];
+					auto index = Internal::GetTypeIndex<T>();
+
+					return entityElem.find(index) != entityElem.end();
+				}
+				else {
+					SE_ASSERT_MSG(false, "Invalid entity handle!");
+				}
+			}
+
+			template<typename T1, typename T2, typename ... Types>
+			bool Has(EntityHandle handle)
+			{
+				if (m_Entities.find(handle) != m_Entities.end())
+				{
+					return Has<T1>(handle) && Has<T2, Types...>(handle);
+				}
+				else {
+					SE_ASSERT_MSG(false, "Invalid entity handle!");
+				}
+			}
+
+		private:
+			std::unordered_map<EntityHandle, Internal::EntityElem> m_Entities;
+		};
+	}
 }
