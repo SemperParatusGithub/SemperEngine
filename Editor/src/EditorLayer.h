@@ -17,6 +17,7 @@ public:
 
 private:
 	bool m_SceneViewPortFocused, m_SceneViewPortHovered;
+	SemperEngine::Vec2f m_ViewportSize;
 
 private:
 	SemperEngine::Framebuffer *m_Framebuffer;

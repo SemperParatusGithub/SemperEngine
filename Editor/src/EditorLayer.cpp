@@ -41,8 +41,10 @@ EditorLayer::EditorLayer() :
 
 void EditorLayer::OnAttach()
 {
-	ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontFromFileTTF("bahnschrift.ttf", 21);
+	ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontFromFileTTF("OpenSans-Regular.ttf", 22); // ImGui::GetIO().Fonts->AddFontFromFileTTF("bahnschrift.ttf", 21);
 	ImGui::GetIO().Fonts->AddFontFromFileTTF("OpenSans-Regular.ttf", 20);
+
+	SemperEngine::EngineApplication::Instance().GetWindow().SetInterval(0);
 }
 
 void EditorLayer::OnDetach()
@@ -72,11 +74,11 @@ void EditorLayer::OnUpdate(float deltaTime)
 		SemperEngine::Transform transform;
 		transform.SetRotation(SemperEngine::Vec3(0.0f, 0.0f, (float) glfwGetTime()));
 
-		for (float y = 0; y < 10.0f; y += 1.0f)
-			for (float x = 0; x < 10.0f; x += 1.0f)
+		for (float y = 0; y < 25.0f; y += 1.0f)
+			for (float x = 0; x < 25.0f; x += 1.0f)
 			{
-				transform.SetTranslation({ x + 3.0f, y, 0.0f });
-				SemperEngine::Batcher2D::DrawQuad(transform, { x / 10.0f, y / 10.0f, 0.0f, 1.0f });
+				transform.SetTranslation({ x -12.0f, y -12.0f, 0.0f });
+				SemperEngine::Batcher2D::DrawQuad(transform, { x / 25.0f, y / 25.0f, 0.0f, 1.0f });
 			}
 
 		SemperEngine::Transform checkerBoardTransform;
@@ -137,7 +139,7 @@ void EditorLayer::OnImGuiRender()
 	ImGui::Begin("Test Window 2");
 	ImGui::End();
 
-	// ImGui::ShowDemoWindow();
+	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Test Window 3");
 	ImGui::Text("Framerate: %d FPS", (int) ImGui::GetIO().Framerate);
@@ -145,10 +147,23 @@ void EditorLayer::OnImGuiRender()
 
 	m_LogConsole->OnImGuiRender();
 
+	char buf[128];
+	sprintf_s(buf, 128, "Scene Viewport (%d) ###AnimatedTitle", (int)ImGui::GetIO().Framerate);
+
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });
-	ImGui::Begin("Scene Viewport");
+	ImGui::Begin(buf);
+
 	m_SceneViewPortFocused = ImGui::IsWindowFocused();
 	m_SceneViewPortHovered = ImGui::IsWindowHovered();
+
+	glm::vec2 currentViewportSize = { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y };
+	if (currentViewportSize != m_ViewportSize) {
+		m_ViewportSize = currentViewportSize;
+		m_Framebuffer->OnResize((SemperEngine::U32)m_ViewportSize.x, (SemperEngine::U32)m_ViewportSize.y);
+		m_CameraController.SetBounds(m_ViewportSize.x, m_ViewportSize.y);
+		SE_CLIENT_INFO("Viewport resized: %.2f, %.2f", m_ViewportSize.x, m_ViewportSize.y);
+	}
+
 	uint64_t textureID = reinterpret_cast<uint32_t>(m_Framebuffer->GetColorAttachmentHandle());
 	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), ImGui::GetContentRegionAvail(), ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 	ImGui::End();
