@@ -33,7 +33,7 @@ namespace SemperEngine
 		virtual void SetViewport(float x, float y, float width, float height) = 0;
 		virtual void Clear() = 0;
 
-		virtual void DrawIndexed(VertexArray *vertexArray, Shader *shader) = 0;
+		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader) = 0;
 
 	private:
 		static API s_RenderAPI;

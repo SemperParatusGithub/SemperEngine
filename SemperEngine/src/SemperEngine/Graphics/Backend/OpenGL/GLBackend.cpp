@@ -15,7 +15,7 @@ namespace SemperEngine
 		glEnable(GL_DEPTH_TEST);		  
 	}
 
-	void GLBackend::SetClearColor(const glm::vec4 &clearColor)
+	void GLBackend::SetClearColor(ConstRef<glm::vec4> clearColor)
 	{
 		glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 	}
@@ -30,7 +30,7 @@ namespace SemperEngine
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void GLBackend::DrawIndexed(VertexArray *vertexArray, Shader *shader)
+	void GLBackend::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader)
 	{
 		vertexArray->Bind();
 		shader->Bind();

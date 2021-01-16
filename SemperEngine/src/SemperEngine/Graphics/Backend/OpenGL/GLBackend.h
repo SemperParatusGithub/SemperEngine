@@ -12,10 +12,10 @@ namespace SemperEngine
 
 		virtual void Init() override;
 
-		virtual void SetClearColor(const glm::vec4 &clearColor) override;
+		virtual void SetClearColor(ConstRef<glm::vec4> clearColor) override;
 		virtual void SetViewport(float x, float y, float width, float height) override;
 		virtual void Clear() override;
 
-		virtual void DrawIndexed(VertexArray *vertexArray, Shader *shader);
+		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader);
 	};
 }

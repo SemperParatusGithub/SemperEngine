@@ -12,11 +12,10 @@
 
 namespace SemperEngine
 {
-
 	class EngineApplication
 	{
 	public:
-		EngineApplication(const std::string &name);
+		EngineApplication(ConstRef<std::string> name);
 		virtual ~EngineApplication();
 
 		void Run();
@@ -41,8 +40,8 @@ namespace SemperEngine
 		bool m_Minimized = false;
 		float m_Lastframe = 0.0f;
 
-		Window *m_Window;
-		Backend *m_Backend;
+		SharedPtr<Window> m_Window;
+		SharedPtr<Backend> m_Backend;
 		LayerStack m_LayerStack;
 		ImGuiLayer *m_ImGuiLayer;
 
@@ -51,5 +50,4 @@ namespace SemperEngine
 
 		unsigned int shaderProgram, vao;
 	};
-	
 }

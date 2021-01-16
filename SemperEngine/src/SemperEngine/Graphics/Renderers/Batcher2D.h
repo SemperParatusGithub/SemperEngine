@@ -37,7 +37,7 @@ namespace SemperEngine
 		static void Flush();
 
 		static void DrawQuad(ConstRef<Transform> transform, ConstRef<Vec4> color);
-		static void DrawQuad(ConstRef<Transform> transform, Texture2D *texture, ConstRef<glm::vec4> tintColor = Vec4(1.0f));
+		static void DrawQuad(ConstRef<Transform> transform, ConstRef<SharedPtr<Texture2D>> texture, ConstRef<glm::vec4> tintColor = Vec4(1.0f));
 
 		static void Draw(Renderable2D *renderable);
 

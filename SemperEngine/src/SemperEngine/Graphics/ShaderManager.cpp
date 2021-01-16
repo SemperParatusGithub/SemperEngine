@@ -10,16 +10,16 @@
 
 namespace SemperEngine
 {
-	void ShaderManager::AddShader(const std::string &name, Shader *shader)
+	void ShaderManager::AddShader(ConstRef<std::string> name, SharedPtr<Shader> shader)
 	{
 		m_ShaderStorage[name] = shader;
 	}
-	Shader *ShaderManager::GetShader(const std::string &name)
+	SharedPtr<Shader> ShaderManager::GetShader(ConstRef<std::string> name)
 	{
 		return m_ShaderStorage[name];
 	}
 
-	void ShaderManager::Remove(const std::string &name)
+	void ShaderManager::Remove(ConstRef<std::string> name)
 	{
 		m_ShaderStorage.erase(name);
 	}
@@ -28,12 +28,12 @@ namespace SemperEngine
 		m_ShaderStorage.clear();
 	}
 
-	Shader *ShaderManager::operator[](const std::string &name) noexcept
+	SharedPtr<Shader> ShaderManager::operator[](ConstRef<std::string> name) noexcept
 	{
 		return m_ShaderStorage[name];
 	}
 
-	ShaderManager::ShaderSource ShaderManager::LoadFromFile(const std::string &filepath)
+	ShaderManager::ShaderSource ShaderManager::LoadFromFile(ConstRef<std::string> filepath)
 	{
 		std::ifstream stream(filepath);
 
@@ -63,7 +63,7 @@ namespace SemperEngine
 		return { ss[(int) ShaderType::VERTEX].str(), ss[(int) ShaderType::FRAGMENT].str() };
 	}
 
-	ShaderManager::ShaderSource ShaderManager::LoadFromFiles(const std::string &vertexPath, const std::string &fragmentPath)
+	ShaderManager::ShaderSource ShaderManager::LoadFromFiles(ConstRef<std::string> vertexPath, ConstRef<std::string> fragmentPath)
 	{
 		std::ifstream vertexStream(vertexPath);
 		std::ifstream fragmentStream(fragmentPath);

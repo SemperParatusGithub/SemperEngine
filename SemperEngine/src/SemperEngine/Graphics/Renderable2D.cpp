@@ -26,7 +26,7 @@ namespace SemperEngine
 	{
 		return m_Color;
 	}
-	Texture2D *Renderable2D::GetTexture() const noexcept
+	SharedPtr<Texture2D> Renderable2D::GetTexture() const noexcept
 	{
 		return m_Texture;
 	}

@@ -17,9 +17,9 @@ namespace SemperEngine
 
 	struct RenderData
 	{
-		VertexArray *vertexArray = nullptr;
-		VertexBuffer *vertexBuffer = nullptr;
-		IndexBuffer *indexBuffer = nullptr;
+		SharedPtr<VertexArray> vertexArray;
+		SharedPtr<VertexBuffer> vertexBuffer;
+		SharedPtr<IndexBuffer> indexBuffer;
 
 		QuadVertex *buffer = nullptr;
 		QuadVertex *bufferPtr = nullptr;
@@ -29,7 +29,7 @@ namespace SemperEngine
 		glm::vec4 vertexPositions[4];
 		glm::vec2 textureCoords[4];
 
-		Shader *shader = nullptr;
+		SharedPtr<Shader> shader;
 
 		Texture2D *whiteTexture;
 		std::array<const Texture2D *, MaxCombinedTextureUnits> textures;
@@ -44,7 +44,7 @@ namespace SemperEngine
 	{
 		// Initialize quad data
 		s_RenderData.buffer = new QuadVertex[MaxVertexCount];
-		s_RenderData.vertexBuffer = VertexBuffer::Create(nullptr, MaxVertexCount * sizeof(QuadVertex), BufferUsage::Dynamic);
+		s_RenderData.vertexBuffer.reset(VertexBuffer::Create(nullptr, MaxVertexCount * sizeof(QuadVertex), BufferUsage::Dynamic));
 
 		s_RenderData.vertexBuffer->AddAttribute({ "a_Position", VertexFormat::Float4, false });
 		s_RenderData.vertexBuffer->AddAttribute({ "a_Color", VertexFormat::Float4, false });
@@ -65,9 +65,9 @@ namespace SemperEngine
 
 			offset += 4;
 		}
-		s_RenderData.indexBuffer = IndexBuffer::Create(indices, IndexFormat::Uint32, MaxIndexCount * sizeof(U32), BufferUsage::Static);
+		s_RenderData.indexBuffer.reset(IndexBuffer::Create(indices, IndexFormat::Uint32, MaxIndexCount * sizeof(U32), BufferUsage::Static));
 
-		s_RenderData.vertexArray = VertexArray::Create(s_RenderData.vertexBuffer, s_RenderData.indexBuffer);
+		s_RenderData.vertexArray.reset(VertexArray::Create(s_RenderData.vertexBuffer.get(), s_RenderData.indexBuffer.get()));
 
 		s_RenderData.vertexPositions[0] = { -0.5f, -0.5f,  0.0f,  1.0f };
 		s_RenderData.vertexPositions[1] = { 0.5f, -0.5f,  0.0f,  1.0f };
@@ -80,7 +80,7 @@ namespace SemperEngine
 		s_RenderData.textureCoords[3] = { 0.0f, 1.0f };
 
 		// General Initialization
-		s_RenderData.shader = Shader::Create(ShaderManager::LoadFromFile("Batch.shader"));
+		s_RenderData.shader.reset(Shader::Create(ShaderManager::LoadFromFile("Batch.shader")));
 
 		s_RenderData.whiteTexture = Texture2D::Create("WhiteTexture.png");
 
@@ -151,7 +151,7 @@ namespace SemperEngine
 		s_RenderData.metrics.indices += 6;
 	}
 
-	void Batcher2D::DrawQuad(ConstRef<Transform> transform, Texture2D *texture, ConstRef<glm::vec4> tintColor)
+	void Batcher2D::DrawQuad(ConstRef<Transform> transform, ConstRef<SharedPtr<Texture2D>> texture, ConstRef<glm::vec4> tintColor)
 	{
 		if (s_RenderData.indexCount >= MaxIndexCount)
 		{
@@ -169,7 +169,7 @@ namespace SemperEngine
 			}
 			else if (s_RenderData.textures[i]->GetHandle() == s_RenderData.whiteTexture->GetHandle()) {
 				textureIndex = static_cast<float>(i);
-				s_RenderData.textures[i] = texture;
+				s_RenderData.textures[i] = texture.get();
 				break;
 			}
 		}
@@ -194,7 +194,7 @@ namespace SemperEngine
 	{
 		auto &transform = renderable->GetTransform();
 		auto &tintColor = renderable->GetColor();
-		auto *texture = renderable->GetTexture();
+		auto &texture = renderable->GetTexture();
 
 		if (s_RenderData.indexCount >= MaxIndexCount)
 		{
@@ -214,7 +214,7 @@ namespace SemperEngine
 				}
 				else if (s_RenderData.textures[i]->GetHandle() == s_RenderData.whiteTexture->GetHandle()) {
 					textureIndex = static_cast<float>(i);
-					s_RenderData.textures[i] = texture;
+					s_RenderData.textures[i] = texture.get();
 					break;
 				}
 			}

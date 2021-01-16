@@ -21,18 +21,18 @@ namespace SemperEngine
 		ShaderManager() = default;
 		~ShaderManager() = default;
 
-		void AddShader(const std::string &name, Shader *shader);
-		Shader *GetShader(const std::string &name);
+		void AddShader(ConstRef<std::string> name, SharedPtr<Shader> shader);
+		SharedPtr<Shader> GetShader(ConstRef<std::string> name);
 
-		void Remove(const std::string &name);
+		void Remove(ConstRef<std::string> name);
 		void ClearShader();
 
-		Shader *operator [](const std::string &name) noexcept;
+		SharedPtr<Shader> operator [](ConstRef<std::string> name) noexcept;
 
-		static ShaderSource LoadFromFile(const std::string &filepath);
-		static ShaderSource LoadFromFiles(const std::string &vertexPath, const std::string &fragmentPath);
+		static ShaderSource LoadFromFile(ConstRef<std::string> filepath);
+		static ShaderSource LoadFromFiles(ConstRef<std::string> vertexPath, ConstRef<std::string> fragmentPath);
 
 	private:
-		std::unordered_map<std::string, Shader *> m_ShaderStorage;
+		std::unordered_map<std::string, SharedPtr<Shader>> m_ShaderStorage;
 	};
 }

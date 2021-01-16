@@ -4,7 +4,7 @@
 
 namespace SemperEngine
 {
-	Sprite::Sprite(Texture2D *texture)
+	Sprite::Sprite(SharedPtr<Texture2D> texture)
 	{
 		m_Texture = texture;
 
@@ -13,7 +13,7 @@ namespace SemperEngine
 		m_TextureCoordinates[2] = { 1.0f, 1.0f };
 		m_TextureCoordinates[3] = { 0.0f, 1.0f };
 	}
-	Sprite::Sprite(Texture2D *texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize)
+	Sprite::Sprite(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize)
 	{
 		m_Texture = texture;
 
@@ -53,11 +53,11 @@ namespace SemperEngine
 		m_Transform.SetRotation(Vec3 { 0.0f, 0.0f, rotation });
 	}
 
-	void Sprite::SetTexture(Texture2D *texture)
+	void Sprite::SetTexture(SharedPtr<Texture2D> texture)
 	{
 		m_Texture = texture;
 	}
-	void Sprite::SetSpriteSheet(Texture2D *texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize)
+	void Sprite::SetSpriteSheet(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize)
 	{
 		m_Texture = texture;
 

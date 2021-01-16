@@ -1,8 +1,10 @@
 #pragma once
 #include "SemperEngine.h"
 
+using namespace SemperEngine;
 
-class EditorLayer : public SemperEngine::Layer
+
+class EditorLayer : public Layer
 {
 public:
 	EditorLayer();
@@ -13,19 +15,19 @@ public:
 
 	virtual void OnUpdate(float deltaTime) override;
 	virtual void OnImGuiRender() override;
-	virtual void OnEvent(SemperEngine::Event &e) override;
+	virtual void OnEvent(Event &e) override;
 
 private:
 	bool m_SceneViewPortFocused, m_SceneViewPortHovered;
-	SemperEngine::Vec2f m_ViewportSize;
+	Vec2f m_ViewportSize;
 
 private:
-	SemperEngine::Framebuffer *m_Framebuffer;
-	SemperEngine::OrthographicCameraController m_CameraController;
-	SemperEngine::Texture2D *m_TestTexture;
+	SharedPtr<Framebuffer> m_Framebuffer;
+	SharedPtr<LogConsole> m_LogConsole;
+	SharedPtr<Scene> m_Scene;
 
-	SemperEngine::SharedPtr<SemperEngine::LogConsole> m_LogConsole;
-	SemperEngine::SharedPtr<SemperEngine::Scene> m_Scene;
+	OrthographicCameraController m_CameraController;
+	SharedPtr<Texture2D> m_TestTexture;
 
-	SemperEngine::Entity m_TestEntity;
+	Entity m_TestEntity;
 };

@@ -19,6 +19,6 @@ namespace SemperEngine
 		static void SetViewport(float x, float y, float width, float height);
 		static void Clear();
 
-		static void DrawIndexed(VertexArray *vertexArray, Shader *shader);
+		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader);
 	};
 }

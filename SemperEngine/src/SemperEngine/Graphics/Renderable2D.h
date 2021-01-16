@@ -20,7 +20,7 @@ namespace SemperEngine
 		ConstRef<Transform> GetTransform() const noexcept;
 
 		ConstRef<Vec4> GetColor() const noexcept;
-		Texture2D *GetTexture() const noexcept;	// Returns nullptr if no texture is set
+		SharedPtr<Texture2D> GetTexture() const noexcept;	// Returns nullptr if no texture is set
 
 		ConstRef<std::array<Vec2, 4>> GetTextureCoordinates() const noexcept;
 
@@ -29,6 +29,6 @@ namespace SemperEngine
 		std::array<Vec2, 4> m_TextureCoordinates;
 
 		Vec4 m_Color = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		Texture2D *m_Texture = nullptr;
+		SharedPtr<Texture2D> m_Texture;
 	};
 }

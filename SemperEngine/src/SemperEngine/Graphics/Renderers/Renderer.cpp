@@ -38,7 +38,7 @@ namespace SemperEngine
 		s_CurrentBackend->Clear();
 	}
 
-	void Renderer::DrawIndexed(VertexArray *vertexArray, Shader *shader)
+	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader)
 	{
 		s_CurrentBackend->DrawIndexed(vertexArray, shader);
 	}

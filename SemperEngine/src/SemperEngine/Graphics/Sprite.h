@@ -7,8 +7,8 @@ namespace SemperEngine
 	class Sprite : public Renderable2D
 	{
 	public:
-		Sprite(Texture2D *texture);
-		Sprite(Texture2D *texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize);
+		Sprite(SharedPtr<Texture2D> texture);
+		Sprite(SharedPtr<Texture2D>, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize);
 
 		Sprite(ConstRef<Vec4> color);
 
@@ -18,8 +18,8 @@ namespace SemperEngine
 		void SetScale(ConstRef<Vec2> scale);
 		void SetRotation(float rotation);	
 
-		void SetTexture(Texture2D *texture);
-		void SetSpriteSheet(Texture2D *texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize);
+		void SetTexture(SharedPtr<Texture2D> texture);
+		void SetSpriteSheet(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize);
 		void SetColor(ConstRef<Vec4> color);
 	};
 }

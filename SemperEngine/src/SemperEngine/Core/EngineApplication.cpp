@@ -5,36 +5,33 @@
 #include "SemperEngine/Events/EventDispatcher.h"
 #include "SemperEngine/Graphics/Renderers/Renderer.h"
 
-// TEMP
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <GLFW/glfw3.h>		// TODO: Remove
 
 
 namespace SemperEngine
 {
 	EngineApplication *EngineApplication::s_Instance = nullptr;
 
-	EngineApplication::EngineApplication(const std::string &name)
+	EngineApplication::EngineApplication(ConstRef<std::string> name)
 	{
 		if (s_Instance)
-			throw std::runtime_error("Application already exists");
+			SE_ASSERT_MSG(false, "Application already exists!");
 		s_Instance = this;
 		m_Running = true;
 
-		m_Window = Window::Create(1280, 720, name);
+		m_Window.reset(Window::Create(1280, 720, name));
 		m_Window->SetInterval(1);
 		m_Window->SetEventCallbackFunction(SE_BIND_EVENT_FN(EngineApplication::OnEvent));
 
-		m_Backend = Backend::Create();
-		Renderer::Init(m_Backend);
+		m_Backend.reset(Backend::Create());
+		Renderer::Init(m_Backend.get());
 
-		m_ImGuiLayer = new (std::nothrow) ImGuiLayer();
+		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 	}
 
 	EngineApplication::~EngineApplication()
 	{
-		delete m_Window;
 	}
 
 	void EngineApplication::Run()
@@ -62,7 +59,7 @@ namespace SemperEngine
 
 	void EngineApplication::OnEvent(Event &e)
 	{
-		// SE_CORE_INFO("Event occured: %s", e.ToString().c_str());
+		// SE_CORE_INFO("Event occurred: %s", e.ToString().c_str());
 		m_ImGuiLayer->OnEvent(e);
 
 		EventDispatcher dispatcher(e);
