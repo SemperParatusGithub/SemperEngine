@@ -34,6 +34,10 @@ namespace SemperEngine
 	using Vec3f = glm::fvec3;
 	using Vec4f = glm::fvec4;
 
+	using Vec2d = glm::dvec2;
+	using Vec3d = glm::dvec3;
+	using Vec4d = glm::dvec4;
+
 	// Matrix types
 	using Mat2 = glm::mat2;
 	using Mat3 = glm::mat3;
