@@ -3,6 +3,7 @@
 #include "SemperEngine/Core/Types.h"
 
 #include <iostream>	
+#include <limits>
 
 #include <type_traits>
 #include <typeindex>
@@ -16,6 +17,7 @@ namespace SemperEngine
 	namespace ECS
 	{
 		using EntityHandle = U32;
+		constexpr EntityHandle NullEntity = std::numeric_limits<EntityHandle>::max();
 
 		namespace Internal
 		{

@@ -37,6 +37,11 @@ namespace SemperEngine
 				return ID;
 			}
 
+			void RemoveEntity(EntityHandle handle)
+			{
+				m_Entities.erase(handle);
+			}
+
 			template<typename T, typename ... Args>
 			T &Add(EntityHandle handle, Args && ... args)
 			{
