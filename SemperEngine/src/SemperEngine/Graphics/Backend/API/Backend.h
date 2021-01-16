@@ -29,7 +29,7 @@ namespace SemperEngine
 	private:
 		virtual void Init() = 0;
 
-		virtual void SetClearColor(const glm::vec4 &clearColor) = 0;
+		virtual void SetClearColor(ConstRef<glm::vec4> clearColor) = 0;
 		virtual void SetViewport(float x, float y, float width, float height) = 0;
 		virtual void Clear() = 0;
 

@@ -7,7 +7,7 @@
 
 namespace SemperEngine
 {
-	Shader *Shader::Create(const ShaderManager::ShaderSource &shaderSource)
+	Shader *Shader::Create(ConstRef<ShaderManager::ShaderSource> shaderSource)
 	{
 		switch (Backend::GetRenderAPI())
 		{
