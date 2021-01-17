@@ -15,12 +15,17 @@ namespace SemperEngine
 		~Scene() = default;
 
 		Entity CreateEntity();
+		void RemoveEntity(Entity entity);
 
 		ECS::World GetWorld();
+
+		void OnImGuiRender();
 
 	private:
 		friend class Entity;
 
+	private:
 		ECS::World m_World;
+		ECS::EntityHandle m_ActiveEntityHandle = ECS::NullEntity;
 	};
 }
