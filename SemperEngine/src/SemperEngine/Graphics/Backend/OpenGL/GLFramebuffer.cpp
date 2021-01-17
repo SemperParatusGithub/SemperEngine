@@ -36,6 +36,9 @@ namespace SemperEngine
 
 	void GLFramebuffer::OnResize(U32 width, U32 height)
 	{
+		m_Info.width = width;
+		m_Info.height = height;
+
 		if (width <= 0)
 			m_Info.width = 1;
 		if (height <= 0)
