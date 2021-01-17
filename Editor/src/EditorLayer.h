@@ -19,7 +19,7 @@ public:
 
 private:
 	bool m_SceneViewPortFocused, m_SceneViewPortHovered;
-	Vec2f m_ViewportSize;
+	Vec2i m_ViewportSize;
 
 private:
 	SharedPtr<Framebuffer> m_Framebuffer;
@@ -28,9 +28,4 @@ private:
 
 	OrthographicCameraController m_CameraController;
 	SharedPtr<Texture2D> m_TestTexture;
-
-	Entity m_TestEntity1;
-	Entity m_TestEntity2;
-	Entity m_TestEntity3;
-	Entity m_TestEntity4;
 };

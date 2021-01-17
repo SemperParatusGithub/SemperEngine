@@ -7,6 +7,7 @@
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
 	m_CameraController(1280.0f / 720.0f, 0.0f, 0.0f),
+	m_ViewportSize({ 1280, 720 }),
 	m_SceneViewPortFocused(false), m_SceneViewPortHovered(false)
 {
 	FramebufferInfo info = { 1280, 720 };
@@ -44,6 +45,11 @@ void EditorLayer::OnUpdate(float deltaTime)
 
 	bool allowEvents = m_SceneViewPortHovered;
 	EngineApplication::Instance().BlockImGuiEvents(!allowEvents);
+
+	if (m_Framebuffer->GetSize() != m_ViewportSize) {
+		m_Framebuffer->OnResize((U32) m_ViewportSize.x, (U32) m_ViewportSize.y);
+		m_CameraController.SetBounds(m_ViewportSize.x, m_ViewportSize.y);
+	}
 
 	Transform quadTransform;
 	float ratio = (float) m_TestTexture->GetWidth() / (float) m_TestTexture->GetHeight();
@@ -134,25 +140,18 @@ void EditorLayer::OnImGuiRender()
 
 	m_LogConsole->OnImGuiRender();
 
-	char buf[128];
-	sprintf_s(buf, 128, "Scene Viewport (%d) ###AnimatedTitle", (int)ImGui::GetIO().Framerate);
-
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });
-	ImGui::Begin(buf);
+	ImGui::Begin("Scene Viewport");
 
 	m_SceneViewPortFocused = ImGui::IsWindowFocused();
 	m_SceneViewPortHovered = ImGui::IsWindowHovered();
 
-	glm::vec2 currentViewportSize = { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y };
-	if (currentViewportSize != m_ViewportSize) {
-		m_ViewportSize = currentViewportSize;
-		m_Framebuffer->OnResize((U32)m_ViewportSize.x, (U32)m_ViewportSize.y);
-		m_CameraController.SetBounds(m_ViewportSize.x, m_ViewportSize.y);
-		SE_CLIENT_INFO("Viewport resized: %.2f, %.2f", m_ViewportSize.x, m_ViewportSize.y);
-	}
+	ImVec2 size = ImGui::GetContentRegionAvail();
+	m_ViewportSize = { (int) size.x, (int) size.y };
 
-	uint64_t textureID = reinterpret_cast<U32>(m_Framebuffer->GetColorAttachmentHandle());
-	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), ImGui::GetContentRegionAvail(), ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
+	uint64_t textureID = reinterpret_cast<U64>(m_Framebuffer->GetColorAttachmentHandle());
+	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), size, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
+
 	ImGui::End();
 	ImGui::PopStyleVar();
 
