@@ -29,5 +29,8 @@ private:
 	OrthographicCameraController m_CameraController;
 	SharedPtr<Texture2D> m_TestTexture;
 
-	Entity m_TestEntity;
+	Entity m_TestEntity1;
+	Entity m_TestEntity2;
+	Entity m_TestEntity3;
+	Entity m_TestEntity4;
 };

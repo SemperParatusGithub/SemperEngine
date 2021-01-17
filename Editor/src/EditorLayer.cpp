@@ -3,11 +3,6 @@
 
 #include <GLFW/include/GLFW/glfw3.h>
 
-struct TestComponent
-{
-	float x, y;
-};
-
 
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
@@ -25,14 +20,6 @@ EditorLayer::EditorLayer() :
 	SE_CORE_INFO("Hello World");
 	SE_CORE_WARN("This is a Warning");
 	SE_CORE_ERROR("Error!");
-
-	m_TestEntity = m_Scene->CreateEntity();
-	m_TestEntity.Add<TestComponent>(TestComponent { 12.0f, 27.0f });
-
-	SE_CLIENT_INFO("Test Entity has TestComponent: %d", m_TestEntity.Has<TestComponent>());
-
-	auto pos = m_TestEntity.Get<TestComponent>();
-	SE_CLIENT_INFO("Test Entity data: %.2f, %.2f", pos.x, pos.y);
 
 	m_CameraController.SetZoom(7.5f);
 	m_TestTexture.reset(Texture2D::Create("Checkerboard.png"));
@@ -137,14 +124,13 @@ void EditorLayer::OnImGuiRender()
 	ImGui::PopFont();									// OpenSans-Regular
 	Batcher2D::ResetMetrics();
 
-	ImGui::Begin("Test Window 2");
-	ImGui::End();
-
 	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Test Window 3");
 	ImGui::Text("Framerate: %d FPS", (int) ImGui::GetIO().Framerate);
 	ImGui::End();
+
+	m_Scene->OnImGuiRender();
 
 	m_LogConsole->OnImGuiRender();
 
