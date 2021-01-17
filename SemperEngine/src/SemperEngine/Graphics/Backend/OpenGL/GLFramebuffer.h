@@ -13,6 +13,8 @@ namespace SemperEngine
 		virtual void Bind() const noexcept override;
 		virtual void UnBind() const noexcept override;
 
+		virtual Vec2i GetSize() const noexcept override;
+
 		virtual void OnResize(U32 width, U32 height) override;
 		virtual void *GetColorAttachmentHandle() const noexcept override;
 

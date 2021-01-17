@@ -29,6 +29,11 @@ namespace SemperEngine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	SemperEngine::Vec2i GLFramebuffer::GetSize() const noexcept
+	{
+		return Vec2i { m_Info.width, m_Info.height };
+	}
+
 	void GLFramebuffer::OnResize(U32 width, U32 height)
 	{
 		if (width <= 0)
