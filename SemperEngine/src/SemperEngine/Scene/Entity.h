@@ -3,6 +3,7 @@
 #include "Scene.h"
 
 #include "SemperEngine/Core/Assert.h"
+#include "Components.h"
 
 
 namespace SemperEngine
@@ -11,6 +12,11 @@ namespace SemperEngine
 	{
 	public:
 		Entity() = default;
+
+		inline ECS::EntityHandle GetHandle() const 
+		{
+			return m_Handle;
+		}
 
 		template<typename Component, typename ... Args>
 		Component &Add(Args && ... args)
@@ -49,12 +55,13 @@ namespace SemperEngine
 			m_Handle(entityHandle),
 			m_Scene(sceneHandle)
 		{
+			Add<IdentificationComponent>(IdentificationComponent { "Entity", entityHandle });
 		}
 
 	private:
 		friend class Scene;
 
-		ECS::EntityHandle m_Handle = 0;
+		ECS::EntityHandle m_Handle = ECS::NullEntity;
 		Scene *m_Scene = nullptr;
 	};
 }
