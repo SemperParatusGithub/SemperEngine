@@ -75,11 +75,11 @@ namespace SemperEngine
 			char buf[1024];
 			sprintf_s(buf, 1024, "[%s][%s] %s: %s\n", elem.time.c_str(), LogBase::LoggerTypeToString(elem.type).c_str(),
 				LogBase::SeverityToString(elem.severity).c_str(), elem.message.c_str());
-			ImGui::Text("%s", buf);
+			ImGui::TextWrapped("%s", buf);
 
 			ImGui::PopStyleColor();    // Pop style color that was set by SetLogColor()
 
-			// Enable/disable autoscroll afterwards because the current message has to be displayed before
+			// Enable/disable auto scroll afterwards because the current message has to be displayed before
 			if (m_EnableAutoscroll)
 				ImGui::SetScrollHereY(1.0f);
 		}
