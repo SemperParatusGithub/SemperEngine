@@ -2,18 +2,26 @@
 #include "SemperEngine/Core/Types.h"
 #include <iostream>
 
+#include "UUID.h"
+#include "SemperEngine/Graphics/Transform.h"
+
 
 namespace SemperEngine
 {
 	struct IdentificationComponent
 	{
 		IdentificationComponent() = default;
-		IdentificationComponent(ConstRef<std::string> name, U64 ID) : 
+		IdentificationComponent(ConstRef<std::string> name, UUID ID) : 
 			name(name), ID(ID) {}
 
 		~IdentificationComponent() = default;
 
+		std::pair<std::string, UUID> GetNameID()
+		{
+			return { name, ID };
+		}
+
 		std::string name = "Entity";
-		U64 ID = 0;
+		UUID ID;
 	};
 }

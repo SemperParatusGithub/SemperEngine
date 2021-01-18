@@ -79,13 +79,14 @@ namespace SemperEngine
 				{
 					auto &id = m_World.Get<IdentificationComponent>(entityHandle);
 					char buffer[64];
-					memset(buffer, 0, 64);
-					memcpy(buffer, id.name.c_str(), id.name.length());
+					std::memset(buffer, 0, 64);
+					std::memcpy(buffer, id.name.c_str(), id.name.length());
+					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth() / 2.0f);
 					if (ImGui::InputText("##Name", buffer, 64))
 						id.name = std::string(buffer);
 
 					ImGui::SameLine();
-					ImGui::Text("ID: %d", id.ID);
+					ImGui::Text("ID: %llx", id.ID);
 				}
 			}
 		}

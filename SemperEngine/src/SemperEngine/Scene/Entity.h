@@ -55,7 +55,7 @@ namespace SemperEngine
 			m_Handle(entityHandle),
 			m_Scene(sceneHandle)
 		{
-			Add<IdentificationComponent>(IdentificationComponent { "Entity", entityHandle });
+			Add<IdentificationComponent>(IdentificationComponent { "Entity", {} });
 		}
 
 	private:
