@@ -13,6 +13,11 @@ namespace SemperEngine
 		UUID(const UUID &) = default;
 		~UUID() = default;
 
+		inline operator U64() const
+		{
+			return m_UUID;
+		}
+
 	private:
 		U64 m_UUID;
 
