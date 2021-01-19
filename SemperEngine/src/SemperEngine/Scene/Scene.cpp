@@ -98,15 +98,17 @@ namespace SemperEngine
 		}
 		if (entity.Has<TransformComponent>())
 		{
+			auto UUID = entity.Get<IdentificationComponent>().ID;
+
 			auto &transform = entity.Get<TransformComponent>().transform;
 			auto [translation, rotation, scale] = entity.Get<TransformComponent>().GetTranslationRotationScale();
 			if (ImGui::CollapsingHeader("Transform Component"))
 			{
-				static float tra[3];
-				static float rot[3];
-				static float sca[3];
+				float tra[3] = { translation.x,translation.y,translation.z, };
+				float rot[3] = { rotation.x,rotation.y,rotation.z, };
+				float sca[3] = { scale.x,scale.y,scale.z, };
 
-				ImGui::PushID(entity.GetHandle());
+				ImGui::PushID((uint64_t)UUID);
 				if (ImGui::DragFloat3("Translation", tra))
 					transform.SetTranslation(Vec3 { tra[0], tra[1], tra[2] });
 				if (ImGui::DragFloat3("Rotation", rot))
