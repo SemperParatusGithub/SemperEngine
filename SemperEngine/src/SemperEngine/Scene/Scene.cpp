@@ -4,16 +4,20 @@
 #include <imgui.h>
 
 #include "Entity.h"
-#include "Components.h"
 
 
 namespace SemperEngine
 {
 	Entity Scene::CreateEntity()
 	{
-		ECS::EntityHandle handle = m_World.CreateEntity();
+		auto handle = m_World.CreateEntity();
+		auto entity = Entity(handle, this);
 
-		return Entity(handle, this);
+		// Add default components
+		entity.Add<IdentificationComponent>(IdentificationComponent { "Entity", {} });
+		entity.Add<TransformComponent>(TransformComponent {});
+
+		return entity;
 	}
 
 	void Scene::RemoveEntity(Entity entity)
@@ -72,24 +76,49 @@ namespace SemperEngine
 
 		ImGui::Begin("Inspector");
 		for (auto &entityHandle : m_World)
-		{
 			if (entityHandle == m_ActiveEntityHandle)
-			{
-				if (m_World.Has<IdentificationComponent>(entityHandle))
-				{
-					auto &id = m_World.Get<IdentificationComponent>(entityHandle);
-					char buffer[64];
-					std::memset(buffer, 0, 64);
-					std::memcpy(buffer, id.name.c_str(), id.name.length());
-					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth() / 2.0f);
-					if (ImGui::InputText("##Name", buffer, 64))
-						id.name = std::string(buffer);
+				DrawInspectorComponentInfo(Entity(entityHandle, this));
+		ImGui::End();
+	}
 
-					ImGui::SameLine();
-					ImGui::Text("ID: %llx", id.ID);
-				}
+	void Scene::DrawInspectorComponentInfo(Entity entity)
+	{
+		if (entity.Has<IdentificationComponent>())
+		{
+			auto &id = entity.Get<IdentificationComponent>();
+			char buffer[64];
+			std::memset(buffer, 0, 64);
+			std::memcpy(buffer, id.name.c_str(), id.name.length());
+			ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth() / 2.0f);
+			if (ImGui::InputText("##Name", buffer, 64))
+				id.name = std::string(buffer);
+
+			ImGui::SameLine();
+			ImGui::Text("ID: %llx", id.ID);
+		}
+		if (entity.Has<TransformComponent>())
+		{
+			auto &transform = entity.Get<TransformComponent>().transform;
+			auto [translation, rotation, scale] = entity.Get<TransformComponent>().GetTranslationRotationScale();
+			if (ImGui::CollapsingHeader("Transform Component"))
+			{
+				static float tra[3];
+				static float rot[3];
+				static float sca[3];
+
+				ImGui::PushID(entity.GetHandle());
+				if (ImGui::DragFloat3("Translation", tra))
+					transform.SetTranslation(Vec3 { tra[0], tra[1], tra[2] });
+				if (ImGui::DragFloat3("Rotation", rot))
+					transform.SetRotation(Vec3 { rot[0], rot[1], rot[2] });
+				if (ImGui::DragFloat3("Scale", sca))
+					transform.SetScale(Vec3 { sca[0], sca[1], sca[2] });
+				ImGui::PopID();
+
+				// ImGui::Text("Translation: %.2f, %.2f, %.2f", translation.x, translation.y, translation.z);
+				// ImGui::Text("Rotation: %.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
+				// ImGui::Text("Scale: %.2f, %.2f, %.2f", scale.x, scale.y, scale.z);
 			}
 		}
-		ImGui::End();
 	}
 }

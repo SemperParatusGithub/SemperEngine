@@ -2,6 +2,7 @@
 #include "SemperEngine/Core/Types.h"
 
 #include "ECS/ECS.h"
+#include "Components.h"
 
 
 namespace SemperEngine
@@ -20,6 +21,9 @@ namespace SemperEngine
 		ECS::World GetWorld();
 
 		void OnImGuiRender();
+
+	private:
+		void DrawInspectorComponentInfo(Entity entity);
 
 	private:
 		friend class Entity;

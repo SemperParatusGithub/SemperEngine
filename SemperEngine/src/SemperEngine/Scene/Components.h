@@ -29,6 +29,7 @@ namespace SemperEngine
 	{
 		Transform transform;
 
+		TransformComponent() = default;
 		TransformComponent(ConstRef<Transform> transfom) : 
 			transform(transform) {}
 		TransformComponent(const TransformComponent &) = default;
