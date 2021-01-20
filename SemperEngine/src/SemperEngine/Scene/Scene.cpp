@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 #include <imgui.h>
+#include <imgui_internal.h>
 
 #include "Entity.h"
 
@@ -58,15 +59,11 @@ namespace SemperEngine
 				auto id = m_World.Get<IdentificationComponent>(entityHandle);
 
 				ImGui::PushID((int) entityHandle);
-
 				bool isActive = entityHandle == m_ActiveEntityHandle;
 
-				ImGui::SetNextTreeNodeOpen(isActive);
+				if (ImGui::Selectable(id.name.c_str(), &isActive))
+					m_ActiveEntityHandle = entityHandle;
 
-				ImGui::CollapsingHeader(id.name.c_str());
-
-				if (ImGui::IsItemClicked())
-					m_ActiveEntityHandle = isActive ? ECS::NullEntity : entityHandle;
 				ImGui::PopID();
 			}
 		}
@@ -104,23 +101,95 @@ namespace SemperEngine
 			auto [translation, rotation, scale] = entity.Get<TransformComponent>().GetTranslationRotationScale();
 			if (ImGui::CollapsingHeader("Transform Component"))
 			{
-				float tra[3] = { translation.x,translation.y,translation.z, };
-				float rot[3] = { rotation.x,rotation.y,rotation.z, };
-				float sca[3] = { scale.x,scale.y,scale.z, };
-
 				ImGui::PushID((uint64_t)UUID);
-				if (ImGui::DragFloat3("Translation", tra))
-					transform.SetTranslation(Vec3 { tra[0], tra[1], tra[2] });
-				if (ImGui::DragFloat3("Rotation", rot))
-					transform.SetRotation(Vec3 { rot[0], rot[1], rot[2] });
-				if (ImGui::DragFloat3("Scale", sca))
-					transform.SetScale(Vec3 { sca[0], sca[1], sca[2] });
+				if (DrawSliderFloat3(" Translation", 100.0f, translation, 0.0f))
+					transform.SetTranslation(translation);
+				if (DrawSliderFloat3(" Rotation", 100.0f, rotation, 0.0f))
+					transform.SetRotation(rotation);
+				if (DrawSliderFloat3(" Scale", 100.0f, scale, 1.0f))
+					transform.SetScale(scale);
 				ImGui::PopID();
-
-				// ImGui::Text("Translation: %.2f, %.2f, %.2f", translation.x, translation.y, translation.z);
-				// ImGui::Text("Rotation: %.2f, %.2f, %.2f", rotation.x, rotation.y, rotation.z);
-				// ImGui::Text("Scale: %.2f, %.2f, %.2f", scale.x, scale.y, scale.z);
 			}
 		}
+	}
+
+	bool Scene::DrawSliderFloat3(ConstRef<std::string> name, float labelWidth, Vec3 &vector, float resetValue)
+	{
+		bool valuesChanged = false;
+
+		auto openSansRegular = ImGui::GetIO().Fonts->Fonts[1];
+		auto openSansBold = ImGui::GetIO().Fonts->Fonts[2];
+
+		float regionWidth = ImGui::GetContentRegionAvail().x - labelWidth;
+		float sz = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
+		ImVec2 buttonSize = { sz, sz };
+		float sliderSize = regionWidth / 3.0f - buttonSize.x;
+
+		ImGui::PushID(name.c_str());
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 2.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2 { 0.0f, 5.0f });
+		ImGui::PushFont(openSansRegular);
+
+		ImGui::Text(name.c_str());
+		ImGui::SameLine(labelWidth);
+
+		ImGui::SetNextItemWidth(sliderSize);
+		if (ImGui::DragFloat("##x", &vector[0], 0.1f, 0.0f, 0.0f, "%.3f"))
+			valuesChanged = true;
+
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.9f, 0.2f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushFont(openSansBold);
+		if (ImGui::Button("X", buttonSize)) {
+			vector.x = resetValue;
+			valuesChanged = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(sliderSize);
+		if (ImGui::DragFloat("##y", &vector[1], 0.1f, 0.0f, 0.0f, "%.3f"))
+			valuesChanged = true;
+
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.3f, 0.8f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushFont(openSansBold);
+		if (ImGui::Button("Y", buttonSize)) {
+			vector.y = resetValue;
+			valuesChanged = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(sliderSize);
+		if (ImGui::DragFloat("##z", &vector[2], 0.1f, 0.0f, 0.0f, "%.3f"))
+			valuesChanged = true;
+		
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.2f, 0.35f, 0.9f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushFont(openSansBold);
+		if (ImGui::Button("Z", buttonSize)) {
+			vector.z = resetValue;
+			valuesChanged = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::PopFont();	// openSansRegular
+		ImGui::PopStyleVar(2);	// Item Spacing, Frame Rounding
+
+		ImGui::PopID();
+
+		return valuesChanged;
 	}
 }

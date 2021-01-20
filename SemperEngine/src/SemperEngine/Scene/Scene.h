@@ -24,6 +24,7 @@ namespace SemperEngine
 
 	private:
 		void DrawInspectorComponentInfo(Entity entity);
+		static bool DrawSliderFloat3(ConstRef<std::string> label, float labelWidth, Vec3 &vector, float resetValue);
 
 	private:
 		friend class Entity;

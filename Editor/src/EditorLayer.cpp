@@ -28,8 +28,9 @@ EditorLayer::EditorLayer() :
 
 void EditorLayer::OnAttach()
 {
-	ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontFromFileTTF("OpenSans-Regular.ttf", 22); // ImGui::GetIO().Fonts->AddFontFromFileTTF("bahnschrift.ttf", 21);
+	ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontFromFileTTF("OpenSans-Regular.ttf", 20); // ImGui::GetIO().Fonts->AddFontFromFileTTF("bahnschrift.ttf", 21);
 	ImGui::GetIO().Fonts->AddFontFromFileTTF("OpenSans-Regular.ttf", 20);
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("OpenSans-Bold.ttf", 20);
 
 	EngineApplication::Instance().GetWindow().SetInterval(0);
 }
