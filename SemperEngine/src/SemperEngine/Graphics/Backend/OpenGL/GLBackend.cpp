@@ -30,6 +30,29 @@ namespace SemperEngine
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	std::string GLBackend::GetRenderAPIString()
+	{
+		return std::string("OpenGL");
+	}
+
+	std::string GLBackend::GetVendor()
+	{
+		const char *string = reinterpret_cast<const char *>(glGetString(GL_VENDOR));
+		return std::string(string);
+	}
+
+	std::string GLBackend::GetRenderer()
+	{
+		const char *string = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
+		return std::string(string);
+	}
+
+	std::string GLBackend::GetVersion()
+	{
+		const char *string = reinterpret_cast<const char *>(glGetString(GL_VERSION));
+		return std::string(string);
+	}
+
 	void GLBackend::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader)
 	{
 		vertexArray->Bind();

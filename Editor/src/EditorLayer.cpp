@@ -120,21 +120,43 @@ void EditorLayer::OnImGuiRender()
 		ImGui::EndMenuBar();
 	}
 
+	ImGui::Begin("Metrics");
+
+	if (ImGui::CollapsingHeader("General"))
+	{
+		ImGui::Text("Framerate: %.2f FPS", EngineApplication::Instance().GetFramerate());
+		ImGui::Text("Frametime: %.2f ms", EngineApplication::Instance().GetFrametime());
+		ImGui::Separator();
+		ImGui::Text("Render API: %s", Renderer::GetRenderAPIString().c_str());
+		ImGui::Text("Vendor: %s", Renderer::GetVendor().c_str());
+		ImGui::Text("Renderer: %s", Renderer::GetRenderer().c_str());
+		ImGui::Text("Version: %s", Renderer::GetVersion().c_str());
+	}
+
 	auto metrics = Batcher2D::GetMetrics();
-	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);	// OpenSans-Regular
-	ImGui::Begin("Batcher 2D Metrics");
-	ImGui::Text("Batches: %d", metrics.batches);
-	ImGui::Text("Vertices: %d", metrics.vertices);
-	ImGui::Text("Indices: %d", metrics.indices);
-	ImGui::Text("Triangles: %d", metrics.triangles);
+	if (ImGui::CollapsingHeader("Batcher2D Metrics"))
+	{
+		ImGui::Text("Batches: %d", metrics.batches);
+		ImGui::Text("Vertices: %d", metrics.vertices);
+		ImGui::Text("Indices: %d", metrics.indices);
+		ImGui::Text("Triangles: %d", metrics.triangles);
+	}
+	Batcher2D::ResetMetrics(); 
+
+	auto &io = ImGui::GetIO();
+	if (ImGui::CollapsingHeader("ImGui Metrics"))
+	{
+		ImGui::Text("Vertices: %d", io.MetricsRenderVertices);
+		ImGui::Text("Indices: %d", io.MetricsRenderIndices);
+		ImGui::Text("%d active windows (%d visible)", io.MetricsActiveWindows, io.MetricsRenderWindows);
+		ImGui::Text("Triangles: %d", metrics.triangles);
+	}
 	ImGui::End();
-	ImGui::PopFont();									// OpenSans-Regular
-	Batcher2D::ResetMetrics();
 
 	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Test Window 3");
-	ImGui::Text("Framerate: %d FPS", (int) ImGui::GetIO().Framerate);
+	ImGui::Text("Hello World!");
 	ImGui::End();
 
 	m_Scene->OnImGuiRender();

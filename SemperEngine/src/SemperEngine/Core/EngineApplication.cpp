@@ -39,11 +39,11 @@ namespace SemperEngine
 		while (m_Running)
 		{
 			m_Window->OnUpdate();
-			float deltaTime = static_cast<float>(glfwGetTime()) - m_Lastframe;
-			m_Lastframe = static_cast<float>(glfwGetTime());
+			m_DeltaTime = static_cast<float>(glfwGetTime()) - m_LastFrame;
+			m_LastFrame = static_cast<float>(glfwGetTime());
 
 			for (auto *layer : m_LayerStack)
-				layer->OnUpdate(deltaTime);
+				layer->OnUpdate(m_DeltaTime);
 
 			m_ImGuiLayer->Begin();
 			for (auto *layer : m_LayerStack)
@@ -122,5 +122,14 @@ namespace SemperEngine
 		}
 		m_Minimized = false;
 		return false;
+	}
+
+	float EngineApplication::GetFrametime()
+	{
+		return m_DeltaTime * 1000.0f;
+	}
+	float EngineApplication::GetFramerate()
+	{
+		return 1.0f / m_DeltaTime;
 	}
 }

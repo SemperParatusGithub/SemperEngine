@@ -34,11 +34,15 @@ namespace SemperEngine
 
 		bool OnWindowClose(WindowCloseEvent &e);
 		bool OnWindowResize(WindowResizeEvent &e);
+
+		float GetFrametime();	// ms
+		float GetFramerate();	
 		
 	private:
 		bool m_Running = false;
 		bool m_Minimized = false;
-		float m_Lastframe = 0.0f;
+		float m_LastFrame = 0.0f;
+		float m_DeltaTime = 0.0f;
 
 		SharedPtr<Window> m_Window;
 		SharedPtr<Backend> m_Backend;

@@ -38,6 +38,26 @@ namespace SemperEngine
 		s_CurrentBackend->Clear();
 	}
 
+	std::string Renderer::GetRenderAPIString()
+	{
+		return s_CurrentBackend->GetRenderAPIString();
+	}
+
+	std::string Renderer::GetVendor()
+	{
+		return s_CurrentBackend->GetVendor();
+	}
+
+	std::string Renderer::GetRenderer()
+	{
+		return s_CurrentBackend->GetRenderer();
+	}
+
+	std::string Renderer::GetVersion()
+	{
+		return s_CurrentBackend->GetVersion();
+	}
+
 	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader)
 	{
 		s_CurrentBackend->DrawIndexed(vertexArray, shader);
