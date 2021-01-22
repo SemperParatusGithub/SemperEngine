@@ -14,6 +14,12 @@
 
 namespace SemperEngine
 {
+	ImFont *ImGuiLayer::GetFont(std::size_t index)
+	{
+		ImFont *font = ImGui::GetIO().Fonts->Fonts[index];
+		return font;
+	}
+
 	void ImGuiLayer::OnAttach()
 	{
 		/* ImGui Setup */
@@ -40,6 +46,13 @@ namespace SemperEngine
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init((char *) glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
 
+		// Load Fonts
+		io.Fonts->AddFontFromFileTTF("OpenSans-Regular.ttf", 20);
+		io.Fonts->AddFontFromFileTTF("OpenSans-Bold.ttf", 20);
+
+		io.FontDefault = GetFont(OPEN_SANS_REGULAR);
+
+		// Set Colors
 		auto &colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_WindowBg] = ImVec4 { 0.1f, 0.105f, 0.11f, 1.0f };
 

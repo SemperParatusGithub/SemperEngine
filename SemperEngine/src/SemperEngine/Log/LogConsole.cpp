@@ -1,6 +1,8 @@
 #include "Precompiled.h"
 #include "LogConsole.h"
 
+#include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
+
 
 namespace SemperEngine
 {
@@ -26,7 +28,7 @@ namespace SemperEngine
 	void LogConsole::OnImGuiRender()
 	{
 		ImGui::Begin("Log Console");
-		ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);	// OpenSans-Regular
+		ImGui::PushFont(ImGuiLayer::GetFont(OPEN_SANS_REGULAR));	// OpenSans-Regular
 
 		if (m_Buffer.size() >= 1000)
 			m_Buffer.erase(m_Buffer.begin(), m_Buffer.begin() + 500);
@@ -84,7 +86,7 @@ namespace SemperEngine
 				ImGui::SetScrollHereY(1.0f);
 		}
 		ImGui::EndChild();    // Log messages
-		ImGui::PopFont();
+		ImGui::PopFont();	// OpenSans-Regular
 
 		ImGui::End();    // Log Console
 	}

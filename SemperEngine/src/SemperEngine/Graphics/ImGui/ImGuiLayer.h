@@ -2,11 +2,19 @@
 
 #include "SemperEngine/Core/LayerStack.h"
 
+#define OPEN_SANS_REGULAR	0
+#define OPEN_SANS_BOLD		1
+
+
+class ImFont;
 
 namespace SemperEngine
 {
 	class ImGuiLayer : public Layer
 	{
+	public:
+		static ImFont *GetFont(std::size_t index);
+
 	public:
 		ImGuiLayer() : Layer("ImGuiLayer") {}
 

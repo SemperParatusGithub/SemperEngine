@@ -3,6 +3,7 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
 
 #include "Entity.h"
 
@@ -34,7 +35,7 @@ namespace SemperEngine
 	void Scene::OnImGuiRender()
 	{
 		ImGui::Begin("Hierarchy");
-		ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);
+		ImGui::PushFont(ImGuiLayer::GetFont(OPEN_SANS_REGULAR));
 
 
 		if (ImGui::BeginPopupContextWindow(0, 1, false))
@@ -99,6 +100,7 @@ namespace SemperEngine
 
 			auto &transform = entity.Get<TransformComponent>().transform;
 			auto [translation, rotation, scale] = entity.Get<TransformComponent>().GetTranslationRotationScale();
+
 			if (ImGui::CollapsingHeader("Transform Component"))
 			{
 				ImGui::PushID((uint64_t)UUID);
@@ -117,8 +119,8 @@ namespace SemperEngine
 	{
 		bool valuesChanged = false;
 
-		auto openSansRegular = ImGui::GetIO().Fonts->Fonts[1];
-		auto openSansBold = ImGui::GetIO().Fonts->Fonts[2];
+		auto openSansRegular = ImGuiLayer::GetFont(OPEN_SANS_REGULAR);
+		auto openSansBold = ImGuiLayer::GetFont(OPEN_SANS_BOLD);
 
 		float regionWidth = ImGui::GetContentRegionAvail().x - labelWidth;
 		float sz = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
