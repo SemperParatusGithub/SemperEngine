@@ -1,9 +1,11 @@
 #pragma once
-
 #include "SemperEngine.h"
 
 
-class TestLayer : public SemperEngine::Layer
+using namespace SemperEngine;
+
+
+class TestLayer : public Layer
 {
 public:
     TestLayer();
@@ -14,22 +16,15 @@ public:
 
     virtual void OnUpdate(float deltaTime) override;
     virtual void OnImGuiRender() override;
-    virtual void OnEvent(SemperEngine::Event & e) override;
+    virtual void OnEvent(Event &e) override;
 
 private:
-    SemperEngine::OrthographicCameraController m_CameraController;
-    SemperEngine::Texture2D *m_GridTexture;
-    SemperEngine::Texture2D *m_StoneTexture;
-    SemperEngine::Texture2D *m_BrickTexture;
+    OrthographicCameraController m_CameraController;
+    SharedPtr<Texture2D> m_GridTexture;
+    SharedPtr<Texture2D> m_StoneTexture;
+    SharedPtr<Texture2D> m_BrickTexture;
 
-    SemperEngine::Texture2D *m_SpriteSheet;
+    SharedPtr<Texture2D> m_SpriteSheet;
 
-    struct SpriteObject
-    {
-        std::string name;
-        SemperEngine::Sprite sprite;
-        float posX = 0.0f, posY = 0.0f;
-        int indexX = 0, indexY = 0;
-    };
-    std::vector<SpriteObject> m_Sprites;
+    std::vector<std::pair<std::string, Sprite>> m_Sprites;
 };

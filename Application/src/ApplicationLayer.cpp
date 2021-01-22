@@ -9,7 +9,7 @@ ApplicationLayer::ApplicationLayer() :
 	Layer("Application Layer"),
 	m_CameraController(1280.0f / 720.0f, 0, 0)
 {
-	SemperEngine::Renderer::SetClearColor({ 0.7f, 0.7f,0.7f, 0.7f });
+	Renderer::SetClearColor({ 0.7f, 0.7f,0.7f, 0.7f });
 
 	float vertices[] = {
 		// Position				TexCoords
@@ -62,24 +62,24 @@ ApplicationLayer::ApplicationLayer() :
 		"}\n"
 	};
 	
-	m_Shader = SemperEngine::Shader::Create({ textureVertexShader, textureFragmentShader });
+	m_Shader.reset(Shader::Create({ textureVertexShader, textureFragmentShader }));
 	m_Shader->Bind();
 	m_Shader->SetUniformInt("u_Texture", 0);
 
-	m_FlatColorShader = SemperEngine::Shader::Create({ flatColorVertexShader, flatColorFragmentShader });
+	m_FlatColorShader.reset(Shader::Create({ flatColorVertexShader, flatColorFragmentShader }));
 	
-	SemperEngine::TextureData data;
-	data.minFilter = SemperEngine::TextureFilter::Linear;
-	data.magFilter = SemperEngine::TextureFilter::Linear;
-	m_Texture = SemperEngine::Texture2D::Create("Grid.png", data);
+	TextureData data;
+	data.minFilter = TextureFilter::Linear;
+	data.magFilter = TextureFilter::Linear;
+	m_Texture.reset(Texture2D::Create("Grid.png", data));
 
-	m_IndexBuffer = SemperEngine::IndexBuffer::Create(indices, SemperEngine::IndexFormat::Uint8, sizeof(indices), SemperEngine::BufferUsage::Static);
-	m_VertexBuffer = SemperEngine::VertexBuffer::Create(vertices, sizeof(vertices), SemperEngine::BufferUsage::Static);
+	m_IndexBuffer.reset(IndexBuffer::Create(indices, IndexFormat::Uint8, sizeof(indices), BufferUsage::Static));
+	m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices), BufferUsage::Static));
 
-	m_VertexBuffer->AddAttribute({ "u_Position", SemperEngine::VertexFormat::Float3, false });
-	m_VertexBuffer->AddAttribute({ "u_TexCoords", SemperEngine::VertexFormat::Float2, false });
+	m_VertexBuffer->AddAttribute({ "u_Position", VertexFormat::Float3, false });
+	m_VertexBuffer->AddAttribute({ "u_TexCoords", VertexFormat::Float2, false });
 
-	m_VertexArray = SemperEngine::VertexArray::Create(m_VertexBuffer, m_IndexBuffer);
+	m_VertexArray.reset(VertexArray::Create(m_VertexBuffer.get(), m_IndexBuffer.get()));
 }
 
 void ApplicationLayer::OnAttach()
@@ -94,28 +94,28 @@ void ApplicationLayer::OnUpdate(float deltaTime)
 {
 	m_CameraController.OnUpdate(deltaTime);
 
-	SemperEngine::Renderer::Clear();
+	Renderer::Clear();
 
 	m_FlatColorShader->Bind();
 	m_FlatColorShader->SetUniformFloat4("u_Color", { m_Color[0],m_Color[1],m_Color[2],m_Color[3] });
 	m_FlatColorShader->SetUniformMat4f("u_MVP", m_CameraController.GetCamera().GetProjectionView() * glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), { 0.0f, 0.0f, 1.0f }));
-	SemperEngine::Renderer::DrawIndexed(m_VertexArray, m_FlatColorShader);
+	Renderer::DrawIndexed(m_VertexArray, m_FlatColorShader);
 	
 	m_Texture->Bind();
 	m_Shader->Bind();
 	m_Shader->SetUniformMat4f("u_MVP", m_CameraController.GetCamera().GetProjectionView() * glm::scale(glm::mat4(1.0f), { 10.0f, 10.0f, 1.0f }));
-	SemperEngine::Renderer::DrawIndexed(m_VertexArray, m_Shader);
+	Renderer::DrawIndexed(m_VertexArray, m_Shader);
 }
 
 void ApplicationLayer::OnImGuiRender()
 {
 	ImGui::Begin("Test");
 	ImGui::Text("Hello, World!");
-	ImGui::Text("Frametime: %.2f FPS", ImGui::GetIO().Framerate);
+	ImGui::Text("Frame time: %.2f FPS", ImGui::GetIO().Framerate);
 	ImGui::End();
 }
 
-void ApplicationLayer::OnEvent(SemperEngine::Event &e)
+void ApplicationLayer::OnEvent(Event &e)
 {
 	m_CameraController.OnEvent(e);
 }

@@ -1,8 +1,10 @@
 #pragma once
 #include "SemperEngine.h"
 
+using namespace SemperEngine;
 
-class ApplicationLayer : public SemperEngine::Layer
+
+class ApplicationLayer : public Layer
 {
 public:
     ApplicationLayer();
@@ -12,18 +14,18 @@ public:
     virtual void OnDetach() override;
     virtual void OnUpdate(float deltaTime) override;
     virtual void OnImGuiRender() override;
-    virtual void OnEvent(SemperEngine::Event &e) override;
+    virtual void OnEvent(Event &e) override;
 
 private:
     float m_Color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    SemperEngine::OrthographicCameraController m_CameraController;
+    OrthographicCameraController m_CameraController;
 
-    SemperEngine::VertexArray *m_VertexArray;
-    SemperEngine::VertexBuffer *m_VertexBuffer;
-    SemperEngine::IndexBuffer *m_IndexBuffer;
-    SemperEngine::Texture2D *m_Texture;
+    SharedPtr<VertexArray> m_VertexArray;
+    SharedPtr<VertexBuffer> m_VertexBuffer;
+    SharedPtr<IndexBuffer> m_IndexBuffer;
+    SharedPtr<Texture2D> m_Texture;
 
-    SemperEngine::Shader *m_Shader;
-    SemperEngine::Shader *m_FlatColorShader;
+	SharedPtr<Shader> m_Shader;
+    SharedPtr<Shader> m_FlatColorShader;
 };
