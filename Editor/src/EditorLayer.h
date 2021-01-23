@@ -1,6 +1,10 @@
 #pragma once
 #include "SemperEngine.h"
 
+#include "Inspector.h"
+#include "Hierarchy.h"
+
+
 using namespace SemperEngine;
 
 
@@ -25,6 +29,9 @@ private:
 	SharedPtr<Framebuffer> m_Framebuffer;
 	SharedPtr<LogConsole> m_LogConsole;
 	SharedPtr<Scene> m_Scene;
+
+	SharedPtr<Hierarchy> m_Hierarchy;
+	SharedPtr<Inspector> m_Inspector;
 
 	OrthographicCameraController m_CameraController;
 	SharedPtr<Texture2D> m_TestTexture;

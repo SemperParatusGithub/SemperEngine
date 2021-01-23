@@ -16,21 +16,14 @@ namespace SemperEngine
 		~Scene() = default;
 
 		Entity CreateEntity();
-		void RemoveEntity(Entity entity);
+		void DestroyEntity(Entity entity);
+		bool IsValid(Entity entity);
 
-		ECS::World GetWorld();
+		void OnUpdate(float deltaTime);
 
-		void OnImGuiRender();
-
-	private:
-		void DrawInspectorComponentInfo(Entity entity);
-		static bool DrawSliderFloat3(ConstRef<std::string> label, float labelWidth, Vec3 &vector, float resetValue);
-
-	private:
-		friend class Entity;
+		ECS::World &GetWorld();
 
 	private:
 		ECS::World m_World;
-		ECS::EntityHandle m_ActiveEntityHandle = ECS::NullEntity;
 	};
 }

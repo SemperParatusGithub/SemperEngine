@@ -17,6 +17,8 @@ EditorLayer::EditorLayer() :
 	Log::SetLogConsoleInstance(m_LogConsole);
 
 	m_Scene = MakeUnique<Scene>();
+	m_Hierarchy = MakeShared<Hierarchy>(m_Scene.get());
+	m_Inspector = MakeShared<Inspector>(m_Scene.get());
 
 	SE_CORE_INFO("Hello World");
 	SE_CORE_WARN("This is a Warning");
@@ -155,7 +157,8 @@ void EditorLayer::OnImGuiRender()
 	ImGui::Text("Hello World!");
 	ImGui::End();
 
-	m_Scene->OnImGuiRender();
+	m_Hierarchy->OnImGui();
+	m_Inspector->OnImGui(m_Hierarchy->GetSelectedEntity());
 
 	m_LogConsole->OnImGuiRender();
 

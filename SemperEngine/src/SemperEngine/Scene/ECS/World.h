@@ -36,10 +36,14 @@ namespace SemperEngine
 
 				return ID;
 			}
-
-			void RemoveEntity(EntityHandle handle)
+			void DestroyEntity(EntityHandle handle)
 			{
 				m_Entities.erase(handle);
+			}
+
+			bool IsValid(EntityHandle handle)
+			{
+				return m_Entities.find(handle) != m_Entities.end();
 			}
 
 			template<typename T, typename ... Args>
