@@ -190,11 +190,10 @@ namespace SemperEngine
 		s_RenderData.metrics.indices += 6;
 	}
 
-	void Batcher2D::Draw(Renderable2D *renderable)
+	void Batcher2D::DrawSprite(ConstRef<Transform> transform, ConstRef<Sprite> sprite)
 	{
-		auto &transform = renderable->GetTransform();
-		auto &tintColor = renderable->GetColor();
-		auto &texture = renderable->GetTexture();
+		auto &tintColor = sprite.GetColor();
+		auto texture = sprite.GetTexture();
 
 		if (s_RenderData.indexCount >= MaxIndexCount)
 		{
@@ -204,7 +203,7 @@ namespace SemperEngine
 
 		float textureIndex = 0.0f;
 
-		if (texture != nullptr)
+		if (texture)
 		{
 			for (std::size_t i = 1; i < s_RenderData.textures.size(); i++)
 			{
@@ -224,7 +223,7 @@ namespace SemperEngine
 		{
 			s_RenderData.bufferPtr->position = transform.GetTransform() * s_RenderData.vertexPositions[i];
 			s_RenderData.bufferPtr->color = tintColor;
-			s_RenderData.bufferPtr->texCoords = renderable->GetTextureCoordinates()[i];
+			s_RenderData.bufferPtr->texCoords = sprite.GetTextureCoordinates()[i];
 			s_RenderData.bufferPtr->texIndex = textureIndex;
 			s_RenderData.bufferPtr++;
 		}

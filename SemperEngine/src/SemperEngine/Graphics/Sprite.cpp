@@ -4,6 +4,14 @@
 
 namespace SemperEngine
 {
+	Sprite::Sprite()
+	{
+		m_TextureCoordinates[0] = { 0.0f, 0.0f };
+		m_TextureCoordinates[1] = { 1.0f, 0.0f };
+		m_TextureCoordinates[2] = { 1.0f, 1.0f };
+		m_TextureCoordinates[3] = { 0.0f, 1.0f };
+	}
+
 	Sprite::Sprite(SharedPtr<Texture2D> texture)
 	{
 		m_Texture = texture;
@@ -13,9 +21,11 @@ namespace SemperEngine
 		m_TextureCoordinates[2] = { 1.0f, 1.0f };
 		m_TextureCoordinates[3] = { 0.0f, 1.0f };
 	}
-	Sprite::Sprite(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize)
+	Sprite::Sprite(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize)
 	{
 		m_Texture = texture;
+
+		Vec2 spriteSize = { texture->GetWidth(), texture->GetHeight() };
 
 		Vec2 min = { (index.x * cellSize.x) / texture->GetWidth(), (index.y * cellSize.y) / texture->GetHeight() };
 		Vec2 max = { ((index.x + spriteSize.x) * cellSize.x) / texture->GetWidth(), ((index.y + spriteSize.y) * cellSize.y) / texture->GetHeight() };
@@ -36,30 +46,34 @@ namespace SemperEngine
 		m_TextureCoordinates[3] = { 0.0f, 1.0f };
 	}
 
-	Sprite::~Sprite()
+	ConstRef<Vec4> Sprite::GetColor() const
 	{
+		return m_Color;
 	}
 
-	void Sprite::SetPosition(ConstRef<Vec2> position)
+	SharedPtr<Texture2D> Sprite::GetTexture() const
 	{
-		m_Transform.SetTranslation(Vec3 { position.x, position.y, 0.0f });
+		return m_Texture;
 	}
-	void Sprite::SetScale(ConstRef<Vec2> scale)
+
+	ConstRef<std::array<Vec2, 4>> Sprite::GetTextureCoordinates() const
 	{
-		m_Transform.SetTranslation(Vec3 { scale.x, scale.y, 0.0f });
+		return m_TextureCoordinates;
 	}
-	void Sprite::SetRotation(float rotation)
+
+	Sprite::~Sprite()
 	{
-		m_Transform.SetRotation(Vec3 { 0.0f, 0.0f, rotation });
 	}
 
 	void Sprite::SetTexture(SharedPtr<Texture2D> texture)
 	{
 		m_Texture = texture;
 	}
-	void Sprite::SetSpriteSheet(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize, ConstRef<Vec2> spriteSize)
+	void Sprite::SetSpriteSheet(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize)
 	{
 		m_Texture = texture;
+
+		Vec2 spriteSize = { texture->GetWidth(), texture->GetHeight() };
 
 		Vec2 min = { (index.x * cellSize.x) / texture->GetWidth() , (index.y * cellSize.y) / texture->GetHeight() };
 		Vec2 max = { ((index.x + spriteSize.x) * cellSize.x) / texture->GetWidth() , ((index.y + spriteSize.y) * cellSize.y) / texture->GetHeight() };

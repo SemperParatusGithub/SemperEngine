@@ -1,8 +1,6 @@
 #pragma once
-
-#include "SemperEngine/Graphics/Backend/API/Texture.h"
-
-#include "SemperEngine/Graphics/Renderable2D.h"
+#include "SemperEngine/Graphics/Sprite.h"
+#include "SemperEngine/Graphics/Transform.h"
 #include "SemperEngine/Graphics/Camera/OrthographicCamera.h"
 
 
@@ -39,7 +37,7 @@ namespace SemperEngine
 		static void DrawQuad(ConstRef<Transform> transform, ConstRef<Vec4> color);
 		static void DrawQuad(ConstRef<Transform> transform, ConstRef<SharedPtr<Texture2D>> texture, ConstRef<glm::vec4> tintColor = Vec4(1.0f));
 
-		static void Draw(Renderable2D *renderable);
+		static void DrawSprite(ConstRef<Transform> transform, ConstRef<Sprite> sprite);
 
 		static void ResetMetrics();
 		static Batcher2DMetrics GetMetrics();
