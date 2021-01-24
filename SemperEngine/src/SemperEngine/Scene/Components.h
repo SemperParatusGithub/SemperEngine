@@ -4,6 +4,7 @@
 
 #include "UUID.h"
 #include "SemperEngine/Graphics/Transform.h"
+#include "SemperEngine/Graphics/Sprite.h"
 
 
 namespace SemperEngine
@@ -65,6 +66,32 @@ namespace SemperEngine
 		ConstRef<Mat4> GetMatrix() const
 		{
 			return transform.GetTransform();
+		}
+	};
+
+	struct SpriteComponent
+	{
+		Sprite sprite;
+
+		SpriteComponent() = default;
+		~SpriteComponent() = default;
+
+		void SetTexture(SharedPtr<Texture2D> texture)
+		{
+			sprite.SetTexture(texture);
+		}
+		void SetTextureSheet(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize)
+		{
+			sprite.SetSpriteSheet(texture, index, cellSize);
+		}
+
+		void SetColor(ConstRef<Vec4> color)
+		{
+			sprite.SetColor(color);
+		}
+		ConstRef<Vec4> GetColor() const
+		{
+			return sprite.GetColor();
 		}
 	};
 }

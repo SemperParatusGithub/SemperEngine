@@ -60,25 +60,7 @@ void EditorLayer::OnUpdate(float deltaTime)
 		Renderer::SetClearColor({ 0.86f,  0.86f,  0.86f,  0.86f });
 		Renderer::Clear();
 
-		Batcher2D::BeginScene(m_CameraController.GetCamera());
-
-		Transform transform;
-		transform.SetRotation(Vec3(0.0f, 0.0f, (float) glfwGetTime()));
-
-		for (float y = 0; y < 25.0f; y += 1.0f)
-		{
-			for (float x = 0; x < 25.0f; x += 1.0f)
-			{
-				transform.SetTranslation({ x - 12.0f, y - 12.0f, 0.0f });
-				Batcher2D::DrawQuad(transform, { x / 25.0f, y / 25.0f, 0.0f, 1.0f });
-			}
-		}
-
-		Transform checkerBoardTransform;
-		checkerBoardTransform.SetScale({ 30.0f, 30.0f, 1.0f });
-		Batcher2D::DrawQuad(checkerBoardTransform, m_TestTexture);
-
-		Batcher2D::EndScene();
+		m_Scene->OnUpdate(deltaTime, m_CameraController.GetCamera());
 
 		m_Framebuffer->UnBind();
 	}

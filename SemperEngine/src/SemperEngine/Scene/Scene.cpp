@@ -6,6 +6,7 @@
 #include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
 
 #include "Entity.h"
+#include "SemperEngine/Graphics/Renderers/Batcher2D.h"
 
 
 namespace SemperEngine
@@ -41,8 +42,23 @@ namespace SemperEngine
 		return m_World.IsValid(entity.GetHandle());
 	}
 
-	void Scene::OnUpdate(float deltaTime)
+	void Scene::OnUpdate(float deltaTime, ConstRef<OrthographicCamera> camera)
 	{
+		Batcher2D::BeginScene(camera);
+
+		for (auto entityHandle : m_World)
+		{
+			Entity currentEntity = Entity(entityHandle, this);
+			if (currentEntity.Has<SpriteComponent>())
+			{
+				auto sprite = currentEntity.Get<SpriteComponent>().sprite;
+				auto transform = currentEntity.Get<TransformComponent>().transform;
+
+				Batcher2D::DrawSprite(transform, sprite);
+			}
+		}
+
+		Batcher2D::EndScene();
 	}
 
 	ECS::World &Scene::GetWorld()

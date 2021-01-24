@@ -132,7 +132,9 @@ namespace SemperEngine
 			{
 				if (ImGui::BeginMenu("Add Component"))
 				{
-					if (ImGui::MenuItem("TransformComponent"));
+					if (ImGui::MenuItem("Transform"));
+					if (ImGui::MenuItem("Sprite"))
+						entity.Add<SpriteComponent>(SpriteComponent {});
 
 					ImGui::EndMenu();
 				}
@@ -165,6 +167,18 @@ namespace SemperEngine
 					if (DrawSliderFloat3(" Scale", 100.0f, scale, 1.0f))
 						transform.SetScale(scale);
 					ImGui::PopID();
+				}
+			}
+		
+			if (entity.Has<SpriteComponent>())
+			{
+				auto &sprite = entity.Get<SpriteComponent>();
+
+				if (ImGui::CollapsingHeader("Sprite Component"))
+				{
+					Vec4 color = Vec4(sprite.GetColor());
+					if (ImGui::ColorEdit4("Sprite Color", &color[0]))
+						sprite.SetColor(color);
 				}
 			}
 		}
