@@ -37,6 +37,8 @@ namespace SemperEngine
 
 		float GetFrametime();	// ms
 		float GetFramerate();	
+
+		std::string OpenFile(const char *filter);
 		
 	private:
 		bool m_Running = false;
