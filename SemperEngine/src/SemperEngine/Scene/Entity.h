@@ -37,7 +37,7 @@ namespace SemperEngine
 		{
 			SE_ASSERT_MSG(Has<Component>(), "Component doesn't exist");
 
-			m_Scene->GetWorld().Remove(m_Handle);
+			m_Scene->GetWorld().Remove<Component>(m_Handle);
 		}
 
 		template<typename Component>

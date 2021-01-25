@@ -4,6 +4,8 @@
 #include <imgui/imgui_internal.h>
 #include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
 
+#include "SemperEngine/Core/EngineApplication.h"
+
 
 namespace SemperEngine
 {
@@ -132,9 +134,13 @@ namespace SemperEngine
 			{
 				if (ImGui::BeginMenu("Add Component"))
 				{
-					if (ImGui::MenuItem("Transform"));
+					if (ImGui::MenuItem("Transform"))
+						if (!entity.Has<TransformComponent>())
+							entity.Add<TransformComponent>(TransformComponent {});
+
 					if (ImGui::MenuItem("Sprite"))
-						entity.Add<SpriteComponent>(SpriteComponent {});
+						if(!entity.Has<SpriteComponent>())
+							entity.Add<SpriteComponent>(SpriteComponent {});
 
 					ImGui::EndMenu();
 				}
@@ -157,6 +163,9 @@ namespace SemperEngine
 
 				if (ImGui::CollapsingHeader("Transform Component"))
 				{
+					if (ImGui::IsItemHovered() && ImGui::IsMouseDown(1))
+						ImGui::OpenPopup("Component Options##Transform");
+
 					auto UUID = entity.Get<IdentificationComponent>().ID;
 
 					ImGui::PushID((U64) UUID);
@@ -168,6 +177,16 @@ namespace SemperEngine
 						transform.SetScale(scale);
 					ImGui::PopID();
 				}
+				else if (ImGui::IsItemHovered() && ImGui::IsMouseDown(1))
+					ImGui::OpenPopup("Component Options##Transform");
+
+				if (ImGui::BeginPopup("Component Options##Transform"))
+				{
+					if (ImGui::MenuItem("Remove Component"))
+						entity.Remove<TransformComponent>();
+
+					ImGui::EndPopup();
+				}
 			}
 		
 			if (entity.Has<SpriteComponent>())
@@ -176,9 +195,38 @@ namespace SemperEngine
 
 				if (ImGui::CollapsingHeader("Sprite Component"))
 				{
+					if (ImGui::IsItemHovered() && ImGui::IsMouseDown(1))
+						ImGui::OpenPopup("Component Options##Sprite");
+
 					Vec4 color = Vec4(sprite.GetColor());
 					if (ImGui::ColorEdit4("Sprite Color", &color[0]))
 						sprite.SetColor(color);
+					auto Texture = sprite.sprite.GetTexture();
+					if (Texture)
+						ImGui::Image((void *) Texture->GetHandle(), ImVec2(64.0f, 64.0f));
+					else ImGui::Image(nullptr, ImVec2(64.0f, 64.0f));
+					if (ImGui::IsItemClicked())
+					{
+						std::string filename = EngineApplication::Instance().OpenFile("");
+						if (filename != "")
+						{
+							SharedPtr<Texture2D> texture;
+							texture.reset(Texture2D::Create(filename));
+							sprite.SetTexture(texture);
+						}
+					}
+				}
+				else {
+					if (ImGui::IsItemHovered() && ImGui::IsMouseDown(1))
+						ImGui::OpenPopup("Component Options##Sprite");
+				}
+
+				if (ImGui::BeginPopup("Component Options##Sprite"))
+				{
+					if (ImGui::MenuItem("Remove Component##Sprite"))
+						entity.Remove<SpriteComponent>();
+
+					ImGui::EndPopup();
 				}
 			}
 		}

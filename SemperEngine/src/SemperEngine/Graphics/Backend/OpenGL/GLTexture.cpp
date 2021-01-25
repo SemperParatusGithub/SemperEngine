@@ -77,7 +77,7 @@ namespace SemperEngine
 		stbi_uc *localBuffer;
 		localBuffer = stbi_load(m_Filepath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 
-		SE_ASSERT_MSG(localBuffer, "Failed to load Texture %s", m_Filepath.c_str());
+		SE_ASSERT_MSG(localBuffer, "Failed to load Texture");
 
 		m_Width = static_cast<U32>(texWidth);
 		m_Height = static_cast<U32>(texHeight);

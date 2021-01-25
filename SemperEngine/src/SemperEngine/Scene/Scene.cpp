@@ -49,7 +49,7 @@ namespace SemperEngine
 		for (auto entityHandle : m_World)
 		{
 			Entity currentEntity = Entity(entityHandle, this);
-			if (currentEntity.Has<SpriteComponent>())
+			if (currentEntity.Has<SpriteComponent>() && currentEntity.Has<TransformComponent>())
 			{
 				auto sprite = currentEntity.Get<SpriteComponent>().sprite;
 				auto transform = currentEntity.Get<TransformComponent>().transform;
