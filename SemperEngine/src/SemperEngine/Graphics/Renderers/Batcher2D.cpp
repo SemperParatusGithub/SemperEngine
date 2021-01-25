@@ -121,7 +121,7 @@ namespace SemperEngine
 		U32 size = static_cast<U32>(reinterpret_cast<U8 *>(s_RenderData.bufferPtr) - reinterpret_cast<U8 *>(s_RenderData.buffer));
 		s_RenderData.vertexBuffer->SetData(s_RenderData.buffer, size);
 
-		Renderer::DrawIndexed(s_RenderData.vertexArray, s_RenderData.shader);
+		Renderer::DrawIndexed(s_RenderData.vertexArray, s_RenderData.shader, s_RenderData.indexCount);
 
 		s_RenderData.metrics.batches += 1;
 	}

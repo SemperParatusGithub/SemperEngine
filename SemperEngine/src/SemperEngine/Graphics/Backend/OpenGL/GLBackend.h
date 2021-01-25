@@ -22,5 +22,6 @@ namespace SemperEngine
 		virtual std::string GetVersion() override;
 
 		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader);
+		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count);
 	};
 }

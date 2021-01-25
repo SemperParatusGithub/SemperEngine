@@ -39,6 +39,7 @@ namespace SemperEngine
 		virtual std::string GetVersion() = 0;
 
 		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader) = 0;
+		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count) = 0;
 
 	private:
 		static API s_RenderAPI;

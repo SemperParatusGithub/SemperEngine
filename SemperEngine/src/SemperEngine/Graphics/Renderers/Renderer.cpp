@@ -62,4 +62,9 @@ namespace SemperEngine
 	{
 		s_CurrentBackend->DrawIndexed(vertexArray, shader);
 	}
+
+	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count)
+	{
+		s_CurrentBackend->DrawIndexed(vertexArray, shader, count);
+	}
 }

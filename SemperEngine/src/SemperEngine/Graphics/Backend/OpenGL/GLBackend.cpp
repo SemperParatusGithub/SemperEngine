@@ -12,7 +12,7 @@ namespace SemperEngine
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_DEPTH_TEST);		  
+		glEnable(GL_DEPTH_TEST);		
 	}
 
 	void GLBackend::SetClearColor(ConstRef<glm::vec4> clearColor)
@@ -59,5 +59,12 @@ namespace SemperEngine
 		shader->Bind();
 		IndexFormat indexFormat = vertexArray->GetIndexBuffer()->GetFormat();
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GLTools::IndexFormatToGLType(indexFormat), nullptr);
+	}
+	void GLBackend::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count)
+	{
+		vertexArray->Bind();
+		shader->Bind();
+		IndexFormat indexFormat = vertexArray->GetIndexBuffer()->GetFormat();
+		glDrawElements(GL_TRIANGLES, count, GLTools::IndexFormatToGLType(indexFormat), nullptr);
 	}
 }
