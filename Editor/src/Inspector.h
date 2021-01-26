@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SemperEngine/Scene/Entity.h"
+#include "SemperEngine/Scene/Components.h"
 
 
 namespace SemperEngine
@@ -16,7 +17,8 @@ namespace SemperEngine
 		bool DrawSliderFloat3(ConstRef<std::string> name, float labelWidth, Vec3 &vector, float resetValue);
 
 	private:
-		bool DrawEntity(Entity entity);		// Returns true if Entity was removed
+		template<typename Component>
+		void DrawComponentInfo(Entity entity);
 
 	private:
 		Scene *m_SceneHandle;
