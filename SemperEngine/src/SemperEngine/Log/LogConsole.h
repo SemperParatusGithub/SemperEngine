@@ -22,8 +22,6 @@ namespace SemperEngine
 
 		void OnImGuiRender();
 
-		static void SetLogColor(Severity severity);
-
 	private:
 		std::vector<LogElement> m_Buffer; 
 		char m_InputBuffer[256];

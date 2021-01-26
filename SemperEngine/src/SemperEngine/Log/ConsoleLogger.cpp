@@ -13,7 +13,7 @@ namespace SemperEngine
 
 	void ConsoleLogger::LogMessage(ConstRef<LogElement> element)
 	{
-		LogBase::SetLogColor(element.severity);
+		printf(LogBase::SeverityToColorCodes(element.severity));
 
 		if (!element.message.empty()) {
 			char buf[1024];
@@ -25,6 +25,6 @@ namespace SemperEngine
 			printf("[WARNING]: Empty message string\n");
 		}
 
-		LogBase::ResetLogColor();
+		printf(ColorCodes::Reset);
 	}
 }

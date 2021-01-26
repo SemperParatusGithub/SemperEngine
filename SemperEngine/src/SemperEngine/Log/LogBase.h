@@ -1,6 +1,7 @@
 #pragma once
 #include <time.h>
 #include <sstream>
+#include "../imgui/imgui.h"
 
 
 namespace SemperEngine
@@ -40,17 +41,32 @@ namespace SemperEngine
 	class LogBase
 	{
 	public:
-		static inline void SetLogColor(Severity severity)
+		static inline const char* SeverityToColorCodes(Severity severity)
 		{
 			switch (severity)
 			{
-				case Severity::Info:		printf(ColorCodes::Green);		break;
-				case Severity::Warn:		printf(ColorCodes::Yellow);		break;
-				case Severity::Error:		printf(ColorCodes::Red);		break;
-				case Severity::Critical:	printf(ColorCodes::LightRed);	break;
+				case Severity::Info:		return ColorCodes::Green;		break;
+				case Severity::Warn:		return ColorCodes::Yellow;		break;
+				case Severity::Error:		return ColorCodes::Red;			break;
+				case Severity::Critical:	return ColorCodes::LightRed;	break;
 
-				default: printf(ColorCodes::Reset);							break;
+				default:					return ColorCodes::Reset;		break;
 			}
+			return ColorCodes::Reset;
+		}
+
+		static inline ImVec4 SeverityToImGuiColor(Severity severity)
+		{
+			switch (severity)
+			{
+				case Severity::Info:		return ImVec4(0.10f, 0.80f, 0.40f, 1.00f);	break;
+				case Severity::Warn:		return ImVec4(1.00f, 0.83f, 0.00f, 1.00f);	break;
+				case Severity::Error:		return ImVec4(1.00f, 0.40f, 0.40f, 1.00f);	break;
+				case Severity::Critical:	return ImVec4(0.40f, 0.00f, 0.00f, 1.00f);	break;
+
+				default:					return ImVec4 {};							break;
+			}
+			return ImVec4 {};
 		}
 
 		static inline std::string SeverityToString(Severity severity)
@@ -64,6 +80,7 @@ namespace SemperEngine
 
 				default: return "Unknown Severity";				break;
 			}
+			return "Unknown Severity"; 
 		}
 
 		static inline std::string LoggerTypeToString(LoggerType type)
@@ -75,11 +92,7 @@ namespace SemperEngine
 
 				default: return "Unknown LoggerType";			break;
 			}
-		}
-
-		static inline void ResetLogColor()
-		{
-			printf(ColorCodes::Reset);
+			return "Unknown LoggerType";
 		}
 
 		static inline std::string GetTimeAsString()

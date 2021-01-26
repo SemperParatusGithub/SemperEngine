@@ -33,7 +33,9 @@ namespace SemperEngine
 		if (m_Buffer.size() >= 1000)
 			m_Buffer.erase(m_Buffer.begin(), m_Buffer.begin() + 500);
 
-		ImGui::SetNextItemWidth(ImGui::GetWindowSize().x * 0.45f);
+		float filterSize = ImGui::GetContentRegionAvailWidth() - 163.0f;
+
+		ImGui::SetNextItemWidth(filterSize);
 		ImGui::InputText("Filter", m_InputBuffer, 256);
 
 		ImGui::SameLine();
@@ -47,10 +49,28 @@ namespace SemperEngine
 		if (ImGui::BeginPopup("Options"))
 		{
 			ImGui::Checkbox("Autoscroll", &m_EnableAutoscroll);
+			ImGui::Separator();
+
+			ImGui::PushStyleColor(ImGuiCol_Text, LogBase::SeverityToImGuiColor(Severity::Info));
+			ImGui::PushStyleColor(ImGuiCol_CheckMark, LogBase::SeverityToImGuiColor(Severity::Info));
 			ImGui::Checkbox("Info", &m_ShowInfos);
+			ImGui::PopStyleColor(2);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, LogBase::SeverityToImGuiColor(Severity::Warn));
+			ImGui::PushStyleColor(ImGuiCol_CheckMark, LogBase::SeverityToImGuiColor(Severity::Warn));
 			ImGui::Checkbox("Warn", &m_ShowWarnings);
+			ImGui::PopStyleColor(2);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, LogBase::SeverityToImGuiColor(Severity::Error));
+			ImGui::PushStyleColor(ImGuiCol_CheckMark, LogBase::SeverityToImGuiColor(Severity::Error));
 			ImGui::Checkbox("Error", &m_ShowErrors);
+			ImGui::PopStyleColor(2);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, LogBase::SeverityToImGuiColor(Severity::Critical));
+			ImGui::PushStyleColor(ImGuiCol_CheckMark, LogBase::SeverityToImGuiColor(Severity::Critical));
 			ImGui::Checkbox("Critical", &m_ShowCriticals);
+			ImGui::PopStyleColor(2);
+
 			ImGui::EndPopup();
 		}
 
@@ -59,11 +79,6 @@ namespace SemperEngine
 		ImGui::BeginChild("Log Messages", { 0.0f, 0.0f }, true);
 		for (const auto &elem : m_Buffer)
 		{
-			// if the message doesn't contain the input string of the filter skip
-			if (!std::string(m_InputBuffer).empty())
-				if (elem.message.find(std::string(m_InputBuffer)) == std::string::npos)
-					continue;
-
 			switch (elem.severity)
 			{
 				case Severity::Info:		if (!m_ShowInfos)		continue; break;
@@ -71,34 +86,30 @@ namespace SemperEngine
 				case Severity::Error:		if (!m_ShowErrors)		continue; break;
 				case Severity::Critical:	if (!m_ShowCriticals)	continue; break;
 			}
+
+			// Check for filter
+			if (!std::string(m_InputBuffer).empty())
+				if (elem.message.find(std::string(m_InputBuffer)) == std::string::npos)
+					continue;
 			
-			SetLogColor(elem.severity);
+			// Draw Text
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, LogBase::SeverityToImGuiColor(elem.severity));
 
-			char buf[1024];
-			sprintf_s(buf, 1024, "[%s][%s] %s: %s\n", elem.time.c_str(), LogBase::LoggerTypeToString(elem.type).c_str(),
-				LogBase::SeverityToString(elem.severity).c_str(), elem.message.c_str());
-			ImGui::TextWrapped("%s", buf);
+				char buf[1024];
+				sprintf_s(buf, 1024, "[%s][%s] %s: %s\n", elem.time.c_str(), LogBase::LoggerTypeToString(elem.type).c_str(),
+					LogBase::SeverityToString(elem.severity).c_str(), elem.message.c_str());
+				ImGui::TextWrapped("%s", buf);
 
-			ImGui::PopStyleColor();    // Pop style color that was set by SetLogColor()
+				ImGui::PopStyleColor();
+			}
 
-			// Enable/disable auto scroll afterwards because the current message has to be displayed before
 			if (m_EnableAutoscroll)
 				ImGui::SetScrollHereY(1.0f);
 		}
-		ImGui::EndChild();    // Log messages
-		ImGui::PopFont();	// OpenSans-Regular
+		ImGui::EndChild();		// Log messages
+		ImGui::PopFont();		// OpenSans-Regular
 
-		ImGui::End();    // Log Console
-	}
-
-	void LogConsole::SetLogColor(Severity severity)
-	{
-		switch (severity)
-		{
-			case Severity::Info:	 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.10f, 0.80f, 0.40f, 1.00f));	break;
-			case Severity::Warn:	 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.00f, 0.83f, 0.00f, 1.00f));	break;
-			case Severity::Error:	 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.00f, 0.40f, 0.40f, 1.00f));	break;
-			case Severity::Critical: ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.40f, 0.00f, 0.00f, 1.00f));	break;
-		}
+		ImGui::End();			// Log Console
 	}
 }
