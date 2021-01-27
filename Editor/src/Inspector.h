@@ -14,7 +14,7 @@ namespace SemperEngine
 
 		void OnImGui(Entity selectedEntity);
 
-		bool DrawSliderFloat3(ConstRef<std::string> name, float labelWidth, Vec3 &vector, float resetValue);
+		static bool DrawSliderFloat3(ConstRef<std::string> name, float labelWidth, Vec3 &vector, float resetValue);
 
 	private:
 		template<typename Component>

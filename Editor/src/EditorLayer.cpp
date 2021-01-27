@@ -134,6 +134,8 @@ void EditorLayer::OnImGuiRender()
 	m_Hierarchy->OnImGui();
 	m_Inspector->OnImGui(m_Hierarchy->GetSelectedEntity());
 
+	m_EditorCamera.OnImGui();
+
 	m_LogConsole->OnImGuiRender();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });

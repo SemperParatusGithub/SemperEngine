@@ -15,11 +15,19 @@ namespace SemperEngine
 		bool Is2D();
 		bool Is3D();
 
+		bool IsOrthoGraphic();
+		bool IsPerspective();
+
 		void Set2D();
 		void Set3D();
 
+		void SetOrthographic();
+		void SetPerspective();
+
 		void OnUpdate(float ts);
 		void OnEvent(Event &e);
+
+		void OnImGui();
 
 		void SetBounds(float width, float height);
 
@@ -49,6 +57,9 @@ namespace SemperEngine
 	private:
 		bool m_Is2D = false;
 		bool m_Is3D = true;
+
+		bool m_IsOrthographic = false;
+		bool m_isPerspective = true;
 
 		float m_FOV = 45.0f, m_AspectRatio = 1.778f, m_NearClip = 0.1f, m_FarClip = 1000.0f;
 
