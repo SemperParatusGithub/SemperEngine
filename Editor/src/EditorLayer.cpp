@@ -6,7 +6,6 @@
 
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
-	m_CameraController(1280.0f / 720.0f, 0.0f, 0.0f),
 	m_ViewportSize({ 1280, 720 }),
 	m_SceneViewPortFocused(false), m_SceneViewPortHovered(false)
 {
@@ -17,15 +16,10 @@ EditorLayer::EditorLayer() :
 	Log::SetLogConsoleInstance(m_LogConsole);
 
 	m_Scene = MakeUnique<Scene>();
-	m_Hierarchy = MakeShared<Hierarchy>(m_Scene.get());
-	m_Inspector = MakeShared<Inspector>(m_Scene.get());
+	m_Hierarchy = MakeShared<Hierarchy>(m_Scene);
+	m_Inspector = MakeShared<Inspector>(m_Scene);
 
-	SE_CORE_INFO("Hello World");
-	SE_CORE_WARN("This is a Warning");
-	SE_CORE_ERROR("Error!");
-
-	m_CameraController.SetZoom(7.5f);
-	m_TestTexture.reset(Texture2D::Create("Checkerboard.png"));
+	m_EditorCamera.Set2D();
 }
 
 void EditorLayer::OnAttach()
@@ -39,28 +33,26 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(float deltaTime)
 {
-	if (m_SceneViewPortFocused && m_SceneViewPortHovered)
-		m_CameraController.OnUpdate(deltaTime);
+	if (m_SceneViewPortHovered && Input::IsKeyPressed(Key::LeftShift))
+		m_EditorCamera.OnUpdate(deltaTime);
 
 	bool allowEvents = m_SceneViewPortHovered;
 	EngineApplication::Instance().BlockImGuiEvents(!allowEvents);
 
-	if (m_Framebuffer->GetSize() != m_ViewportSize) {
+	if (m_Framebuffer->GetSize() != m_ViewportSize) 
+	{
 		m_Framebuffer->OnResize((U32) m_ViewportSize.x, (U32) m_ViewportSize.y);
-		m_CameraController.SetBounds(m_ViewportSize.x, m_ViewportSize.y);
+		m_EditorCamera.SetBounds((U32) m_ViewportSize.x, (U32) m_ViewportSize.y);
 	}
 
-	Transform quadTransform;
-	float ratio = (float) m_TestTexture->GetWidth() / (float) m_TestTexture->GetHeight();
-	quadTransform.SetScale({ ratio, 1.0f, 1.0f });
-
+	// Render
 	{
 		m_Framebuffer->Bind();
 
 		Renderer::SetClearColor({ 0.86f,  0.86f,  0.86f,  0.86f });
 		Renderer::Clear();
 
-		m_Scene->OnUpdate(deltaTime, m_CameraController.GetCamera());
+		m_Scene->OnUpdateEditor(deltaTime, m_EditorCamera);
 
 		m_Framebuffer->UnBind();
 	}
@@ -164,5 +156,5 @@ void EditorLayer::OnImGuiRender()
 
 void EditorLayer::OnEvent(Event &e)
 {
-	m_CameraController.OnEvent(e);
+	m_EditorCamera.OnEvent(e);
 }

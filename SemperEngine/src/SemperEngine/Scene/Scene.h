@@ -2,6 +2,7 @@
 #include "SemperEngine/Core/Types.h"
 
 #include "SemperEngine/Graphics/Camera/OrthographicCamera.h"
+#include "SemperEngine/Graphics/Camera/EditorCamera.h"
 
 #include "ECS/ECS.h"
 #include "Components.h"
@@ -22,6 +23,7 @@ namespace SemperEngine
 		bool IsValid(Entity entity);
 
 		void OnUpdate(float deltaTime, ConstRef<OrthographicCamera> camera);
+		void OnUpdateEditor(float deltaTime, ConstRef<EditorCamera> camera);
 
 		ECS::World &GetWorld();
 

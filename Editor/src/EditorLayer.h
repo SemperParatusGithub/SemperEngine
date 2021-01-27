@@ -28,11 +28,10 @@ private:
 private:
 	SharedPtr<Framebuffer> m_Framebuffer;
 	SharedPtr<LogConsole> m_LogConsole;
-	SharedPtr<Scene> m_Scene;
 
+	SharedPtr<Scene> m_Scene;
 	SharedPtr<Hierarchy> m_Hierarchy;
 	SharedPtr<Inspector> m_Inspector;
 
-	OrthographicCameraController m_CameraController;
-	SharedPtr<Texture2D> m_TestTexture;
+	EditorCamera m_EditorCamera;
 };

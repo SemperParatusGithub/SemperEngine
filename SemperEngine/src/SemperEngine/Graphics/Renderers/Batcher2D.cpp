@@ -98,13 +98,21 @@ namespace SemperEngine
 	{
 	}
 
-	void Batcher2D::BeginScene(ConstRef<OrthographicCamera> camera)
+	void Batcher2D::BeginScene(ConstRef<Mat4> projectionView)
 	{
 		s_RenderData.indexCount = 0;
-		s_RenderData.bufferPtr = s_RenderData.buffer;	
-		
+		s_RenderData.bufferPtr = s_RenderData.buffer;
+
 		s_RenderData.shader->Bind();
-		s_RenderData.shader->SetUniformMat4f("u_ProjectionView", camera.GetProjectionView());
+		s_RenderData.shader->SetUniformMat4f("u_ProjectionView", projectionView);
+	}
+	void Batcher2D::BeginScene(ConstRef<OrthographicCamera> camera)
+	{
+		BeginScene(camera.GetProjectionView());
+	}
+	void Batcher2D::BeginScene(ConstRef<EditorCamera> camera)
+	{
+		BeginScene(camera.GetViewProjection());
 	}
 	void Batcher2D::EndScene()
 	{

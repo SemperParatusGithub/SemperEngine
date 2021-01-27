@@ -61,6 +61,25 @@ namespace SemperEngine
 		Batcher2D::EndScene();
 	}
 
+	void Scene::OnUpdateEditor(float deltaTime, ConstRef<EditorCamera> camera)
+	{
+		Batcher2D::BeginScene(camera);
+
+		for (auto entityHandle : m_World)
+		{
+			Entity currentEntity = Entity(entityHandle, this);
+			if (currentEntity.Has<SpriteComponent>() && currentEntity.Has<TransformComponent>())
+			{
+				auto sprite = currentEntity.Get<SpriteComponent>().sprite;
+				auto transform = currentEntity.Get<TransformComponent>().transform;
+
+				Batcher2D::DrawSprite(transform, sprite);
+			}
+		}
+
+		Batcher2D::EndScene();
+	}
+
 	ECS::World &Scene::GetWorld()
 	{
 		return m_World;

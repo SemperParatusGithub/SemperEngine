@@ -1,7 +1,9 @@
 #pragma once
 #include "SemperEngine/Graphics/Sprite.h"
 #include "SemperEngine/Graphics/Transform.h"
+
 #include "SemperEngine/Graphics/Camera/OrthographicCamera.h"
+#include "SemperEngine/Graphics/Camera/EditorCamera.h"
 
 
 namespace SemperEngine
@@ -30,7 +32,9 @@ namespace SemperEngine
 		static void Init();
 		static void Shutdown();
 
+		static void BeginScene(ConstRef<Mat4> viewProjection);
 		static void BeginScene(ConstRef<OrthographicCamera> camera);
+		static void BeginScene(ConstRef<EditorCamera> camera);
 		static void EndScene();
 		static void Flush();
 
