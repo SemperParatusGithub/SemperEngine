@@ -7,7 +7,7 @@
 
 namespace SemperEngine
 {
-	Hierarchy::Hierarchy(Scene *handle) : 
+	Hierarchy::Hierarchy(SharedPtr<Scene> handle) : 
 		m_SceneHandle(handle)
 	{
 	}
@@ -32,7 +32,7 @@ namespace SemperEngine
 
 		for (auto &entityHandle : m_SceneHandle->GetWorld())
 		{
-			Entity currentEntity = Entity(entityHandle, m_SceneHandle);
+			Entity currentEntity = Entity(entityHandle, m_SceneHandle.get());
 
 			if (currentEntity.Has<IdentificationComponent>())
 			{

@@ -9,7 +9,7 @@ namespace SemperEngine
 	class Hierarchy
 	{
 	public:
-		Hierarchy(Scene *handle);
+		Hierarchy(SharedPtr<Scene> handle);
 		~Hierarchy() = default;
 
 		void OnImGui();
@@ -19,6 +19,6 @@ namespace SemperEngine
 
 	private:
 		Entity m_SelectedEntity;
-		Scene *m_SceneHandle;
+		SharedPtr<Scene> m_SceneHandle;
 	};
 }

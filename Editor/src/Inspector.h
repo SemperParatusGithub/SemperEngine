@@ -9,7 +9,7 @@ namespace SemperEngine
 	class Inspector
 	{
 	public:
-		Inspector(Scene *handle);
+		Inspector(SharedPtr<Scene> handle);
 		~Inspector() = default;
 
 		void OnImGui(Entity selectedEntity);
@@ -21,6 +21,6 @@ namespace SemperEngine
 		void DrawComponentInfo(Entity entity);
 
 	private:
-		Scene *m_SceneHandle;
+		SharedPtr<Scene> m_SceneHandle;
 	};
 }

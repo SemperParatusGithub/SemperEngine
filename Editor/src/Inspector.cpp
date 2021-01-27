@@ -17,7 +17,7 @@ namespace SemperEngine
 	void Inspector::DrawComponentInfo<SpriteComponent>(Entity entity);
 
 
-	Inspector::Inspector(Scene *handle) : 
+	Inspector::Inspector(SharedPtr<Scene> handle) : 
 		m_SceneHandle(handle)
 	{
 	}
