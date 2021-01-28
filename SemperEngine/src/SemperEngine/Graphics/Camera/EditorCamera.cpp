@@ -13,10 +13,12 @@
 
 #define M_PI 3.14159f
 
+
 namespace SemperEngine
 {
-	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
-		: m_FOV(fov), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip), Camera(glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip))
+	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip) :
+		m_FOV(fov), m_AspectRatio(aspectRatio),
+		m_NearClip(nearClip), m_FarClip(farClip)
 	{
 		RecalculateCameraMatrices();
 	}
@@ -137,12 +139,29 @@ namespace SemperEngine
 		ImGui::Text("Near Clip");
 		ImGui::SameLine(100);
 		ImGui::SetNextItemWidth(region.x - 100.0f);
-		ImGui::SliderFloat("##Near Clip", &m_NearClip, 0.0f, 1000.0f);
+		ImGui::DragFloat("##Near Clip", &m_NearClip, 0.1f, 0.0f, 1000.0f);
 
 		ImGui::Text("Far Clip");
 		ImGui::SameLine(100);
 		ImGui::SetNextItemWidth(region.x - 100.0f);
-		ImGui::SliderFloat("##Far Clip", &m_FarClip, 0.0f, 1000.0f);
+		ImGui::DragFloat("##Far Clip", &m_FarClip, 0.1f, 0.0f, 1000.0f);
+
+		ImGui::Separator();
+
+		ImGui::Text("Movement Speed");
+		ImGui::SameLine(150);
+		ImGui::SetNextItemWidth(region.x - 150.0f);
+		ImGui::DragFloat("##Movement Speed", &m_MovementSpeed, 0.1f, 0.0f, 10.0f);
+
+		ImGui::Text("Rotation Speed");
+		ImGui::SameLine(150);
+		ImGui::SetNextItemWidth(region.x - 150.0f);
+		ImGui::DragFloat("##Rotation Speed", &m_RotationSpeed, 0.1f, 0.0f, 10.0f);
+
+		ImGui::Text("Zoom Speed");
+		ImGui::SameLine(150);
+		ImGui::SetNextItemWidth(region.x - 150.0f);
+		ImGui::DragFloat("##Zoom Speed", &m_ZoomSpeed, 0.1f, 0.0f, 10.0f);
 
 		ImGui::Separator();
 
@@ -211,20 +230,20 @@ namespace SemperEngine
 
 	void EditorCamera::MousePan(ConstRef<Vec2> delta)
 	{
-		m_FocalPoint += -GetRightDirection() * delta.x * m_Distance;
-		m_FocalPoint += GetUpDirection() * delta.y *  m_Distance;
+		m_FocalPoint += -GetRightDirection() * delta.x * m_Distance * m_MovementSpeed;
+		m_FocalPoint += GetUpDirection() * delta.y *  m_Distance * m_MovementSpeed;
 	}
 
 	void EditorCamera::MouseRotate(ConstRef<Vec2> delta)
 	{
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
-		m_Yaw += yawSign * delta.x * 0.8f;
+		m_Yaw += yawSign * delta.x * m_RotationSpeed;
 		m_Pitch += delta.y * 0.8f;
 	}
 
 	void EditorCamera::MouseZoom(float delta)
 	{
-		m_Distance -= delta * 0.5f;
+		m_Distance -= delta * m_ZoomSpeed;
 		if (m_Distance < 1.0f)
 		{
 			m_FocalPoint += GetForwardDirection();

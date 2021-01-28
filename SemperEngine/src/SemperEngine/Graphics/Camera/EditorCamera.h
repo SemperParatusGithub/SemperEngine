@@ -71,6 +71,10 @@ namespace SemperEngine
 		float m_Distance = 10.0f;
 		float m_Yaw = 0.0f, m_Pitch = 0.0f;
 
+		float m_MovementSpeed = 1.5f;
+		float m_RotationSpeed = 1.0f;
+		float m_ZoomSpeed = 0.5f;
+
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 	};
 
