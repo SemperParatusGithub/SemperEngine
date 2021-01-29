@@ -188,11 +188,13 @@ namespace SemperEngine
 
 			auto UUID = entity.Get<IdentificationComponent>().ID;
 
+			Vec3 rotationDeg = glm::degrees(rotation);
+
 			ImGui::PushID((U64) UUID);
 			if (DrawSliderFloat3(" Translation", 100.0f, translation, 0.0f))
 				transform.SetTranslation(translation);
-			if (DrawSliderFloat3(" Rotation", 100.0f, rotation, 0.0f))
-				transform.SetRotation(rotation);
+			if (DrawSliderFloat3(" Rotation", 100.0f, rotationDeg, 0.0f))
+				transform.SetRotation(glm::radians(rotationDeg));
 			if (DrawSliderFloat3(" Scale", 100.0f, scale, 1.0f))
 				transform.SetScale(scale);
 			ImGui::PopID();
