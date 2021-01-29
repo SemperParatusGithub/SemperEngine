@@ -15,6 +15,8 @@ namespace SemperEngine
 	void Inspector::DrawComponentInfo<TransformComponent>(Entity entity);
 	template<>
 	void Inspector::DrawComponentInfo<SpriteComponent>(Entity entity);
+	template<>
+	void Inspector::DrawComponentInfo<SceneCameraComponent>(Entity entity);
 
 
 	Inspector::Inspector(SharedPtr<Scene> handle) : 
@@ -34,6 +36,9 @@ namespace SemperEngine
 		
 		if (selectedEntity && selectedEntity.Has<SpriteComponent>())
 			DrawComponentInfo<SpriteComponent>(selectedEntity);
+
+		if(selectedEntity && selectedEntity.Has<SceneCameraComponent>())
+			DrawComponentInfo<SceneCameraComponent>(selectedEntity);
 
 		ImGui::End();
 	}
@@ -154,6 +159,10 @@ namespace SemperEngine
 					if (!entity.Has<SpriteComponent>())
 						entity.Add<SpriteComponent>(SpriteComponent {});
 
+				if (ImGui::MenuItem("Scene Camera"))
+					if (!entity.Has<SceneCameraComponent>())
+						entity.Add<SceneCameraComponent>(SceneCameraComponent {});
+
 				ImGui::EndMenu();
 			}
 			if (ImGui::MenuItem("Delete Entity"))
@@ -237,6 +246,31 @@ namespace SemperEngine
 		{
 			if (ImGui::MenuItem("Remove Component##Sprite"))
 				entity.Remove<SpriteComponent>();
+
+			ImGui::EndPopup();
+		}
+	}
+	template<>
+	void Inspector::DrawComponentInfo<SceneCameraComponent>(Entity entity)
+	{
+		auto &camera = entity.Get<SceneCameraComponent>();
+
+		if (ImGui::CollapsingHeader("Scene Camera"))
+		{
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDown(1))
+				ImGui::OpenPopup("Component Options##Scene Camera");
+
+			ImGui::Checkbox("Primary", &camera.primary);
+		}
+		else {
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDown(1))
+				ImGui::OpenPopup("Component Options##Scene Camera");
+		}
+
+		if (ImGui::BeginPopup("Component Options##Scene Camera"))
+		{
+			if (ImGui::MenuItem("Remove Component##OrthoCamera"))
+				entity.Remove<SceneCameraComponent>();
 
 			ImGui::EndPopup();
 		}

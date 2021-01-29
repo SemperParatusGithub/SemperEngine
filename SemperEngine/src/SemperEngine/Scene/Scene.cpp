@@ -42,9 +42,9 @@ namespace SemperEngine
 		return m_World.IsValid(entity.GetHandle());
 	}
 
-	void Scene::OnUpdate(float deltaTime, ConstRef<OrthographicCamera> camera)
+	void Scene::OnUpdate(float deltaTime, ConstRef<Mat4> projectionView)
 	{
-		Batcher2D::BeginScene(camera);
+		Batcher2D::BeginScene(projectionView);
 
 		for (auto entityHandle : m_World)
 		{
@@ -63,21 +63,7 @@ namespace SemperEngine
 
 	void Scene::OnUpdateEditor(float deltaTime, ConstRef<EditorCamera> camera)
 	{
-		Batcher2D::BeginScene(camera);
-
-		for (auto entityHandle : m_World)
-		{
-			Entity currentEntity = Entity(entityHandle, this);
-			if (currentEntity.Has<SpriteComponent>() && currentEntity.Has<TransformComponent>())
-			{
-				auto sprite = currentEntity.Get<SpriteComponent>().sprite;
-				auto transform = currentEntity.Get<TransformComponent>().transform;
-
-				Batcher2D::DrawSprite(transform, sprite);
-			}
-		}
-
-		Batcher2D::EndScene();
+		OnUpdate(deltaTime, camera.GetProjectionView());
 	}
 
 	ECS::World &Scene::GetWorld()

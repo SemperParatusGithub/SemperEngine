@@ -32,7 +32,7 @@ namespace SemperEngine
 		static void Init();
 		static void Shutdown();
 
-		static void BeginScene(ConstRef<Mat4> viewProjection);
+		static void BeginScene(ConstRef<Mat4> projectionView);
 		static void BeginScene(ConstRef<OrthographicCamera> camera);
 		static void BeginScene(ConstRef<EditorCamera> camera);
 		static void EndScene();

@@ -22,7 +22,7 @@ namespace SemperEngine
 		void DestroyEntity(Entity entity);
 		bool IsValid(Entity entity);
 
-		void OnUpdate(float deltaTime, ConstRef<OrthographicCamera> camera);
+		void OnUpdate(float deltaTime, ConstRef<Mat4> projectionView);
 		void OnUpdateEditor(float deltaTime, ConstRef<EditorCamera> camera);
 
 		ECS::World &GetWorld();

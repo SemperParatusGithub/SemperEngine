@@ -3,8 +3,11 @@
 #include <iostream>
 
 #include "UUID.h"
+
 #include "SemperEngine/Graphics/Transform.h"
 #include "SemperEngine/Graphics/Sprite.h"
+
+#include "SemperEngine/Graphics/Camera/SceneCamera.h"
 
 
 namespace SemperEngine
@@ -74,6 +77,8 @@ namespace SemperEngine
 		Sprite sprite;
 
 		SpriteComponent() = default;
+		SpriteComponent(ConstRef<SpriteComponent>) = default;
+
 		~SpriteComponent() = default;
 
 		void SetTexture(SharedPtr<Texture2D> texture)
@@ -92,6 +97,45 @@ namespace SemperEngine
 		ConstRef<Vec4> GetColor() const
 		{
 			return sprite.GetColor();
+		}
+	};
+
+	struct SceneCameraComponent
+	{
+		SceneCamera camera;
+		bool primary = false;
+
+		SceneCameraComponent() = default;
+		SceneCameraComponent(ConstRef<SceneCameraComponent>) = default;
+
+		~SceneCameraComponent() = default;
+
+		void SetPosition(ConstRef<Vec3> position)
+		{
+			camera.SetPosition(position);
+		}
+		void SetRotation(ConstRef<Vec3> rotation)
+		{
+			camera.SetRotation(rotation);
+		}
+
+		ConstRef<Vec3> GetPosition() const
+		{
+			return camera.GetPosition();
+		}
+		ConstRef<Vec3> GetRotation() const
+		{
+			return camera.GetRotation();
+		}
+
+		ConstRef<Mat4> GetProjectionViewMatrix()
+		{
+			return camera.GetProjectionView();
+		}
+
+		void SetBounds(float width, float height)
+		{
+			camera.SetBounds(width, height);
 		}
 	};
 }
