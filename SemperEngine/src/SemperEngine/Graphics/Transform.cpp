@@ -57,6 +57,25 @@ namespace SemperEngine
 		Invalidate();
 	}
 
+	void Transform::Translate(ConstRef<Vec3> offset)
+	{
+		m_Translation += offset;
+
+		Invalidate();
+	}
+	void Transform::Rotate(ConstRef<Vec3> offset)
+	{
+		m_Rotation += offset;
+
+		Invalidate();
+	}
+	void Transform::Scale(ConstRef<Vec3> offset)
+	{
+		m_Scale += offset;
+
+		Invalidate();
+	}
+
 	ConstRef<Mat4> Transform::GetTransform() const noexcept
 	{
 		return m_TransformationMatrix;

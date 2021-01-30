@@ -22,6 +22,10 @@ namespace SemperEngine
 		void SetRotation(ConstRef<Vec3> rotation);
 		void SetScale(ConstRef<Vec3> scale);
 
+		void Translate(ConstRef<Vec3> offset);
+		void Rotate(ConstRef<Vec3> offset);
+		void Scale(ConstRef<Vec3> offset);
+
 		ConstRef<Mat4> GetTransform() const noexcept;
 
 	private:
