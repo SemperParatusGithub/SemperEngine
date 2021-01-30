@@ -5,7 +5,6 @@
 #include "SemperEngine/Graphics/Camera/EditorCamera.h"
 
 #include "ECS/ECS.h"
-#include "Components.h"
 
 
 namespace SemperEngine
@@ -18,7 +17,8 @@ namespace SemperEngine
 		Scene() = default;
 		~Scene() = default;
 
-		Entity CreateEntity();
+		Entity CreateEntity(ConstRef<std::string> name = "Entity");
+		Entity CreateEmptyEntity(ConstRef<std::string> name = "Empty Entity");
 		void DestroyEntity(Entity entity);
 		bool IsValid(Entity entity);
 

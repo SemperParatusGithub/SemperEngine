@@ -42,7 +42,7 @@ void EditorLayer::OnUpdate(float deltaTime)
 	if (m_Framebuffer->GetSize() != m_ViewportSize) 
 	{
 		m_Framebuffer->OnResize((U32) m_ViewportSize.x, (U32) m_ViewportSize.y);
-		m_EditorCamera.SetBounds((U32) m_ViewportSize.x, (U32) m_ViewportSize.y);
+		m_EditorCamera.SetBounds((float) m_ViewportSize.x, (float) m_ViewportSize.y);
 	}
 
 	// Render

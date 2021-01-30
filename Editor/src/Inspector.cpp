@@ -5,6 +5,7 @@
 #include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
 
 #include "SemperEngine/Core/EngineApplication.h"
+#include "SemperEngine/Scene/Components.h"
 
 
 namespace SemperEngine
@@ -17,6 +18,8 @@ namespace SemperEngine
 	void Inspector::DrawComponentInfo<SpriteComponent>(Entity entity);
 	template<>
 	void Inspector::DrawComponentInfo<SceneCameraComponent>(Entity entity);
+	template<>
+	void Inspector::DrawComponentInfo<NativeScripComponent>(Entity entity);
 
 
 	Inspector::Inspector(SharedPtr<Scene> handle) : 
@@ -39,6 +42,9 @@ namespace SemperEngine
 
 		if(selectedEntity && selectedEntity.Has<SceneCameraComponent>())
 			DrawComponentInfo<SceneCameraComponent>(selectedEntity);
+
+		if (selectedEntity && selectedEntity.Has<NativeScripComponent>())
+			DrawComponentInfo<NativeScripComponent>(selectedEntity);
 
 		ImGui::End();
 	}
@@ -190,7 +196,7 @@ namespace SemperEngine
 
 			Vec3 rotationDeg = glm::degrees(rotation);
 
-			ImGui::PushID((U64) UUID);
+			ImGui::PushID((int) (U64) UUID);
 			if (DrawSliderFloat3(" Translation", 100.0f, translation, 0.0f))
 				transform.SetTranslation(translation);
 			if (DrawSliderFloat3(" Rotation", 100.0f, rotationDeg, 0.0f))
@@ -275,6 +281,13 @@ namespace SemperEngine
 				entity.Remove<SceneCameraComponent>();
 
 			ImGui::EndPopup();
+		}
+	}
+	template<>
+	void Inspector::DrawComponentInfo<NativeScripComponent>(Entity entity)
+	{
+		if (ImGui::CollapsingHeader("Native Script"))
+		{
 		}
 	}
 }

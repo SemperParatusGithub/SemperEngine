@@ -4,6 +4,8 @@
 #include <imgui/imgui_internal.h>
 #include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
 
+#include "SemperEngine/Scene/Components.h"
+
 
 namespace SemperEngine
 {

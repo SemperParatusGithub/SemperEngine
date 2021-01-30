@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "UUID.h"
+#include "Entity.h"
 
 #include "SemperEngine/Graphics/Transform.h"
 #include "SemperEngine/Graphics/Sprite.h"
@@ -136,6 +137,38 @@ namespace SemperEngine
 		void SetBounds(float width, float height)
 		{
 			camera.SetBounds(width, height);
+		}
+	};
+
+	struct NativeScripComponent
+	{
+		ScriptableEntity *instance;
+
+		ScriptableEntity*(*CreateInstance)();
+		void(*DestroyInstance)(NativeScripComponent *);
+
+		template<typename Script>
+		void AttachScript()
+		{
+			CreateInstance = []() {
+				return static_cast<ScriptableEntity *>(new Script());
+			};
+			DestroyInstance = [](NativeScripComponent *nsc) {
+				delete nsc->instance; 
+				nsc->instance = nullptr;
+			};
+		}
+		void OnCreate()
+		{
+			instance->OnCreate();
+		}
+		void OnUpdate(float deltaTime)
+		{
+			instance->OnUpdate(deltaTime);
+		}
+		void OnDestroy()
+		{
+			instance->OnDestroy();
 		}
 	};
 }

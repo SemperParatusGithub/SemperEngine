@@ -67,6 +67,7 @@ namespace SemperEngine
 
 			default: SE_ASSERT_MSG(false, "Unknown Texture format Format");
 		}
+		return 0;
 	}
 	U32 GLTools::TextureWrapToGL(TextureWrap wrap)
 	{
@@ -80,6 +81,7 @@ namespace SemperEngine
 
 			default: SE_ASSERT_MSG(false, "Unknown Texture Wrap Format");
 		}
+		return 0;
 	}
 	U32 GLTools::TextureFormatToInternalFormat(U32 format)
 	{
@@ -101,6 +103,7 @@ namespace SemperEngine
 
 			default: SE_ASSERT_MSG(false, "Unknown Texture Format");
 		}
+		return 0;
 	}
 	TextureFormat GLTools::BitsToTextureFormat(U32 bits)
 	{
@@ -113,8 +116,8 @@ namespace SemperEngine
 			case 48: return TextureFormat::RGB16;
 			case 64: return TextureFormat::RGBA16;
 
-			default: SE_ASSERT_MSG(false, "Unsupported image bit - depth %d", bits)
-			return TextureFormat::RGB8;
+			default: SE_ASSERT_MSG(false, "Unsupported image bit - depth")
 		}
+		return TextureFormat::RGB8;
 	}
 }

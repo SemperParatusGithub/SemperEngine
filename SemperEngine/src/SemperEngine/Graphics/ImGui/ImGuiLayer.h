@@ -6,7 +6,7 @@
 #define OPEN_SANS_BOLD		1
 
 
-class ImFont;
+struct ImFont;
 
 namespace SemperEngine
 {

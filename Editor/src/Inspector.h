@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SemperEngine/Scene/Entity.h"
-#include "SemperEngine/Scene/Components.h"
 
 
 namespace SemperEngine

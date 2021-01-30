@@ -23,8 +23,8 @@ namespace SemperEngine
 	struct LogElement
 	{
 		std::string time;
-		LoggerType type;
-		Severity severity;
+		LoggerType type = LoggerType::Core;
+		Severity severity = Severity::Info;
 		std::string message;
 	};
 

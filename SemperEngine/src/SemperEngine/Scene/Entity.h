@@ -3,7 +3,6 @@
 #include "Scene.h"
 
 #include "SemperEngine/Core/Assert.h"
-#include "Components.h"
 
 
 namespace SemperEngine
@@ -76,6 +75,7 @@ namespace SemperEngine
 			else {
 				return false;
 			}
+			return false;
 		}
 
 		bool operator ==(const Entity other)
@@ -90,5 +90,27 @@ namespace SemperEngine
 	private:
 		ECS::EntityHandle m_Handle = ECS::NullEntity;
 		Scene *m_Scene = nullptr;
+	};
+
+	class ScriptableEntity
+	{
+	public:
+		ScriptableEntity() = default;
+		virtual ~ScriptableEntity() = default;
+
+		virtual void OnCreate() {}
+		virtual void OnUpdate(float deltaTime) {}
+		virtual void OnDestroy() {}
+
+		template<typename Component>
+		Component &Get() 
+		{
+			return m_Entity.Get<Component>();
+		}
+
+		Entity m_Entity;	// Make me private!
+			
+	private:
+		friend class Scene;
 	};
 }

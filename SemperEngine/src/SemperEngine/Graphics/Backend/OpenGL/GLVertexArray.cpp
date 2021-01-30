@@ -27,9 +27,9 @@ namespace SemperEngine
 			const auto &element = vertexBuffer->GetElements()[i];
 			GLenum normalized = element.normalized ? GL_TRUE : GL_FALSE;
 		
-			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, element.GetComponentCount(), element.GetComponentOpenGLDataType(), normalized,
-				vertexBuffer->GetStride(), (GLvoid *)(vertexBuffer->GetElements()[i].offset));
+			glEnableVertexAttribArray((GLuint) i);
+			glVertexAttribPointer((GLuint) i, element.GetComponentCount(), element.GetComponentOpenGLDataType(), normalized,
+				vertexBuffer->GetStride(), (GLvoid *) (U64) (vertexBuffer->GetElements()[i].offset));
 		}
 	}
 	GLVertexArray::~GLVertexArray()
@@ -48,8 +48,8 @@ namespace SemperEngine
 		{
 			const auto &element = vertexBuffer->GetElements()[i];
 
-			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, element.GetComponentCount(), element.GetComponentOpenGLDataType(),	element.normalized,
+			glEnableVertexAttribArray((GLuint) i);
+			glVertexAttribPointer((GLuint) i, element.GetComponentCount(), element.GetComponentOpenGLDataType(),	element.normalized,
 				vertexBuffer->GetStride(), static_cast<const GLvoid *>(&vertexBuffer->GetElements()[i].offset));
 		}
 
@@ -59,7 +59,6 @@ namespace SemperEngine
 	{
 		m_IndexBuffer = indexBuffer;
 
-		// Bind the Vertex Array and the Index Buffer an it magically links together (OpenGL Stuff)
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 
