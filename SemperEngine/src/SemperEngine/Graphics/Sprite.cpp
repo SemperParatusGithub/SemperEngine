@@ -75,8 +75,8 @@ namespace SemperEngine
 
 		Vec2 spriteSize = { texture->GetWidth(), texture->GetHeight() };
 
-		Vec2 min = { (index.x * cellSize.x) / texture->GetWidth() , (index.y * cellSize.y) / texture->GetHeight() };
-		Vec2 max = { ((index.x + spriteSize.x) * cellSize.x) / texture->GetWidth() , ((index.y + spriteSize.y) * cellSize.y) / texture->GetHeight() };
+		Vec2 min = { (index.x * cellSize.x) / spriteSize.x, (index.y * cellSize.y) / spriteSize.y };
+		Vec2 max = { (index.x * cellSize.x + cellSize.x) / spriteSize.x , (index.y * cellSize.y + cellSize.y) / spriteSize.y };
 
 		m_TextureCoordinates[0] = { min.x, min.y };
 		m_TextureCoordinates[1] = { max.x, min.y };

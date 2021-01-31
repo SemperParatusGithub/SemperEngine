@@ -76,6 +76,8 @@ namespace SemperEngine
 	struct SpriteComponent
 	{
 		Sprite sprite;
+		int xIndex = 0, yIndex = 0;
+		int cellWidth = 1024, cellHeight = 1024;
 
 		SpriteComponent() = default;
 		SpriteComponent(ConstRef<SpriteComponent>) = default;
@@ -85,6 +87,10 @@ namespace SemperEngine
 		void SetTexture(SharedPtr<Texture2D> texture)
 		{
 			sprite.SetTexture(texture);
+		}
+		SharedPtr<Texture2D> GetTexture() const
+		{
+			return sprite.GetTexture();
 		}
 		void SetTextureSheet(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize)
 		{

@@ -230,19 +230,77 @@ namespace SemperEngine
 			Vec4 color = Vec4(sprite.GetColor());
 			if (ImGui::ColorEdit4("Sprite Color", &color[0]))
 				sprite.SetColor(color);
-			auto Texture = sprite.sprite.GetTexture();
-			if (Texture)
-				ImGui::Image((void *) Texture->GetHandle(), ImVec2(64.0f, 64.0f));
-			else ImGui::Image(nullptr, ImVec2(64.0f, 64.0f));
-			if (ImGui::IsItemClicked())
+
+			auto texture = sprite.GetTexture();
+			bool openTexture = false;
+
+			if (texture) 
 			{
+				ImGui::Image((void *) texture->GetHandle(), ImVec2(64.0f, 64.0f));
+				if (ImGui::IsItemClicked())
+					openTexture = true;
+
+				U32 width = texture->GetWidth(), height = texture->GetHeight();
+				float ratio = (float)width / (float)height;
+
+				ImGui::SameLine();
+				ImGui::Text("Width: %d, Height %d\n Aspect Ratio: %.2f", width, height, ratio);
+			}
+			else
+			{
+				ImGui::Image(nullptr, ImVec2(64.0f, 64.0f));
+				if (ImGui::IsItemClicked())
+					openTexture = true;
+			}
+			if (openTexture)
+			{
+				SE_CORE_INFO("Openfiel");
 				std::string filename = EngineApplication::Instance().OpenFile("");
 				if (filename != "")
 				{
 					SharedPtr<Texture2D> texture;
 					texture.reset(Texture2D::Create(filename));
-					sprite.SetTexture(texture);
+					sprite.cellWidth = texture->GetWidth();
+					sprite.cellHeight = texture->GetHeight();
+					sprite.xIndex = 0;
+					sprite.yIndex = 0;
+					sprite.SetTextureSheet(texture, { 0, 0 }, { sprite.cellHeight, sprite.cellHeight });
 				}
+			}
+
+			float availWidth = ImGui::GetContentRegionAvailWidth();
+			float sliderSize = (availWidth - 100.0f) / 2.0f;
+
+			if (texture && ImGui::TreeNode("Advanced"))
+			{
+				U32 width = texture->GetWidth(), height = texture->GetHeight();
+				bool edited = false;
+
+				ImGui::Text("CellSize");
+				ImGui::SameLine(100.0f);
+				ImGui::SetNextItemWidth(sliderSize);
+				if (ImGui::DragInt("##cellSizeX", &sprite.cellWidth))
+					edited = true;
+				ImGui::SameLine();
+				ImGui::SetNextItemWidth(sliderSize);
+				if (ImGui::DragInt("##cellSizeY", &sprite.cellHeight))
+					edited = true;
+
+				ImGui::Text("Index");
+				ImGui::SameLine(100.0f);
+				ImGui::SetNextItemWidth(sliderSize);
+				if (ImGui::SliderInt("##xIndex", &sprite.xIndex, 0, width / sprite.cellWidth - 1))
+					edited = true;
+				ImGui::SameLine();
+				ImGui::SetNextItemWidth(sliderSize);
+				if (ImGui::SliderInt("##Yindex", &sprite.yIndex, 0, height / sprite.cellHeight - 1))
+					edited = true;
+
+				if (edited) {
+					sprite.SetTextureSheet(texture, { sprite.xIndex, sprite.yIndex }, { sprite.cellWidth, sprite.cellHeight });
+				}
+
+				ImGui::TreePop();
 			}
 		}
 		else {
