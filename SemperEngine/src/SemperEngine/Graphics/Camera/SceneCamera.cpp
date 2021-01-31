@@ -52,12 +52,22 @@ namespace SemperEngine
 		RecalculateCameraMatrices();
 	}
 
+	float SceneCamera::GetZoom() const
+	{
+		return m_Zoom;
+	}
+
 	void SceneCamera::SetFOV(float FOV)
 	{
 		m_FOV = FOV;
 
 		RecalculateCameraMatrices();
 	}
+	float SceneCamera::GetFOV() const
+	{
+		return 0.0f;
+	}
+
 	void SceneCamera::SetNearClip(float nearClip)
 	{
 		m_NearClip = nearClip;
@@ -69,6 +79,15 @@ namespace SemperEngine
 		m_FarClip = farClip;
 
 		RecalculateCameraMatrices();
+	}
+
+	float SceneCamera::GetNearClip() const
+	{
+		return m_NearClip;
+	}
+	float SceneCamera::GetFarClip() const
+	{
+		return m_FarClip;
 	}
 
 	void SceneCamera::SetPosition(ConstRef<Vec3> position)

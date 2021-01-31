@@ -241,7 +241,7 @@ namespace SemperEngine
 					openTexture = true;
 
 				U32 width = texture->GetWidth(), height = texture->GetHeight();
-				float ratio = (float)width / (float)height;
+				float ratio = (float) width / (float) height;
 
 				ImGui::SameLine();
 				ImGui::Text("Width: %d, Height %d\n Aspect Ratio: %.2f", width, height, ratio);
@@ -319,14 +319,72 @@ namespace SemperEngine
 	template<>
 	void Inspector::DrawComponentInfo<SceneCameraComponent>(Entity entity)
 	{
-		auto &camera = entity.Get<SceneCameraComponent>();
+		auto &cc = entity.Get<SceneCameraComponent>();
+		auto &camera = cc.camera;
 
 		if (ImGui::CollapsingHeader("Scene Camera"))
 		{
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDown(1))
 				ImGui::OpenPopup("Component Options##Scene Camera");
 
-			ImGui::Checkbox("Primary", &camera.primary);
+			ImVec2 region = ImGui::GetContentRegionAvail();
+
+			const char *currentItemProjection = camera.IsOrthographic() ? "Orthographic" : "Perspective";
+
+			ImGui::SetNextItemWidth(region.x * 0.7f);
+			if (ImGui::BeginCombo("##Camera Projection", currentItemProjection))
+			{
+				if (ImGui::Selectable("Orthographic"))
+					camera.SetOrthographic();
+
+				if (ImGui::Selectable("Perspective"))
+					camera.SetPerspective();
+
+				ImGui::EndCombo();
+			}
+
+			ImGui::SameLine();
+			ImGui::Checkbox("Primary", &cc.primary);
+
+			ImGui::Separator();
+
+			if (camera.IsOrthographic())
+			{
+				float zoom = camera.GetZoom();
+
+				ImGui::Text("Zoom");
+				ImGui::SameLine(100);
+				ImGui::SetNextItemWidth(region.x - 100.0f);
+				if (ImGui::DragFloat("##Zoom", &zoom, 0.1f, 0.0f, 100.0f))
+					camera.SetZoom(zoom);
+			}
+			if (camera.IsPerspective())
+			{
+				float FOV = camera.GetZoom();
+
+				ImGui::Text("Zoom");
+				ImGui::SameLine(100);
+				ImGui::SetNextItemWidth(region.x - 100.0f);
+				if (ImGui::DragFloat("##FOV", &FOV, 0.1f, 0.0f, 90.0f))
+					camera.SetFOV(FOV);
+			}
+
+			ImGui::Separator();
+
+			float nearClip = camera.GetNearClip();
+			float farClip = camera.GetFarClip();
+
+			ImGui::Text("Near Clip");
+			ImGui::SameLine(100);
+			ImGui::SetNextItemWidth(region.x - 100.0f);
+			if (ImGui::DragFloat("##Near Clip", &nearClip, 0.1f, 0.0f, 1000.0f))
+				camera.SetNearClip(nearClip);
+
+			ImGui::Text("Far Clip");
+			ImGui::SameLine(100);
+			ImGui::SetNextItemWidth(region.x - 100.0f);
+			if (ImGui::DragFloat("##Far Clip", &farClip, 0.1f, 0.0f, 1000.0f))
+				camera.SetFarClip(farClip);
 		}
 		else {
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDown(1))

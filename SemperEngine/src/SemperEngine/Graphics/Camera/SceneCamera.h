@@ -21,13 +21,19 @@ namespace SemperEngine
 
 		// ========= Orthographic ==========//
 		void SetZoom(float zoom);
+		float GetZoom() const;
 		//==================================//
 
 		//========== Perspective ===========//
 		void SetFOV(float FOV);
+		float GetFOV() const;
+		//==================================//
+
 		void SetNearClip(float nearClip);
 		void SetFarClip(float farClip);
-		//==================================//
+
+		float GetNearClip() const;
+		float GetFarClip() const;
 
 		void SetPosition(ConstRef<Vec3> position);
 		void SetRotation(ConstRef<Vec3> rotation);
