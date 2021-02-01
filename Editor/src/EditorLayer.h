@@ -34,4 +34,6 @@ private:
 	SharedPtr<Inspector> m_Inspector;
 
 	EditorCamera m_EditorCamera;
+
+	int m_ImGuizmoOperation = -1;
 };

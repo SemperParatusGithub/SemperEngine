@@ -3,6 +3,11 @@
 
 #include <GLFW/include/GLFW/glfw3.h>
 
+#include "ImGuizmo/ImGuizmo.h"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
+
 
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
@@ -19,7 +24,7 @@ EditorLayer::EditorLayer() :
 	m_Hierarchy = MakeShared<Hierarchy>(m_Scene);
 	m_Inspector = MakeShared<Inspector>(m_Scene);
 
-	m_EditorCamera.Set2D();
+	m_EditorCamera.Set3D();
 }
 
 void EditorLayer::OnAttach()
@@ -36,13 +41,26 @@ void EditorLayer::OnUpdate(float deltaTime)
 	if (m_SceneViewPortHovered && Input::IsKeyPressed(Key::LeftShift))
 		m_EditorCamera.OnUpdate(deltaTime);
 
-	bool allowEvents = m_SceneViewPortHovered;
+	bool allowEvents = m_SceneViewPortHovered || m_SceneViewPortFocused;
 	EngineApplication::Instance().BlockImGuiEvents(!allowEvents);
 
 	if (m_Framebuffer->GetSize() != m_ViewportSize) 
 	{
 		m_Framebuffer->OnResize((U32) m_ViewportSize.x, (U32) m_ViewportSize.y);
 		m_EditorCamera.SetBounds((float) m_ViewportSize.x, (float) m_ViewportSize.y);
+	}
+
+	// Gizmos
+	if (Input::IsKeyPressed(Key::LeftControl))
+	{
+		if (Input::IsKeyPressed(Key::D1))
+			m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		if(Input::IsKeyPressed(Key::D2))
+			m_ImGuizmoOperation = ImGuizmo::OPERATION::ROTATE;
+		if(Input::IsKeyPressed(Key::D3))
+			m_ImGuizmoOperation = ImGuizmo::OPERATION::SCALE;
+		if(Input::IsKeyPressed(Key::D0))
+			m_ImGuizmoOperation = -1;
 	}
 
 	// Render
@@ -149,6 +167,43 @@ void EditorLayer::OnImGuiRender()
 
 	uint64_t textureID = reinterpret_cast<U64>(m_Framebuffer->GetColorAttachmentHandle());
 	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), size, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
+
+	// Gizmos
+	Entity activeEntity = m_Hierarchy->GetSelectedEntity();
+	if (activeEntity && m_ImGuizmoOperation != -1)
+	{
+		ImGuizmo::SetOrthographic(false);
+		ImGuizmo::SetDrawlist();
+		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+		ConstRef<Mat4> view = m_EditorCamera.GetView();
+		ConstRef<Mat4> proj = m_EditorCamera.GetProjection();
+
+		auto &tc = activeEntity.Get<TransformComponent>();
+		Mat4 transform = tc.transform.GetTransform();
+
+		bool snap = Input::IsKeyPressed(Key::LeftControl);
+		float snapValue = m_ImGuizmoOperation == ImGuizmo::OPERATION::ROTATE ? 45.0f : 0.5f;
+
+		float snapValues[3] = { snapValue, snapValue, snapValue };
+
+		ImGuizmo::Manipulate(&view[0][0], &proj[0][0], (ImGuizmo::OPERATION)m_ImGuizmoOperation,
+			ImGuizmo::LOCAL, &transform[0][0], nullptr, snap ? snapValues : nullptr);
+
+		if (ImGuizmo::IsUsing())
+		{
+			Vec3 scale, translation, skew;
+			glm::vec4 perspective;
+			glm::quat orientation; 
+			glm::decompose(transform, scale, orientation, translation, skew, perspective);
+			glm::vec3 rotation = glm::eulerAngles(orientation);
+
+			glm::vec3 deltaRotation = rotation - tc.transform.GetRotation();
+
+			tc.SetTranslation(translation);
+			tc.transform.Rotate(deltaRotation);
+			tc.SetScale(scale);
+		}
+	}
 
 	ImGui::End();
 	ImGui::PopStyleVar();

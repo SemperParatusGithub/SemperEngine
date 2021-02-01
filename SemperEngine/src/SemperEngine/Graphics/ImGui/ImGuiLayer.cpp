@@ -7,6 +7,8 @@
 #include "examples/imgui_impl_opengl3.h"
 #include "examples/imgui_impl_glfw.h"
 
+#include "ImGuizmo.h"
+
 // TEMPORARY
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -110,6 +112,8 @@ namespace SemperEngine
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()

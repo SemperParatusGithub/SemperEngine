@@ -15,10 +15,15 @@ project "SemperEngine"
 	{
 		"src/**.h",
 		"src/**.cpp",
+
 		"vendor/stb_image/**.h",
 		"vendor/stb_image/**.cpp",
+
 		"vendor/glm/glm/**.hpp",
 		"vendor/glm/glm/**.inl",
+
+		"vendor/ImGuizmo/ImGuizmo.h",
+		"vendor/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	defines
@@ -36,7 +41,8 @@ project "SemperEngine"
         "../SemperEngine/vendor/imgui",
         "../SemperEngine/vendor/glm",
         "../SemperEngine/vendor/stb_image",
-        "../SemperEngine/vendor/entt/include",
+		"../SemperEngine/vendor/entt/include",
+		"../SemperEngine/vendor/ImGuizmo",
 	}
 
 	links

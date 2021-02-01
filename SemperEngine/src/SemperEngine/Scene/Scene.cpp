@@ -10,8 +10,6 @@
 
 #include "SemperEngine/Graphics/Renderers/Batcher2D.h"
 
-#include "SemperEngine/Core/EngineApplication.h"	// TODO: remove me
-
 
 namespace SemperEngine
 {
