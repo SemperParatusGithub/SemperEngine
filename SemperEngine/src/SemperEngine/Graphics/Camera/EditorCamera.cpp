@@ -246,8 +246,9 @@ namespace SemperEngine
 		m_Distance -= delta * m_ZoomSpeed;
 		if (m_Distance < 1.0f)
 		{
-			m_FocalPoint += GetForwardDirection();
-			m_Distance = 1.0f;
+			m_Distance = 0.5f;
+			// m_FocalPoint += GetForwardDirection();
+			// m_Distance = 1.0f;
 		}
 	}
 
