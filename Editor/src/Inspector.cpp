@@ -279,11 +279,11 @@ namespace SemperEngine
 				ImGui::Text("CellSize");
 				ImGui::SameLine(100.0f);
 				ImGui::SetNextItemWidth(sliderSize);
-				if (ImGui::DragInt("##cellSizeX", &sprite.cellWidth))
+				if (ImGui::DragInt("##cellSizeX", &sprite.cellWidth, 1.0f, 1.0f, 1000.0f))
 					edited = true;
 				ImGui::SameLine();
 				ImGui::SetNextItemWidth(sliderSize);
-				if (ImGui::DragInt("##cellSizeY", &sprite.cellHeight))
+				if (ImGui::DragInt("##cellSizeY", &sprite.cellHeight, 1.0f, 1.0f, 1000.0f))
 					edited = true;
 
 				ImGui::Text("Index");
