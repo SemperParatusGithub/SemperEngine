@@ -254,7 +254,6 @@ namespace SemperEngine
 			}
 			if (openTexture)
 			{
-				SE_CORE_INFO("Openfiel");
 				std::string filename = EngineApplication::Instance().OpenFile("");
 				if (filename != "")
 				{

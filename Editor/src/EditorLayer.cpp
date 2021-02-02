@@ -4,9 +4,7 @@
 #include <GLFW/include/GLFW/glfw3.h>
 
 #include "ImGuizmo/ImGuizmo.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/matrix_decompose.hpp>
+#include "SemperEngine/Util/Math.h"
 
 
 EditorLayer::EditorLayer() :
@@ -166,6 +164,7 @@ void EditorLayer::OnImGuiRender()
 	m_ViewportSize = { (int) size.x, (int) size.y };
 
 	uint64_t textureID = reinterpret_cast<U64>(m_Framebuffer->GetColorAttachmentHandle());
+
 	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), size, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 
 	// Gizmos
@@ -174,7 +173,7 @@ void EditorLayer::OnImGuiRender()
 	{
 		ImGuizmo::SetOrthographic(false);
 		ImGuizmo::SetDrawlist();
-		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, size.x, size.y);
 		ConstRef<Mat4> view = m_EditorCamera.GetView();
 		ConstRef<Mat4> proj = m_EditorCamera.GetProjection();
 
@@ -186,26 +185,25 @@ void EditorLayer::OnImGuiRender()
 
 		float snapValues[3] = { snapValue, snapValue, snapValue };
 
-		ImGuizmo::Manipulate(&view[0][0], &proj[0][0], (ImGuizmo::OPERATION)m_ImGuizmoOperation,
+		ImGuizmo::Manipulate(&view[0][0], &proj[0][0], (ImGuizmo::OPERATION) m_ImGuizmoOperation,
 			ImGuizmo::LOCAL, &transform[0][0], nullptr, snap ? snapValues : nullptr);
 
 		if (ImGuizmo::IsUsing())
 		{
-			Vec3 scale, translation, skew;
-			glm::vec4 perspective;
-			glm::quat orientation; 
-			glm::decompose(transform, scale, orientation, translation, skew, perspective);
-			glm::vec3 rotation = glm::eulerAngles(orientation);
+			auto [translation, rotation, scale] = Util::Decompose(transform);
 
 			glm::vec3 deltaRotation = rotation - tc.transform.GetRotation();
 
-			tc.SetTranslation(translation);
-			tc.transform.Rotate(deltaRotation);
-			tc.SetScale(scale);
+			if(m_ImGuizmoOperation == ImGuizmo::OPERATION::TRANSLATE)
+				tc.SetTranslation(translation);
+			if (m_ImGuizmoOperation == ImGuizmo::OPERATION::ROTATE)
+				tc.transform.Rotate(deltaRotation);
+			if (m_ImGuizmoOperation == ImGuizmo::OPERATION::SCALE)
+				tc.SetScale(scale);
 		}
 	}
 
-	ImGui::End();
+	ImGui::End();	// Viewport
 	ImGui::PopStyleVar();
 
 	ImGui::End(); // Dock space
