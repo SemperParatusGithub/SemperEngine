@@ -1,0 +1,29 @@
+﻿  EditorLayer.cpp
+  Hierarchy.cpp
+  Inspector.cpp
+  Main.cpp
+C:\Dev\SemperEngine\Editor\Source\Inspector.cpp(281,70): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Dev\SemperEngine\Editor\Source\Inspector.cpp(281,64): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Dev\SemperEngine\Editor\Source\Inspector.cpp(285,71): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Dev\SemperEngine\Editor\Source\Inspector.cpp(285,65): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Util\Math.h(65,17): warning C4101: "Pdum3": Unreferenzierte lokale Variable (Quelldatei wird kompiliert ..\..\Editor\Source\EditorLayer.cpp)
+C:\Dev\SemperEngine\Editor\Source\EditorLayer.cpp(100,41): warning C4390: ";": Leere kontrollierte Anweisung aufgetreten; ist dies beabsichtigt?
+C:\Dev\SemperEngine\Editor\Source\EditorLayer.cpp(101,45): warning C4390: ";": Leere kontrollierte Anweisung aufgetreten; ist dies beabsichtigt?
+C:\Dev\SemperEngine\Editor\Source\EditorLayer.cpp(102,54): warning C4390: ";": Leere kontrollierte Anweisung aufgetreten; ist dies beabsichtigt?
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(113): warning C4715: "SemperEngine::ECS::World::Has<SemperEngine::IdentificationComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(98): warning C4715: "SemperEngine::ECS::World::Get<SemperEngine::IdentificationComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(113): warning C4715: "SemperEngine::ECS::World::Has<SemperEngine::TransformComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(113): warning C4715: "SemperEngine::ECS::World::Has<SemperEngine::IdentificationComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(113): warning C4715: "SemperEngine::ECS::World::Has<SemperEngine::SpriteComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(113): warning C4715: "SemperEngine::ECS::World::Has<SemperEngine::SceneCameraComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(113): warning C4715: "SemperEngine::ECS::World::Has<SemperEngine::NativeScripComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(98): warning C4715: "SemperEngine::ECS::World::Get<SemperEngine::IdentificationComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(64): warning C4715: "SemperEngine::ECS::World::Add<SemperEngine::TransformComponent,SemperEngine::TransformComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(64): warning C4715: "SemperEngine::ECS::World::Add<SemperEngine::SpriteComponent,SemperEngine::SpriteComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(64): warning C4715: "SemperEngine::ECS::World::Add<SemperEngine::SceneCameraComponent,SemperEngine::SceneCameraComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(98): warning C4715: "SemperEngine::ECS::World::Get<SemperEngine::TransformComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(98): warning C4715: "SemperEngine::ECS::World::Get<SemperEngine::SceneCameraComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(98): warning C4715: "SemperEngine::ECS::World::Get<SemperEngine::SpriteComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(98): warning C4715: "SemperEngine::ECS::World::Get<SemperEngine::TransformComponent>": Nicht alle Codepfade geben einen Wert zurück.
+C:\Dev\SemperEngine\SemperEngine\Source\SemperEngine\Scene\ECS\World.h(113): warning C4715: "SemperEngine::ECS::World::Has<SemperEngine::TransformComponent>": Nicht alle Codepfade geben einen Wert zurück.
+  Editor.vcxproj -> C:\Dev\SemperEngine\Scripts\Build\..\..\Binaries\Debug-windows-x86_64\Editor.exe

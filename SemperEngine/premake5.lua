@@ -1,29 +1,41 @@
 project "SemperEngine"
-	location "../Scripts/build"
+	location "../Scripts/Build"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
     staticruntime "on"
 
-	targetdir   ("../bin/"      .. outputdir .. "/%{prj.name}")
-	objdir      ("../bin-int/"  .. outputdir .. "/%{prj.name}")
+	targetdir   ("../Binaries/" .. outputdir)
+	objdir      ("../Binaries/Intermediate/" .. outputdir)
 
 	pchheader "Precompiled.h"
-	pchsource "src/Precompiled.cpp"
+	pchsource "Source/Precompiled.cpp"
 
 	files
 	{
-		"src/**.h",
-		"src/**.cpp",
+		-- Source Files
+		"Source/**.h",
+		"Source/**.cpp",
 
-		"vendor/stb_image/**.h",
-		"vendor/stb_image/**.cpp",
+		-- Cereal
+		"External/cereal/include/cereal/**.h",
+		"External/cereal/include/cereal/**.hpp",
+		"External/cereal/include/cereal/**.cpp",
 
-		"vendor/glm/glm/**.hpp",
-		"vendor/glm/glm/**.inl",
+		-- entt
+		"External/entt/include/entt.hpp",
 
-		"vendor/ImGuizmo/ImGuizmo.h",
-		"vendor/ImGuizmo/ImGuizmo.cpp"
+		-- glm
+		"External/glm/glm/**.hpp",
+		"External/glm/glm/**.inl",
+		
+		-- ImGuizmo
+		"External/ImGuizmo/ImGuizmo.h",
+		"External/ImGuizmo/ImGuizmo.cpp",
+		
+		-- STB
+		"External/stb_image/**.h",
+		"External/stb_image/**.cpp"
 	}
 
 	defines
@@ -33,16 +45,18 @@ project "SemperEngine"
 
 	includedirs
 	{
-		"src",
-		"src/SemperEngine/Graphics/ImGui",
-		"src/SemperEngine/Graphics/Backend",
-        "../SemperEngine/vendor/GLFW/include",
-        "../SemperEngine/vendor/Glad/include",
-        "../SemperEngine/vendor/imgui",
-        "../SemperEngine/vendor/glm",
-        "../SemperEngine/vendor/stb_image",
-		"../SemperEngine/vendor/entt/include",
-		"../SemperEngine/vendor/ImGuizmo",
+		"Source",
+		"Source/SemperEngine/Graphics/ImGui",
+		"Source/SemperEngine/Graphics/Backend",
+
+		"../SemperEngine/External/GLFW/include",
+		"../SemperEngine/External/Glad/include",
+		"../SemperEngine/External/imgui",		
+        "../SemperEngine/External/glm",
+        "../SemperEngine/External/stb_image",
+		"../SemperEngine/External/entt/include",
+		"../SemperEngine/External/ImGuizmo",
+		"../SemperEngine/External/cereal/include"
 	}
 
 	links
@@ -66,7 +80,7 @@ project "SemperEngine"
 		runtime "Release"
 		optimize "on"
 
-	filter "configurations:Dist"
-		defines "SE_DIST"
+	filter "configurations:Production"
+		defines "SE_PRODUCTION"
 		runtime "Release"
 		optimize "on"

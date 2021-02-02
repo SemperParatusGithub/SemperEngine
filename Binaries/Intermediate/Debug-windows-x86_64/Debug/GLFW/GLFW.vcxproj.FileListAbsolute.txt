@@ -1,0 +1,2 @@
+C:\Dev\SemperEngine\Binaries\Debug-windows-x86_64\GLFW.pdb
+C:\Dev\SemperEngine\Binaries\Intermediate\Debug-windows-x86_64\Debug\GLFW\GLFW.pdb

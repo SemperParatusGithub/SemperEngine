@@ -2,15 +2,15 @@ workspace "SemperEngine"
 	architecture "x86_64"
 	startproject "Editor"
 
-	configurations 	{ "Debug", "Release", "Dist" }
+	configurations 	{ "Debug", "Release", "Production" }
 	flags 			{ "MultiProcessorCompile" }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
-	include "../SemperEngine/vendor/GLFW"
-	include "../SemperEngine/vendor/Glad"
-	include "../SemperEngine/vendor/imgui"
+	include "../SemperEngine/External/GLFW"
+	include "../SemperEngine/External/Glad"
+	include "../SemperEngine/External/imgui"
 group ""
 
 group "Engine"

@@ -1,26 +1,27 @@
 project "Editor"
-	location "../Scripts/build"
+	location "../Scripts/Build"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
 
-	targetdir   ("../bin/"      .. outputdir .. "/%{prj.name}")
-	objdir      ("../bin-int/"  .. outputdir .. "/%{prj.name}")
+	targetdir   ("../Binaries/" .. outputdir)
+	objdir      ("../Binaries/Intermediate/" .. outputdir)
 
 	files
 	{
-		"src/**.h",
-		"src/**.cpp"
+		"Source/**.h",
+		"Source/**.cpp"
 	}
 
 	includedirs
 	{
-		"../SemperEngine/src",
-		"../SemperEngine/vendor",
-		"../SemperEngine/vendor/glm",
-		"../SemperEngine/vendor/entt/include",
-		"../SemperEngine/vendor/Glad/include"
+		"../SemperEngine/Source",
+		"../SemperEngine/External",
+		"../SemperEngine/External/glm",
+		"../SemperEngine/External/Glad/include",
+		"../SemperEngine/External/GLFW/include",
+		"../SemperEngine/External/cereal/include"
 	}
 
 	links { "SemperEngine" }
@@ -38,7 +39,7 @@ project "Editor"
 		runtime "Release"
 		optimize "on"
 
-	filter "configurations:Dist"
-		defines "SE_DIST"
+	filter "configurations:Production"
+		defines "SE_PRODUCTION"
 		runtime "Release"
 		optimize "on"

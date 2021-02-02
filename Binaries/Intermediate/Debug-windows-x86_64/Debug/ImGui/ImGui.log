@@ -1,0 +1,5 @@
+﻿  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_widgets.cpp
+  ImGui.vcxproj -> C:\Dev\SemperEngine\Scripts\Build\..\..\Binaries\Debug-windows-x86_64\ImGui.lib
