@@ -1,7 +1,0 @@
-[00:19:44][Core] Info: Initialized GLFW
-[00:19:44][Core] Info: Creating Window: Semper Editor (1280, 720)
-[00:19:44][Core] Info: Initialized Glad
-[00:19:44][Core] Info: OpenGL Version: 4.6.0 NVIDIA 431.07
-[00:19:44][Client] Info: Pushed Overlay: ImGuiLayer
-[00:19:44][Client] Info: Pushed Layer: Editor Layer
-[00:21:37][Core] Info: Created Entity: Entity

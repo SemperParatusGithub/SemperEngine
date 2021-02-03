@@ -64,7 +64,7 @@ namespace SemperEngine
 }
 
 
-// Logging is only disabled in distribution builds
+// Logging is only disabled in Production builds
 
 #if defined(SE_DEBUG) || defined(SE_RELEASE)
 	

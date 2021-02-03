@@ -1,6 +1,9 @@
 #pragma once
+#include "SemperEngine/Core/Platforms.h"
 
-// TODO: Platform Detection
+#ifdef SE_PLATFORM_WINDOWS
+	#include <Windows.h>
+#endif
 
 #include <iostream>
 #include <memory>

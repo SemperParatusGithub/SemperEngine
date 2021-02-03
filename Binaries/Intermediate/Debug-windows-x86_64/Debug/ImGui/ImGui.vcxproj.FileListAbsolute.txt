@@ -1,2 +1,0 @@
-C:\Dev\SemperEngine\Binaries\Debug-windows-x86_64\ImGui.pdb
-C:\Dev\SemperEngine\Binaries\Intermediate\Debug-windows-x86_64\Debug\ImGui\ImGui.pdb

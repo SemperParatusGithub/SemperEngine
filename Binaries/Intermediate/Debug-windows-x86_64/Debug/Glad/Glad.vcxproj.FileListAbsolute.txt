@@ -1,2 +1,0 @@
-C:\Dev\SemperEngine\Binaries\Debug-windows-x86_64\Glad.pdb
-C:\Dev\SemperEngine\Binaries\Intermediate\Debug-windows-x86_64\Debug\Glad\Glad.pdb
