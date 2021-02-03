@@ -1,8 +1,6 @@
 # Binaries
-**/bin/
-!vendor/premake/bin/
-bin-int/
-Scripts/build
+Binaries
+Scripts/Build
 
 # Visual Studio files and folder
 .vs/
