@@ -32,23 +32,23 @@ namespace SemperEngine
 			ImGui::EndPopup();
 		}
 
-		for (auto &entityHandle : m_SceneHandle->GetWorld())
+		auto view = m_SceneHandle->GetRegistry().view<IdentificationComponent>();
+
+		for (auto entity : view)
 		{
-			Entity currentEntity = Entity(entityHandle, m_SceneHandle.get());
+			Entity currentEntity = Entity(entity, m_SceneHandle.get());
+			bool isActive = currentEntity == m_SelectedEntity;
 
-			if (currentEntity.Has<IdentificationComponent>())
-			{
-				auto [name, uuid] = currentEntity.Get<IdentificationComponent>().GetNameID();
-				bool isActive = currentEntity == m_SelectedEntity;
+			auto &idc = view.get<IdentificationComponent>(entity);
 
-				ImGui::PushID((int) uuid);
-				if (ImGui::Selectable(name.c_str(), &isActive))
-					m_SelectedEntity = currentEntity;
-				ImGui::PopID();
-			}
+			ImGui::PushID((int) idc.ID);
+			if (ImGui::Selectable(idc.name.c_str(), &isActive))
+				m_SelectedEntity = currentEntity;
+			ImGui::PopID();
 		}
 
+
 		ImGui::PopFont();
-		ImGui::End();		// Hierarchy
+		ImGui::End();	// Hierarchy
 	}
 }

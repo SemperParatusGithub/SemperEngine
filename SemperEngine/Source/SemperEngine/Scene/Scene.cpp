@@ -1,10 +1,6 @@
 #include "Precompiled.h"
 #include "Scene.h"
 
-#include <imgui.h>
-#include <imgui_internal.h>
-#include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
-
 #include "Entity.h"
 #include "Components.h"
 
@@ -17,7 +13,7 @@ namespace SemperEngine
 	{
 		SE_CORE_INFO("Created Entity: %s", name.c_str());
 
-		auto handle = m_World.CreateEntity();
+		auto handle = m_Registry.create();
 		auto entity = Entity(handle, this);
 
 		// Add default components
@@ -31,7 +27,7 @@ namespace SemperEngine
 	{
 		SE_CORE_INFO("Creating empty entity: %s", name.c_str());
 
-		auto handle = m_World.CreateEntity();
+		auto handle = m_Registry.create();
 		auto entity = Entity(handle, this);
 
 		// Every Entity has an ID
@@ -45,34 +41,23 @@ namespace SemperEngine
 		if(entity)
 		{
 			SE_CORE_INFO("Destroyed Entity", entity.Get<IdentificationComponent>().name.c_str());
-			m_World.DestroyEntity(entity.GetHandle());
+			m_Registry.destroy(entity.GetHandle());
 		}
 		else {
 			SE_CORE_WARN("Tried to destroy invalid entity");
 		}
 	}
 
-	bool Scene::IsValid(Entity entity)
-	{
-		return m_World.IsValid(entity.GetHandle());
-	}
-
 	void Scene::OnUpdate(float deltaTime, ConstRef<Mat4> projectionView)
 	{
 		Batcher2D::BeginScene(projectionView);
 
-		for (auto entityHandle : m_World)
-		{
-			Entity currentEntity = Entity(entityHandle, this);
+		auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
 
-			if (currentEntity.Has<SpriteComponent>() && currentEntity.Has<TransformComponent>())
+		view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
 			{
-				auto sprite = currentEntity.Get<SpriteComponent>().sprite;
-				auto transform = currentEntity.Get<TransformComponent>().transform;
-
-				Batcher2D::DrawSprite(transform, sprite);
-			}
-		}
+				Batcher2D::DrawSprite(tc.transform, sc.sprite);
+			});
 
 		Batcher2D::EndScene();
 	}
@@ -82,8 +67,8 @@ namespace SemperEngine
 		OnUpdate(deltaTime, camera.GetProjectionView());
 	}
 
-	ECS::World &Scene::GetWorld()
+	entt::registry &Scene::GetRegistry()
 	{
-		return m_World;
+		return m_Registry;
 	}
 }

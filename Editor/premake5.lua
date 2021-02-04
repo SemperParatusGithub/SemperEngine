@@ -21,6 +21,7 @@ project "Editor"
 		"../SemperEngine/External/glm",
 		"../SemperEngine/External/Glad/include",
 		"../SemperEngine/External/GLFW/include",
+		"../SemperEngine/External/entt/include",
 		"../SemperEngine/External/cereal/include"
 	}
 
