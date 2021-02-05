@@ -1,7 +1,7 @@
 #pragma once
-#include "Scene.h"
-#include "../../../External/entt/include/entt.hpp"
+#include <entt.hpp>
 
+#include "SemperEngine/Scene/Scene.h"
 #include "SemperEngine/Core/Assert.h"
 
 
@@ -28,7 +28,7 @@ namespace SemperEngine
 		}
 
 		template<typename Component, typename ... Args>
-		Component &Add(Args && ... args)
+		inline Component &Add(Args && ... args)
 		{
 			SE_ASSERT_MSG(!Has<Component>(), "Entity already has component");
 			
@@ -36,7 +36,7 @@ namespace SemperEngine
 		}
 
 		template<typename Component>
-		void Remove()
+		inline void Remove()
 		{
 			SE_ASSERT_MSG(Has<Component>(), "Component doesn't exist");
 
@@ -44,7 +44,7 @@ namespace SemperEngine
 		}
 
 		template<typename Component>
-		Component &Get()
+		inline Component &Get()
 		{
 			SE_ASSERT_MSG(Has<Component>(), "Component doesn't exist");
 
@@ -52,34 +52,38 @@ namespace SemperEngine
 		}
 
 		template<typename Component>
-		ConstRef<Component> Get() const
+		inline ConstRef<Component> Get() const
 		{
 			SE_ASSERT_MSG(Has<Component>(), "Component doesn't exist");
 
-			return m_Scene->GetRegistry().get<Component>();
+			return m_Scene->GetRegistry().get<Component>(m_Handle);
 		}
 
 		template<typename ... Components>
-		bool Has()
+		inline bool Has() const
 		{
 			return m_Scene->GetRegistry().has<Components...>(m_Handle);
 		}
 
-		void Destroy()
+		inline void Destroy()
 		{
-			if (m_Handle != entt::null && m_Scene != nullptr)
-			{
-				m_Scene->GetRegistry().destroy(m_Handle);
-				m_Scene = nullptr;
-			}
-			else {
-				SE_ASSERT_MSG(false, "Invalid Entity can't be destroyed!");
-			}
+			SE_ASSERT_MSG(m_Handle != entt::null && m_Scene != nullptr, "Invalid Entity");
+
+			m_Scene->GetRegistry().destroy(m_Handle);
+			m_Scene = nullptr;
 		}
 
 		inline operator bool() const
 		{ 
 			return m_Handle != entt::null && m_Scene != nullptr;
+		}
+		inline operator entt::entity() const
+		{
+			return m_Handle;
+		}
+		inline operator U32() const
+		{
+			return static_cast<U32>(m_Handle);
 		}
 
 		inline bool operator ==(const Entity other)
@@ -102,19 +106,23 @@ namespace SemperEngine
 		ScriptableEntity() = default;
 		virtual ~ScriptableEntity() = default;
 
-		virtual void OnCreate() {}
-		virtual void OnUpdate(float deltaTime) {}
-		virtual void OnDestroy() {}
+		inline virtual void OnCreate() {}
+		inline virtual void OnUpdate(float deltaTime) {}
+		inline virtual void OnDestroy() {}
 
 		template<typename Component>
-		Component &Get() 
+		inline Component &Get() 
 		{
 			return m_Entity.Get<Component>();
 		}
-
-		Entity m_Entity;	// Make me private!
+		template<typename ... Components>
+		inline bool Has()
+		{
+			return m_Entity.Has<Components...>();
+		}
 			
 	private:
 		friend class Scene;
+		Entity m_Entity;
 	};
 }

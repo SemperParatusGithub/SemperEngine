@@ -19,7 +19,7 @@ namespace SemperEngine
 	template<>
 	void Inspector::DrawComponentInfo<SceneCameraComponent>(Entity entity);
 	template<>
-	void Inspector::DrawComponentInfo<NativeScripComponent>(Entity entity);
+	void Inspector::DrawComponentInfo<NativeScriptComponent>(Entity entity);
 
 
 	Inspector::Inspector(SharedPtr<Scene> handle) : 
@@ -43,8 +43,8 @@ namespace SemperEngine
 		if(selectedEntity && selectedEntity.Has<SceneCameraComponent>())
 			DrawComponentInfo<SceneCameraComponent>(selectedEntity);
 
-		if (selectedEntity && selectedEntity.Has<NativeScripComponent>())
-			DrawComponentInfo<NativeScripComponent>(selectedEntity);
+		if (selectedEntity && selectedEntity.Has<NativeScriptComponent>())
+			DrawComponentInfo<NativeScriptComponent>(selectedEntity);
 
 		ImGui::End();
 	}
@@ -399,7 +399,7 @@ namespace SemperEngine
 		}
 	}
 	template<>
-	void Inspector::DrawComponentInfo<NativeScripComponent>(Entity entity)
+	void Inspector::DrawComponentInfo<NativeScriptComponent>(Entity entity)
 	{
 		if (ImGui::CollapsingHeader("Native Script"))
 		{

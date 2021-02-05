@@ -145,12 +145,12 @@ namespace SemperEngine
 		}
 	};
 
-	struct NativeScripComponent
+	struct NativeScriptComponent
 	{
 		ScriptableEntity *instance;
 
 		ScriptableEntity*(*CreateInstance)();
-		void(*DestroyInstance)(NativeScripComponent *);
+		void(*DestroyInstance)(NativeScriptComponent *);
 
 		template<typename Script>
 		void AttachScript()
