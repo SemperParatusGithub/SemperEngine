@@ -173,7 +173,7 @@ namespace SemperEngine
 			}
 			if (ImGui::MenuItem("Delete Entity"))
 			{
-				m_SceneHandle->DestroyEntity(entity);
+				entity.Destroy();
 			}
 
 			ImGui::EndPopup();

@@ -36,18 +36,6 @@ namespace SemperEngine
 		return entity;
 	}
 
-	void Scene::DestroyEntity(Entity entity)
-	{
-		if(entity)
-		{
-			SE_CORE_INFO("Destroyed Entity", entity.Get<IdentificationComponent>().name.c_str());
-			m_Registry.destroy(entity.GetHandle());
-		}
-		else {
-			SE_CORE_WARN("Tried to destroy invalid entity");
-		}
-	}
-
 	void Scene::OnUpdate(float deltaTime, ConstRef<Mat4> projectionView)
 	{
 		Batcher2D::BeginScene(projectionView);

@@ -19,7 +19,6 @@ namespace SemperEngine
 
 		Entity CreateEntity(ConstRef<std::string> name = "Entity");
 		Entity CreateEmptyEntity(ConstRef<std::string> name = "Empty Entity");
-		void DestroyEntity(Entity entity);
 
 		void OnUpdate(float deltaTime, ConstRef<Mat4> projectionView);
 		void OnUpdateEditor(float deltaTime, ConstRef<EditorCamera> camera);

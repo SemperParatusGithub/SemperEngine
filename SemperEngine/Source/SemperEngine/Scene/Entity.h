@@ -75,7 +75,10 @@ namespace SemperEngine
 
 		inline operator bool() const
 		{ 
-			return m_Handle != entt::null && m_Scene != nullptr;
+			if (m_Scene && m_Handle != entt::null)
+				return m_Scene->GetRegistry().valid(m_Handle);
+			else
+				return false;
 		}
 		inline operator entt::entity() const
 		{
@@ -116,7 +119,7 @@ namespace SemperEngine
 			return m_Entity.Get<Component>();
 		}
 		template<typename ... Components>
-		inline bool Has()
+		inline bool Has() const
 		{
 			return m_Entity.Has<Components...>();
 		}
