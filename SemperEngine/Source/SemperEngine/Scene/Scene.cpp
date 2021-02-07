@@ -74,7 +74,7 @@ namespace SemperEngine
 		archive->operator()( cereal::make_nvp("General", *this) );
 
 		// Serialize all entities of the scene
-		entt::snapshot { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent>(*archive);
+		entt::snapshot { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent, SpriteComponent>(*archive);
 	} 
 
 	void Scene::Deserialize(ConstRef<std::string> filepath)
@@ -89,6 +89,6 @@ namespace SemperEngine
 
 		// Load all entities
 		m_Registry.clear();
-		entt::snapshot_loader { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent>(*archive);
+		entt::snapshot_loader { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent, SpriteComponent>(*archive);
 	}
 }

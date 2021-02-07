@@ -105,6 +105,8 @@ namespace SemperEngine
 		virtual U32 GetWidth() const noexcept = 0;
 		virtual U32 GetHeight() const noexcept = 0;
 
+		virtual std::string GetFilepath() const noexcept = 0;
+
 		virtual void Bind(U32 slot = 0) const noexcept = 0;
 		virtual void UnBind(U32 slot = 0) const noexcept = 0;
 	};

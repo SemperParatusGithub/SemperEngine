@@ -16,6 +16,8 @@ namespace SemperEngine
 
 		virtual void *GetHandle() const noexcept override;
 
+		virtual std::string GetFilepath() const noexcept override;
+
 		virtual uint32_t GetWidth() const noexcept override;
 		virtual uint32_t GetHeight() const noexcept override;
 

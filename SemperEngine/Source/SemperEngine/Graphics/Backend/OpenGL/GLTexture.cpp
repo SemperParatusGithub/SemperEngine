@@ -47,6 +47,11 @@ namespace SemperEngine
 		return (void *) m_RendererID;
 	}
 
+	std::string GLTexture2D::GetFilepath() const noexcept
+	{
+		return m_Filepath;
+	}
+
 	U32 GLTexture2D::GetWidth() const noexcept
 	{
 		return m_Width;

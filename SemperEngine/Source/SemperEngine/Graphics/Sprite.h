@@ -1,7 +1,9 @@
 #pragma once
+#include "SemperEngine/Util/CerealOverloads.h"
+#include <array>
+
 #include "SemperEngine/Core/Types.h"
 #include "SemperEngine/Graphics/Backend/API/Texture.h"
-#include <array>
 
 
 namespace SemperEngine
@@ -34,6 +36,39 @@ namespace SemperEngine
 
 		ConstRef<Vec2> GetCellIndex() const;
 		ConstRef<Vec2> GetCellSize() const;
+
+		template<typename Archive>
+		void save(Archive &archive) const
+		{
+			std::string textureFilepath = m_Texture->GetFilepath();
+
+			archive( cereal::make_nvp("HasTexture", m_HasTexture),
+					 cereal::make_nvp("HasSpriteSheet", m_HasSpriteSheet),
+					 cereal::make_nvp("TextureFilepath", textureFilepath),
+					 cereal::make_nvp("Color", m_Color),
+					 cereal::make_nvp("TextureCoordinates", m_TextureCoordinates),
+					 cereal::make_nvp("CellSize", m_CellSize),
+					 cereal::make_nvp("CellIndex", m_CellIndex) );
+		}
+		template<typename Archive>
+		void load(Archive &archive)
+		{
+			std::string textureFilepath;
+
+			archive( cereal::make_nvp("HasTexture", m_HasTexture),
+					 cereal::make_nvp("HasSpriteSheet", m_HasSpriteSheet),
+					 cereal::make_nvp("TextureFilepath", textureFilepath),
+					 cereal::make_nvp("Color", m_Color),
+					 cereal::make_nvp("TextureCoordinates", m_TextureCoordinates),
+					 cereal::make_nvp("CellSize", m_CellSize),
+					 cereal::make_nvp("CellIndex", m_CellIndex) );
+			
+			// Load Texture
+			if (m_HasTexture || m_HasSpriteSheet || !textureFilepath.empty())
+			{
+				m_Texture.reset(Texture2D::Create(textureFilepath));
+			}
+		}
 
 	private:
 		void RecalculateTetxureCoordinates();

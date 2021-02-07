@@ -1,5 +1,7 @@
 #pragma once
 #include "SemperEngine/Core/Types.h"
+
+#include <cereal/cereal.hpp>
  
 #include "UUID.h"
 #include "Entity.h"
@@ -117,6 +119,17 @@ namespace SemperEngine
 		void SetSpriteSheet(SharedPtr<Texture2D> texture, ConstRef<Vec2> index, ConstRef<Vec2> cellSize)
 		{ 
 			sprite.SetSpriteSheet(texture, index, cellSize);
+		}
+		
+		template<typename Archive>
+		void save(Archive &archive) const
+		{
+			archive( cereal::make_nvp("Sprite", sprite) );
+		}
+		template<typename Archive>
+		void load(Archive &archive)
+		{
+			archive( cereal::make_nvp("Sprite", sprite) );
 		}
 	};
 
