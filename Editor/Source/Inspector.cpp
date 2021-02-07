@@ -220,7 +220,7 @@ namespace SemperEngine
 	template<>
 	void Inspector::DrawComponentInfo<SpriteComponent>(Entity entity)
 	{
-		auto &sprite = entity.Get<SpriteComponent>();
+		auto &sprite = entity.Get<SpriteComponent>().sprite;
 
 		if (ImGui::CollapsingHeader("Sprite Component"))
 		{
@@ -231,75 +231,86 @@ namespace SemperEngine
 			if (ImGui::ColorEdit4("Sprite Color", &color[0]))
 				sprite.SetColor(color);
 
-			auto texture = sprite.GetTexture();
-			bool openTexture = false;
-
-			if (texture) 
+			if (!sprite.HasTexture() && !sprite.HasSpriteSheet())
 			{
-				ImGui::Image((void *) texture->GetHandle(), ImVec2(64.0f, 64.0f));
-				if (ImGui::IsItemClicked())
-					openTexture = true;
+				if (ImGui::Button("Add Texture")) 
+				{
+					SharedPtr<Texture2D> emptyTexture;
+					emptyTexture.reset(Texture2D::Create("Assets/Textures/EmptyTexture.png"));
+					sprite.SetTexture(emptyTexture);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Add SpriteSheet"))
+				{
+					SharedPtr<Texture2D> emptyTexture;
+					emptyTexture.reset(Texture2D::Create("Assets/Textures/EmptyTexture.png"));
+					Vec2 textureSize = { static_cast<float>(emptyTexture->GetWidth()), static_cast<float>(emptyTexture->GetHeight()) };
+					sprite.SetSpriteSheet(emptyTexture, Vec2(0.0f, 0.0f), textureSize);
+				}
+			}
 
-				U32 width = texture->GetWidth(), height = texture->GetHeight();
+			bool openFileDialogTexture = false;
+			bool openFileDialogSpriteSheet = false;
+
+			if (sprite.HasTexture())
+			{
+				ImGui::Image((void *) sprite.GetTexture()->GetHandle(), ImVec2(64.0f, 64.0f));
+				if (ImGui::IsItemClicked())
+				{
+					std::string filename = EngineApplication::Instance().OpenFile("");
+					if (filename != "")
+					{
+						SharedPtr<Texture2D> texture;
+						texture.reset(Texture2D::Create(filename));
+						sprite.SetTexture(texture);
+					}
+				}
+
+				U32 width = sprite.GetTexture()->GetWidth(), height = sprite.GetTexture()->GetHeight();
 				float ratio = (float) width / (float) height;
 
 				ImGui::SameLine();
-				ImGui::Text("Width: %d, Height %d\n Aspect Ratio: %.2f", width, height, ratio);
+				ImGui::Text("Width: %d, Height %d\n Aspect Ratio: %.2f\n", width, height, ratio);
+
+				ImGui::SameLine();
+				if (ImGui::Button("Remove Texture"))
+					sprite.RemoveTexture();
 			}
-			else
+			if (sprite.HasSpriteSheet())
 			{
-				ImGui::Image(nullptr, ImVec2(64.0f, 64.0f));
+				float index[2] = { sprite.GetCellIndex().x, sprite.GetCellIndex().y };
+				float size[2] = { sprite.GetCellSize().x, sprite.GetCellSize().y };
+
+				ImGui::Text("SpriteSheet  Preview");
+
+				ImGui::Image((void *) sprite.GetTexture()->GetHandle(), ImVec2(64.0f, 64.0f));
 				if (ImGui::IsItemClicked())
-					openTexture = true;
-			}
-			if (openTexture)
-			{
-				std::string filename = EngineApplication::Instance().OpenFile("");
-				if (filename != "")
 				{
-					SharedPtr<Texture2D> texture;
-					texture.reset(Texture2D::Create(filename));
-					sprite.cellWidth = texture->GetWidth();
-					sprite.cellHeight = texture->GetHeight();
-					sprite.xIndex = 0;
-					sprite.yIndex = 0;
-					sprite.SetTextureSheet(texture, { 0, 0 }, { sprite.cellHeight, sprite.cellHeight });
-				}
-			}
-
-			float availWidth = ImGui::GetContentRegionAvailWidth();
-			float sliderSize = (availWidth - 100.0f) / 2.0f;
-
-			if (texture && ImGui::TreeNode("Advanced"))
-			{
-				U32 width = texture->GetWidth(), height = texture->GetHeight();
-				bool edited = false;
-
-				ImGui::Text("CellSize");
-				ImGui::SameLine(100.0f);
-				ImGui::SetNextItemWidth(sliderSize);
-				if (ImGui::DragInt("##cellSizeX", &sprite.cellWidth, 1.0f, 1.0f, 1000.0f))
-					edited = true;
-				ImGui::SameLine();
-				ImGui::SetNextItemWidth(sliderSize);
-				if (ImGui::DragInt("##cellSizeY", &sprite.cellHeight, 1.0f, 1.0f, 1000.0f))
-					edited = true;
-
-				ImGui::Text("Index");
-				ImGui::SameLine(100.0f);
-				ImGui::SetNextItemWidth(sliderSize);
-				if (ImGui::SliderInt("##xIndex", &sprite.xIndex, 0, width / sprite.cellWidth - 1))
-					edited = true;
-				ImGui::SameLine();
-				ImGui::SetNextItemWidth(sliderSize);
-				if (ImGui::SliderInt("##Yindex", &sprite.yIndex, 0, height / sprite.cellHeight - 1))
-					edited = true;
-
-				if (edited) {
-					sprite.SetTextureSheet(texture, { sprite.xIndex, sprite.yIndex }, { sprite.cellWidth, sprite.cellHeight });
+					std::string filename = EngineApplication::Instance().OpenFile("");
+					if (filename != "")
+					{
+						SharedPtr<Texture2D> texture;
+						texture.reset(Texture2D::Create(filename));
+						Vec2 textureSize = { static_cast<float>(texture->GetWidth()), static_cast<float>(texture->GetHeight()) };
+						sprite.SetSpriteSheet(texture, Vec2(0.0f, 0.0f), textureSize);
+					}
 				}
 
-				ImGui::TreePop();
+				const auto &texCoords = sprite.GetTextureCoordinates();
+				ImVec2 uv0 = { texCoords[0].x, texCoords[0].y };
+				ImVec2 uv1 = { texCoords[2].x, texCoords[2].y };
+
+				ImGui::SameLine();
+				ImGui::Image((void *) sprite.GetTexture()->GetHandle(), ImVec2(64.0f, 64.0f), uv0, uv1);
+
+				if (ImGui::SliderFloat2("Index", index, 0, 32, "%1.0f"))
+					sprite.SetCellIndex({ index[0], index[1] });
+				if (ImGui::SliderFloat2("Size", size, 0, 2048, "%1.0f"))
+					sprite.SetCellSize({ size[0], size[1] });
+
+				ImGui::SameLine();
+				if (ImGui::Button("Remove SpriteSheet"))
+					sprite.RemoveSpriteSheet();
 			}
 		}
 		else {

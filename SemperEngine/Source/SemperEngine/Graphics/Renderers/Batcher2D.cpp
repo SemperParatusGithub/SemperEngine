@@ -200,8 +200,8 @@ namespace SemperEngine
 
 	void Batcher2D::DrawSprite(ConstRef<Transform> transform, ConstRef<Sprite> sprite)
 	{
-		auto &tintColor = sprite.GetColor();
-		auto texture = sprite.GetTexture();
+		const auto &tintColor = sprite.GetColor();
+		float textureIndex = 0.0f;
 
 		if (s_RenderData.indexCount >= MaxIndexCount)
 		{
@@ -209,10 +209,10 @@ namespace SemperEngine
 			BeginScene();
 		}
 
-		float textureIndex = 0.0f;
-
-		if (texture)
+		if (sprite.HasTexture() || sprite.HasSpriteSheet())
 		{
+			const auto &texture = sprite.GetTexture();
+
 			for (std::size_t i = 1; i < s_RenderData.textures.size(); i++)
 			{
 				if (s_RenderData.textures[i]->GetHandle() == texture->GetHandle()) {
