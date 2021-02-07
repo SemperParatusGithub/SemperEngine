@@ -39,6 +39,7 @@ namespace SemperEngine
 		float GetFramerate();	
 
 		std::string OpenFile(const char *filter);
+		std::string SaveFile(const char *filter);
 		
 	private:
 		bool m_Running = false;

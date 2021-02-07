@@ -98,8 +98,10 @@ void EditorLayer::OnImGuiRender()
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("New", "Ctrl+N"));
-			if (ImGui::MenuItem("Open...", "Ctrl+O"));
-			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"));
+			if (ImGui::MenuItem("Open...", "Ctrl+O"))
+				OpenScene();
+			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+				SaveSceneAs();
 			if (ImGui::MenuItem("Exit"))
 				EngineApplication::Instance().Close();
 				
@@ -142,14 +144,6 @@ void EditorLayer::OnImGuiRender()
 	ImGui::End();
 
 	ImGui::ShowDemoWindow();
-
-	ImGui::Begin("Test Window 3");
-	ImGui::Text("Hello World!");
-	if (ImGui::Button("Serialize"))
-		m_Scene->Serialize("TestScene.xml");
-	if (ImGui::Button("Deserialize"))
-		m_Scene->Deserialize("TestScene.xml");
-	ImGui::End();
 
 	m_Hierarchy->OnImGui();
 	m_Inspector->OnImGui(m_Hierarchy->GetSelectedEntity());
@@ -216,4 +210,22 @@ void EditorLayer::OnImGuiRender()
 void EditorLayer::OnEvent(Event &e)
 {
 	m_EditorCamera.OnEvent(e);
+}
+
+void EditorLayer::OpenScene()
+{
+	std::string filepath = EngineApplication::Instance().OpenFile("Semper Scene (*.semper)\0*.semper\0");
+	if (!filepath.empty())
+	{
+		m_Scene->Deserialize(filepath);
+	}
+}
+
+void EditorLayer::SaveSceneAs()
+{
+	std::string filepath = EngineApplication::Instance().SaveFile("Semper Scene (*.semper)\0*.semper\0");
+	if (!filepath.empty())
+	{
+		m_Scene->Serialize(filepath);
+	}
 }

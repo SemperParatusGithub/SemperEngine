@@ -22,6 +22,10 @@ public:
 	virtual void OnEvent(Event &e) override;
 
 private:
+	void OpenScene();
+	void SaveSceneAs();
+
+private:
 	bool m_SceneViewPortFocused, m_SceneViewPortHovered;
 	Vec2i m_ViewportSize;
 
