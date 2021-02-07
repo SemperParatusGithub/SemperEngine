@@ -15,7 +15,7 @@ namespace SemperEngine
 	class EngineApplication
 	{
 	public:
-		EngineApplication(ConstRef<std::string> name);
+		EngineApplication(ConstRef<std::string> name, U32 width = 1280u, U32 height = 720u);
 		virtual ~EngineApplication();
 
 		void Run();

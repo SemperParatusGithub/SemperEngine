@@ -15,14 +15,14 @@ namespace SemperEngine
 {
 	EngineApplication *EngineApplication::s_Instance = nullptr;
 
-	EngineApplication::EngineApplication(ConstRef<std::string> name)
+	EngineApplication::EngineApplication(ConstRef<std::string> name, U32 width, U32 height)
 	{
 		if (s_Instance)
 			SE_ASSERT_MSG(false, "Application already exists!");
 		s_Instance = this;
 		m_Running = true;
 
-		m_Window.reset(Window::Create(1280, 720, name));
+		m_Window.reset(Window::Create(width, height, name));
 		m_Window->SetInterval(1);
 		m_Window->SetEventCallbackFunction(SE_BIND_EVENT_FN(EngineApplication::OnEvent));
 
