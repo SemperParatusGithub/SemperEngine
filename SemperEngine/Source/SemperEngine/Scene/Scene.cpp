@@ -1,6 +1,9 @@
 #include "Precompiled.h"
 #include "Scene.h"
 
+#include <cereal/cereal.hpp>
+#include <cereal/archives/xml.hpp>
+
 #include "Entity.h"
 #include "Components.h"
 
@@ -36,6 +39,11 @@ namespace SemperEngine
 		return entity;
 	}
 
+	entt::registry &Scene::GetRegistry()
+	{
+		return m_Registry;
+	}
+
 	void Scene::OnUpdate(float deltaTime, ConstRef<Mat4> projectionView)
 	{
 		Batcher2D::BeginScene(projectionView);
@@ -55,8 +63,32 @@ namespace SemperEngine
 		OnUpdate(deltaTime, camera.GetProjectionView());
 	}
 
-	entt::registry &Scene::GetRegistry()
+	void Scene::Serialize(ConstRef<std::string> filepath)
 	{
-		return m_Registry;
+		SE_CORE_INFO("Serializing Scene: %s", filepath.c_str());
+
+		std::ofstream ofStream(filepath);
+		UniquePtr<cereal::XMLOutputArchive> archive = MakeUnique<cereal::XMLOutputArchive>(ofStream);
+
+		// Serialize general scene info
+		archive->operator()( cereal::make_nvp("General", *this) );
+
+		// Serialize all entities of the scene
+		entt::snapshot { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent>(*archive);
+	} 
+
+	void Scene::Deserialize(ConstRef<std::string> filepath)
+	{
+		SE_CORE_INFO("Deserializing Scene: %s", filepath.c_str());
+
+		std::ifstream ifStream(filepath);
+		UniquePtr<cereal::XMLInputArchive> archive = MakeUnique<cereal::XMLInputArchive>(ifStream);
+	
+		// Load general Scene info
+		archive->operator()( cereal::make_nvp("General", *this) );
+
+		// Load all entities
+		m_Registry.clear();
+		entt::snapshot_loader { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent>(*archive);
 	}
 }

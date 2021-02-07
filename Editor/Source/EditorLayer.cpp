@@ -145,6 +145,10 @@ void EditorLayer::OnImGuiRender()
 
 	ImGui::Begin("Test Window 3");
 	ImGui::Text("Hello World!");
+	if (ImGui::Button("Serialize"))
+		m_Scene->Serialize("TestScene.xml");
+	if (ImGui::Button("Deserialize"))
+		m_Scene->Deserialize("TestScene.xml");
 	ImGui::End();
 
 	m_Hierarchy->OnImGui();

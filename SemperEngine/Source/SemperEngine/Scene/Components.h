@@ -9,11 +9,17 @@
 
 #include "SemperEngine/Graphics/Camera/SceneCamera.h"
 
+#define ALL_COMPONENTS IdentificationComponent, TransformComponent, SpriteComponent, \
+							SceneCameraComponent, NativeScriptComponent
+
 
 namespace SemperEngine
 {
 	struct IdentificationComponent
 	{
+		std::string name = "Entity";
+		UUID ID;
+
 		IdentificationComponent() = default;
 		IdentificationComponent(ConstRef<std::string> name, UUID ID) : 
 			name(name), ID(ID) {}
@@ -25,8 +31,18 @@ namespace SemperEngine
 			return { name, ID };
 		}
 
-		std::string name = "Entity";
-		UUID ID;
+		template<typename Archive>
+		void save(Archive &archive) const
+		{
+			archive( cereal::make_nvp("Name", name),
+					 cereal::make_nvp("UUID", static_cast<U64>(ID)) );
+		}
+		template<typename Archive>
+		void load(Archive &archive)
+		{
+			archive( cereal::make_nvp("Name", name),
+					 cereal::make_nvp("UUID", static_cast<U64>(ID)) );
+		}
 	};
 
 	struct TransformComponent
@@ -69,6 +85,17 @@ namespace SemperEngine
 		ConstRef<Mat4> GetMatrix() const
 		{
 			return transform.GetTransform();
+		}
+
+		template<typename Archive>
+		void save(Archive &archive) const
+		{
+			archive( cereal::make_nvp("Transform", transform) );
+		}
+		template<typename Archive>
+		void load(Archive &archive)
+		{
+			archive( cereal::make_nvp("Transform", transform) );
 		}
 	};
 
