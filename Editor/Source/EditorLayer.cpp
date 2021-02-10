@@ -22,6 +22,10 @@ EditorLayer::EditorLayer() :
 	m_Hierarchy = MakeShared<Hierarchy>(m_Scene);
 	m_Inspector = MakeShared<Inspector>(m_Scene);
 
+	m_PlayButtonTexture.reset(Texture2D::Create("Assets/Textures/PlayButton.png"));
+	m_PauseButtonTexture.reset(Texture2D::Create("Assets/Textures/PauseButton.png"));
+	m_ExitButtonTexture.reset(Texture2D::Create("Assets/Textures/ExitButton.png"));
+
 	m_EditorCamera.Set3D();
 }
 
@@ -36,16 +40,16 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(float deltaTime)
 {
-	if (m_SceneViewPortHovered && Input::IsKeyPressed(Key::LeftShift))
+	if (m_SceneViewPortHovered && Input::IsKeyPressed(Key::LeftShift) && !m_Scene->IsPlaying())
 		m_EditorCamera.OnUpdate(deltaTime);
 
 	bool allowEvents = m_SceneViewPortHovered || m_SceneViewPortFocused;
 	EngineApplication::Instance().BlockImGuiEvents(!allowEvents);
 
-	if (m_Framebuffer->GetSize() != m_ViewportSize) 
+	if (m_Framebuffer->GetSize() != static_cast<Vec2i>(m_ViewportSize)) 
 	{
-		m_Framebuffer->OnResize((U32) m_ViewportSize.x, (U32) m_ViewportSize.y);
-		m_EditorCamera.SetBounds((float) m_ViewportSize.x, (float) m_ViewportSize.y);
+		m_Framebuffer->OnResize(static_cast<U32>(m_ViewportSize.x), static_cast<U32>(m_ViewportSize.y));
+		m_EditorCamera.SetBounds(m_ViewportSize.x, m_ViewportSize.y);
 	}
 
 	// Gizmos
@@ -68,7 +72,7 @@ void EditorLayer::OnUpdate(float deltaTime)
 		Renderer::SetClearColor({ 0.86f,  0.86f,  0.86f,  0.86f });
 		Renderer::Clear();
 
-		m_Scene->OnUpdateEditor(deltaTime, m_EditorCamera);
+		m_Scene->OnUpdate(deltaTime, m_EditorCamera, m_ViewportSize);
 
 		m_Framebuffer->UnBind();
 	}
@@ -155,15 +159,56 @@ void EditorLayer::OnImGuiRender()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });
 	ImGui::Begin("Scene Viewport");
 
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12, 0));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.8f, 0.8f, 0.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
+
+	ImGui::SetCursorPosX(ImGui::GetContentRegionAvailWidth() * 0.5f - 48.0f);
+
+	if (ImGui::ImageButton(m_PlayButtonTexture->GetHandle(), { 32.0f, 32.0f }))
+	{
+		m_Scene->Play();
+		m_ImGuizmoOperation = -1;
+		SE_CORE_ERROR("Playing Scene");
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::ImageButton(m_PauseButtonTexture->GetHandle(), { 32.0f, 32.0f }))
+	{
+		m_Scene->Pause();
+		SE_CORE_ERROR("Pausing Scene");
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::ImageButton(m_ExitButtonTexture->GetHandle(), { 32.0f, 32.0f }))
+	{
+		m_Scene->ReturnToEditing();
+		SE_CORE_ERROR("Return");
+	}
+
+	ImGui::PopStyleColor(3);
+	ImGui::PopStyleVar(3);
+
+	m_ViewportPosition = {
+		ImGui::GetWindowPos().x + ImGui::GetCursorPos().x,
+		ImGui::GetWindowPos().y + ImGui::GetCursorPos().y 
+	};
+	m_ViewportSize = {
+		ImGui::GetWindowSize().x - ImGui::GetCursorPos().x,
+		ImGui::GetWindowSize().y - ImGui::GetCursorPos().y
+	};
+
 	m_SceneViewPortFocused = ImGui::IsWindowFocused();
 	m_SceneViewPortHovered = ImGui::IsWindowHovered();
 
-	ImVec2 size = ImGui::GetContentRegionAvail();
-	m_ViewportSize = { (int) size.x, (int) size.y };
-
 	uint64_t textureID = reinterpret_cast<U64>(m_Framebuffer->GetColorAttachmentHandle());
 
-	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), size, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
+	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 
 	// Gizmos
 	Entity activeEntity = m_Hierarchy->GetSelectedEntity();
@@ -171,7 +216,7 @@ void EditorLayer::OnImGuiRender()
 	{
 		ImGuizmo::SetOrthographic(false);
 		ImGuizmo::SetDrawlist();
-		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, size.x, size.y);
+		ImGuizmo::SetRect(m_ViewportPosition.x, m_ViewportPosition.y, m_ViewportSize.x, m_ViewportSize.y);
 		ConstRef<Mat4> view = m_EditorCamera.GetView();
 		ConstRef<Mat4> proj = m_EditorCamera.GetProjection();
 

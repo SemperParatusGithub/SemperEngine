@@ -22,8 +22,13 @@ namespace SemperEngine
 
 		entt::registry &GetRegistry();
 
-		void OnUpdate(float deltaTime, ConstRef<Mat4> projectionView);
-		void OnUpdateEditor(float deltaTime, ConstRef<EditorCamera> camera);
+		void OnUpdate(float deltaTime, ConstRef<EditorCamera> camera, ConstRef<Vec2> viewportSize);
+
+		void Play();
+		void Pause();
+		void ReturnToEditing();
+
+		inline bool IsPlaying() const { return m_IsPlaying; }
 
 		void Serialize(ConstRef<std::string> filepath);
 		void Deserialize(ConstRef<std::string> filepath);
@@ -42,6 +47,10 @@ namespace SemperEngine
 		}
 
 	private:
+		bool m_IsEditing = true;
+		bool m_IsPlaying = false;
+		bool m_IsPaused = false;
+
 		std::string m_Name = "Unnamed";
 		std::string m_Version = "1.1";
 

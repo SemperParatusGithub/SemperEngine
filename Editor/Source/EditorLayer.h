@@ -27,7 +27,8 @@ private:
 
 private:
 	bool m_SceneViewPortFocused, m_SceneViewPortHovered;
-	Vec2i m_ViewportSize;
+	Vec2f m_ViewportPosition;
+	Vec2f m_ViewportSize;
 
 private:
 	SharedPtr<Framebuffer> m_Framebuffer;
@@ -36,6 +37,10 @@ private:
 	SharedPtr<Scene> m_Scene;
 	SharedPtr<Hierarchy> m_Hierarchy;
 	SharedPtr<Inspector> m_Inspector;
+
+	SharedPtr<Texture2D> m_PlayButtonTexture;
+	SharedPtr<Texture2D> m_PauseButtonTexture;
+	SharedPtr<Texture2D> m_ExitButtonTexture;
 
 	EditorCamera m_EditorCamera;
 

@@ -72,6 +72,8 @@ namespace SemperEngine
 
 	RendererID GLTexture2D::LoadFromFile()
 	{
+		SE_CORE_INFO("Loading Texture: %s", m_Filepath.c_str());
+
 		int texWidth, texHeight;
 		int sizeofChannel = 8;
 		int texChannels = 0;

@@ -8,6 +8,7 @@
 #include "Components.h"
 
 #include "SemperEngine/Graphics/Renderers/Batcher2D.h"
+#include "SemperEngine/Util/Timer.h"
 
 
 namespace SemperEngine
@@ -44,28 +45,83 @@ namespace SemperEngine
 		return m_Registry;
 	}
 
-	void Scene::OnUpdate(float deltaTime, ConstRef<Mat4> projectionView)
+	void Scene::OnUpdate(float deltaTime, ConstRef<EditorCamera> camera, ConstRef<Vec2> viewportSize)
 	{
-		Batcher2D::BeginScene(projectionView);
+		Mat4 projectionViewMatrix = camera.GetProjectionView();
 
-		auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
+		if (m_IsEditing)
+		{
+			Batcher2D::BeginScene(projectionViewMatrix);
 
-		view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
+			auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
+
+			view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
+				{
+					Batcher2D::DrawSprite(tc.transform, sc.sprite);
+				});
+
+			Batcher2D::EndScene();
+		}
+		else if (m_IsPlaying)
+		{
+			// Get primary camera entity and override scene camera with it
 			{
-				Batcher2D::DrawSprite(tc.transform, sc.sprite);
-			});
+				auto view = m_Registry.view<const TransformComponent, const SceneCameraComponent>();
+				for (const auto ent : view)
+				{
+					auto entity = Entity(ent, this);
+					auto &camera = entity.Get<SceneCameraComponent>();
+					camera.SetPosition(entity.Get<TransformComponent>().transform.GetTranslation());
+					camera.SetBounds(viewportSize.x, viewportSize.y);
+					if (camera.primary)
+					{
+						projectionViewMatrix = camera.GetProjectionViewMatrix();
+						break;
+					}
+				}
+			}
 
-		Batcher2D::EndScene();
+			// Render all Sprites
+			{
+				Batcher2D::BeginScene(projectionViewMatrix);
+
+				auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
+
+				view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
+					{
+						Batcher2D::DrawSprite(tc.transform, sc.sprite);
+					});
+
+				Batcher2D::EndScene();
+			}
+		}
 	}
 
-	void Scene::OnUpdateEditor(float deltaTime, ConstRef<EditorCamera> camera)
+	void Scene::Play()
 	{
-		OnUpdate(deltaTime, camera.GetProjectionView());
+		m_IsPlaying = true;
+		m_IsEditing = false;
+		m_IsPaused = false;
+	}
+	void Scene::Pause()
+	{
+		m_IsPaused = true;
+		m_IsPlaying = false;
+		m_IsEditing = false;
+	}
+	void Scene::ReturnToEditing()
+	{
+		m_IsEditing = true;
+		m_IsPlaying = false;
+		m_IsPaused = false;
 	}
 
 	void Scene::Serialize(ConstRef<std::string> filepath)
 	{
 		SE_CORE_INFO("Serializing Scene: %s", filepath.c_str());
+
+		Util::Timer timer;
+		timer.Start();
 
 		std::ofstream ofStream(filepath);
 		UniquePtr<cereal::XMLOutputArchive> archive = MakeUnique<cereal::XMLOutputArchive>(ofStream);
@@ -75,11 +131,17 @@ namespace SemperEngine
 
 		// Serialize all entities of the scene
 		entt::snapshot { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent, SpriteComponent>(*archive);
+	
+		auto elapsed = timer.GetTime().time;
+		SE_CORE_INFO("Saving the Scene took: %.2f ms", elapsed);
 	} 
 
 	void Scene::Deserialize(ConstRef<std::string> filepath)
 	{
 		SE_CORE_INFO("Deserializing Scene: %s", filepath.c_str());
+
+		Util::Timer timer;
+		timer.Start();
 
 		std::ifstream ifStream(filepath);
 		UniquePtr<cereal::XMLInputArchive> archive = MakeUnique<cereal::XMLInputArchive>(ifStream);
@@ -90,5 +152,8 @@ namespace SemperEngine
 		// Load all entities
 		m_Registry.clear();
 		entt::snapshot_loader { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent, SpriteComponent>(*archive);
+	
+		auto elapsed = timer.GetTime().time;
+		SE_CORE_INFO("Loading the Scene took: %.2f ms", elapsed);
 	}
 }
