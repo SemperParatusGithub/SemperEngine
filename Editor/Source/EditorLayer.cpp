@@ -37,7 +37,7 @@ EditorLayer::EditorLayer() :
 		virtual void OnCreate() override
 		{
 			constexpr float rotationX = glm::radians(-20.0f);
-			Get<TransformComponent>().Rotate(Vec3(rotationX, 0.0f, 0.0f));
+			Get<TransformComponent>().SetRotation(Vec3(rotationX, 0.0f, 0.0f));
 		}
 		virtual void OnUpdate(float dt) override
 		{
@@ -70,6 +70,22 @@ EditorLayer::EditorLayer() :
 
 	auto &nsc = m_CameraEntity.Add<NativeScriptComponent>();
 	nsc.AttachScript<CameraController>();
+
+	m_DirtEntity = m_Scene->CreateEntity("ground");
+
+	auto &sc = m_DirtEntity.Add<SpriteComponent>();
+	SharedPtr<Texture2D> groundTex;
+	groundTex.reset(Texture2D::Create("Assets/Textures/StoneTex.jpg"));
+	sc.SetTexture(groundTex);
+
+	auto &tc = m_DirtEntity.Get<TransformComponent>();
+	tc.SetRotation(Vec3(glm::radians(90.0f), 0.0f, 0.0f));
+	tc.SetScale(Vec3(5.0f, 5.0f, 1.0f));
+
+	m_SquareEntity = m_Scene->CreateEntity("Square");
+
+	m_SquareEntity.Add<SpriteComponent>();
+	m_SquareEntity.Get<TransformComponent>().SetTranslation(Vec3(0.0f, 0.5f, 0.0f));
 }
 
 void EditorLayer::OnAttach()

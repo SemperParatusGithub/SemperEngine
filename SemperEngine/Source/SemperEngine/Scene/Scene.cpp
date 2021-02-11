@@ -67,7 +67,41 @@ namespace SemperEngine
 
 			case SceneState::Pausing:
 			{
+				// Don't update Scripts while pausing!
 
+				// Get primary camera entity and override scene camera with it
+				{
+					auto view = m_Registry.view<const TransformComponent, const SceneCameraComponent>();
+					for (const auto ent : view)
+					{
+						auto entity = Entity(ent, this);
+						auto &camera = entity.Get<SceneCameraComponent>();
+
+						camera.camera.SetPosition(entity.Get<TransformComponent>().transform.GetTranslation());
+						camera.camera.SetRotation(entity.Get<TransformComponent>().transform.GetRotation());
+						camera.SetBounds(viewportSize.x, viewportSize.y);
+
+						if (camera.primary)
+						{
+							projectionViewMatrix = camera.GetProjectionViewMatrix();
+							break;
+						}
+					}
+				}
+
+				// Render all Sprites
+				{
+					Batcher2D::BeginScene(projectionViewMatrix);
+
+					auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
+
+					view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
+						{
+							Batcher2D::DrawSprite(tc.transform, sc.sprite);
+						});
+
+					Batcher2D::EndScene();
+				}
 			}break;
 
 			case SceneState::Playing:
@@ -136,20 +170,29 @@ namespace SemperEngine
 	}
 	void Scene::Pause()
 	{
-		m_SceneState = SceneState::Pausing;
+		if (m_SceneState != SceneState::Editing)
+		{
+			if (m_SceneState == SceneState::Pausing)
+				m_SceneState = SceneState::Playing;
+			else
+				m_SceneState = SceneState::Pausing;
+		}
 	}
 	void Scene::ReturnToEditing()
 	{
-		m_SceneState = SceneState::Editing;
-
-		// Destroy all native scripts
-		auto view = m_Registry.view<NativeScriptComponent>();
-		for (const auto ent : view)
+		if (m_SceneState != SceneState::Editing)
 		{
-			auto entity = Entity(ent, this);
-			auto &nsc = entity.Get<NativeScriptComponent>();
-			nsc.OnDestroy();
-			nsc.DestroyInstance(&nsc);
+			m_SceneState = SceneState::Editing;
+
+			// Destroy all native scripts
+			auto view = m_Registry.view<NativeScriptComponent>();
+			for (const auto ent : view)
+			{
+				auto entity = Entity(ent, this);
+				auto &nsc = entity.Get<NativeScriptComponent>();
+				nsc.OnDestroy();
+				nsc.DestroyInstance(&nsc);
+			}
 		}
 	}
 
