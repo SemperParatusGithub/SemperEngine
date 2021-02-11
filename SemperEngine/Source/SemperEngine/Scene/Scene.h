@@ -14,6 +14,14 @@ namespace SemperEngine
 	class Scene
 	{
 	public:
+		enum class SceneState
+		{
+			Editing = 0,
+			Playing,
+			Pausing
+		};
+
+	public:
 		Scene() = default;
 		~Scene() = default;
 
@@ -28,7 +36,7 @@ namespace SemperEngine
 		void Pause();
 		void ReturnToEditing();
 
-		inline bool IsPlaying() const { return m_IsPlaying; }
+		inline bool IsPlaying() const { return m_SceneState == SceneState::Playing; }
 
 		void Serialize(ConstRef<std::string> filepath);
 		void Deserialize(ConstRef<std::string> filepath);
@@ -47,9 +55,7 @@ namespace SemperEngine
 		}
 
 	private:
-		bool m_IsEditing = true;
-		bool m_IsPlaying = false;
-		bool m_IsPaused = false;
+		SceneState m_SceneState = SceneState::Editing;
 
 		std::string m_Name = "Unnamed";
 		std::string m_Version = "1.1";

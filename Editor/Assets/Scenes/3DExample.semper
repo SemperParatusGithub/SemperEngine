@@ -4,7 +4,7 @@
 		<Name>Unnamed</Name>
 		<Version>1.1</Version>
 	</General>
-	<value0>6</value0>
+	<value0>7</value0>
 	<value1>0</value1>
 	<value2>1</value2>
 	<value3>2</value3>
@@ -12,39 +12,45 @@
 	<value5>4</value5>
 	<value6>5</value6>
 	<value7>6</value7>
-	<value8>0</value8>
-	<value9>
+	<value8>7</value8>
+	<value9>0</value9>
+	<value10>
 		<Name>Entity</Name>
-		<UUID>16283167055268364474</UUID>
-	</value9>
-	<value10>1</value10>
-	<value11>
+		<UUID>17131079794807326386</UUID>
+	</value10>
+	<value11>1</value11>
+	<value12>
 		<Name>Entity</Name>
-		<UUID>12912848565702878981</UUID>
-	</value11>
-	<value12>2</value12>
-	<value13>
+		<UUID>15401354467786243437</UUID>
+	</value12>
+	<value13>2</value13>
+	<value14>
 		<Name>Entity</Name>
-		<UUID>18157340190984941661</UUID>
-	</value13>
-	<value14>3</value14>
-	<value15>
+		<UUID>11449069257306187454</UUID>
+	</value14>
+	<value15>3</value15>
+	<value16>
 		<Name>Entity</Name>
-		<UUID>10983247285978702188</UUID>
-	</value15>
-	<value16>4</value16>
-	<value17>
+		<UUID>5372208476514377394</UUID>
+	</value16>
+	<value17>4</value17>
+	<value18>
 		<Name>Entity</Name>
-		<UUID>9224786276354421828</UUID>
-	</value17>
-	<value18>5</value18>
-	<value19>
+		<UUID>14292765601841405794</UUID>
+	</value18>
+	<value19>5</value19>
+	<value20>
 		<Name>Entity</Name>
-		<UUID>14299258104063339817</UUID>
-	</value19>
-	<value20>6</value20>
-	<value21>0</value21>
+		<UUID>17904488119601680022</UUID>
+	</value20>
+	<value21>6</value21>
 	<value22>
+		<Name>camera</Name>
+		<UUID>18292204864448099734</UUID>
+	</value22>
+	<value23>7</value23>
+	<value24>0</value24>
+	<value25>
 		<Transform>
 			<Translation>
 				<x>0</x>
@@ -62,9 +68,9 @@
 				<z>1</z>
 			</Scale>
 		</Transform>
-	</value22>
-	<value23>1</value23>
-	<value24>
+	</value25>
+	<value26>1</value26>
+	<value27>
 		<Transform>
 			<Translation>
 				<x>0</x>
@@ -82,9 +88,9 @@
 				<z>6.7999997138977051</z>
 			</Scale>
 		</Transform>
-	</value24>
-	<value25>2</value25>
-	<value26>
+	</value27>
+	<value28>2</value28>
+	<value29>
 		<Transform>
 			<Translation>
 				<x>0</x>
@@ -102,9 +108,9 @@
 				<z>1</z>
 			</Scale>
 		</Transform>
-	</value26>
-	<value27>3</value27>
-	<value28>
+	</value29>
+	<value30>3</value30>
+	<value31>
 		<Transform>
 			<Translation>
 				<x>0.5</x>
@@ -122,9 +128,9 @@
 				<z>1</z>
 			</Scale>
 		</Transform>
-	</value28>
-	<value29>4</value29>
-	<value30>
+	</value31>
+	<value32>4</value32>
+	<value33>
 		<Transform>
 			<Translation>
 				<x>-0.5</x>
@@ -142,9 +148,9 @@
 				<z>1</z>
 			</Scale>
 		</Transform>
-	</value30>
-	<value31>5</value31>
-	<value32>
+	</value33>
+	<value34>5</value34>
+	<value35>
 		<Transform>
 			<Translation>
 				<x>0</x>
@@ -162,10 +168,30 @@
 				<z>1</z>
 			</Scale>
 		</Transform>
-	</value32>
-	<value33>6</value33>
-	<value34>1</value34>
-	<value35>
+	</value35>
+	<value36>6</value36>
+	<value37>
+		<Transform>
+			<Translation>
+				<x>0</x>
+				<y>0.61757278442382813</y>
+				<z>4.1023654937744141</z>
+			</Translation>
+			<Rotation>
+				<x>0</x>
+				<y>0</y>
+				<z>0</z>
+			</Rotation>
+			<Scale>
+				<x>1</x>
+				<y>1</y>
+				<z>1</z>
+			</Scale>
+		</Transform>
+	</value37>
+	<value38>6</value38>
+	<value39>1</value39>
+	<value40>
 		<Sprite>
 			<HasTexture>true</HasTexture>
 			<HasSpriteSheet>false</HasSpriteSheet>
@@ -203,9 +229,9 @@
 				<y>-107374176</y>
 			</CellIndex>
 		</Sprite>
-	</value35>
-	<value36>0</value36>
-	<value37>
+	</value40>
+	<value41>0</value41>
+	<value42>
 		<Sprite>
 			<HasTexture>true</HasTexture>
 			<HasSpriteSheet>false</HasSpriteSheet>
@@ -243,9 +269,9 @@
 				<y>-107374176</y>
 			</CellIndex>
 		</Sprite>
-	</value37>
-	<value38>2</value38>
-	<value39>
+	</value42>
+	<value43>2</value43>
+	<value44>
 		<Sprite>
 			<HasTexture>true</HasTexture>
 			<HasSpriteSheet>false</HasSpriteSheet>
@@ -283,9 +309,9 @@
 				<y>-107374176</y>
 			</CellIndex>
 		</Sprite>
-	</value39>
-	<value40>3</value40>
-	<value41>
+	</value44>
+	<value45>3</value45>
+	<value46>
 		<Sprite>
 			<HasTexture>true</HasTexture>
 			<HasSpriteSheet>false</HasSpriteSheet>
@@ -323,9 +349,9 @@
 				<y>-107374176</y>
 			</CellIndex>
 		</Sprite>
-	</value41>
-	<value42>4</value42>
-	<value43>
+	</value46>
+	<value47>4</value47>
+	<value48>
 		<Sprite>
 			<HasTexture>true</HasTexture>
 			<HasSpriteSheet>false</HasSpriteSheet>
@@ -363,9 +389,9 @@
 				<y>-107374176</y>
 			</CellIndex>
 		</Sprite>
-	</value43>
-	<value44>5</value44>
-	<value45>
+	</value48>
+	<value49>5</value49>
+	<value50>
 		<Sprite>
 			<HasTexture>true</HasTexture>
 			<HasSpriteSheet>false</HasSpriteSheet>
@@ -403,6 +429,6 @@
 				<y>-107374176</y>
 			</CellIndex>
 		</Sprite>
-	</value45>
+	</value50>
 </cereal>
 

@@ -49,39 +49,9 @@ namespace SemperEngine
 	{
 		Mat4 projectionViewMatrix = camera.GetProjectionView();
 
-		if (m_IsEditing)
+		switch (m_SceneState)
 		{
-			Batcher2D::BeginScene(projectionViewMatrix);
-
-			auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
-
-			view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
-				{
-					Batcher2D::DrawSprite(tc.transform, sc.sprite);
-				});
-
-			Batcher2D::EndScene();
-		}
-		else if (m_IsPlaying)
-		{
-			// Get primary camera entity and override scene camera with it
-			{
-				auto view = m_Registry.view<const TransformComponent, const SceneCameraComponent>();
-				for (const auto ent : view)
-				{
-					auto entity = Entity(ent, this);
-					auto &camera = entity.Get<SceneCameraComponent>();
-					camera.SetPosition(entity.Get<TransformComponent>().transform.GetTranslation());
-					camera.SetBounds(viewportSize.x, viewportSize.y);
-					if (camera.primary)
-					{
-						projectionViewMatrix = camera.GetProjectionViewMatrix();
-						break;
-					}
-				}
-			}
-
-			// Render all Sprites
+			case SceneState::Editing:
 			{
 				Batcher2D::BeginScene(projectionViewMatrix);
 
@@ -93,27 +63,94 @@ namespace SemperEngine
 					});
 
 				Batcher2D::EndScene();
-			}
+			} break;
+
+			case SceneState::Pausing:
+			{
+
+			}break;
+
+			case SceneState::Playing:
+			{
+				// Update NativeScriptComponents
+				{
+					auto view = m_Registry.view<NativeScriptComponent>();
+					view.each([=](NativeScriptComponent &nsc)
+						{
+							nsc.OnUpdate(deltaTime);
+						});
+
+				}
+
+				// Get primary camera entity and override scene camera with it
+				{
+					auto view = m_Registry.view<const TransformComponent, const SceneCameraComponent>();
+					for (const auto ent : view)
+					{
+						auto entity = Entity(ent, this);
+						auto &camera = entity.Get<SceneCameraComponent>();
+
+						camera.camera.SetPosition(entity.Get<TransformComponent>().transform.GetTranslation());
+						camera.camera.SetRotation(entity.Get<TransformComponent>().transform.GetRotation());
+						camera.SetBounds(viewportSize.x, viewportSize.y);
+
+						if (camera.primary)
+						{
+							projectionViewMatrix = camera.GetProjectionViewMatrix();
+							break;
+						}
+					}
+				}
+
+				// Render all Sprites
+				{
+					Batcher2D::BeginScene(projectionViewMatrix);
+
+					auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
+
+					view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
+						{
+							Batcher2D::DrawSprite(tc.transform, sc.sprite);
+						});
+
+					Batcher2D::EndScene();
+				}
+			} break;
 		}
 	}
 
 	void Scene::Play()
 	{
-		m_IsPlaying = true;
-		m_IsEditing = false;
-		m_IsPaused = false;
+		m_SceneState = SceneState::Playing;
+
+		// Create all native scripts
+		auto view = m_Registry.view<NativeScriptComponent>();
+		for (const auto ent : view)
+		{
+			auto entity = Entity(ent, this);
+			auto &nsc = entity.Get<NativeScriptComponent>();
+			nsc.instance = nsc.CreateInstance();
+			nsc.instance->m_Entity = entity;
+			nsc.OnCreate();
+		}
 	}
 	void Scene::Pause()
 	{
-		m_IsPaused = true;
-		m_IsPlaying = false;
-		m_IsEditing = false;
+		m_SceneState = SceneState::Pausing;
 	}
 	void Scene::ReturnToEditing()
 	{
-		m_IsEditing = true;
-		m_IsPlaying = false;
-		m_IsPaused = false;
+		m_SceneState = SceneState::Editing;
+
+		// Destroy all native scripts
+		auto view = m_Registry.view<NativeScriptComponent>();
+		for (const auto ent : view)
+		{
+			auto entity = Entity(ent, this);
+			auto &nsc = entity.Get<NativeScriptComponent>();
+			nsc.OnDestroy();
+			nsc.DestroyInstance(&nsc);
+		}
 	}
 
 	void Scene::Serialize(ConstRef<std::string> filepath)

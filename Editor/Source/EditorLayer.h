@@ -43,6 +43,7 @@ private:
 	SharedPtr<Texture2D> m_ExitButtonTexture;
 
 	EditorCamera m_EditorCamera;
+	Entity m_CameraEntity;
 
 	int m_ImGuizmoOperation = -1;
 };

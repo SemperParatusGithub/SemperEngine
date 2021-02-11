@@ -46,7 +46,9 @@ namespace SemperEngine
 	}
 	void Transform::SetRotation(ConstRef<Vec3> rotation)
 	{
-		m_Rotation = rotation;
+		m_Rotation.x = rotation.x >= glm::radians(360.0f) ? rotation.x - glm::radians(360.0f) : rotation.x;
+		m_Rotation.y = rotation.y >= glm::radians(360.0f) ? rotation.y - glm::radians(360.0f) : rotation.y;
+		m_Rotation.z = rotation.z >= glm::radians(360.0f) ? rotation.z - glm::radians(360.0f) : rotation.z;
 
 		Invalidate();
 	}
@@ -66,6 +68,10 @@ namespace SemperEngine
 	void Transform::Rotate(ConstRef<Vec3> offset)
 	{
 		m_Rotation += offset;
+
+		m_Rotation.x = m_Rotation.x >= glm::radians(360.0f) ? m_Rotation.x - glm::radians(360.0f) : m_Rotation.x;
+		m_Rotation.y = m_Rotation.y >= glm::radians(360.0f) ? m_Rotation.y - glm::radians(360.0f) : m_Rotation.y;
+		m_Rotation.z = m_Rotation.z >= glm::radians(360.0f) ? m_Rotation.z - glm::radians(360.0f) : m_Rotation.z;
 
 		Invalidate();
 	}

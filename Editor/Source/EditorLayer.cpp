@@ -6,6 +6,9 @@
 #include "ImGuizmo/ImGuizmo.h"
 #include "SemperEngine/Util/Math.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
@@ -27,6 +30,46 @@ EditorLayer::EditorLayer() :
 	m_ExitButtonTexture.reset(Texture2D::Create("Assets/Textures/ExitButton.png"));
 
 	m_EditorCamera.Set3D();
+
+	class CameraController : public ScriptableEntity
+	{
+	public:
+		virtual void OnCreate() override
+		{
+			constexpr float rotationX = glm::radians(-20.0f);
+			Get<TransformComponent>().Rotate(Vec3(rotationX, 0.0f, 0.0f));
+		}
+		virtual void OnUpdate(float dt) override
+		{
+			auto &transform = Get<TransformComponent>();
+
+			transform.Rotate(Vec3(0.0f, dt, 0.0f));
+
+			Vec3 position = m_FocalPoint - GetForwardDirection() * m_Zoom;
+			transform.SetTranslation(position);
+		}	
+		virtual void OnDestroy() override
+		{
+		}
+
+		Vec3 GetForwardDirection() 
+		{
+			Vec3 rotation = Get<TransformComponent>().transform.GetRotation();
+			return glm::rotate(glm::quat(rotation), Vec3(0.0f, 0.0f, -1.0f));
+		}
+
+	private:
+		Vec3 m_FocalPoint = { 0.0f, 0.0f, 0.0f };
+		float m_Zoom = 10.0f;
+	};
+
+	m_CameraEntity = m_Scene->CreateEntity("Main Scene Camera");
+
+	auto &cam = m_CameraEntity.Add<SceneCameraComponent>();
+	cam.primary = true;
+
+	auto &nsc = m_CameraEntity.Add<NativeScriptComponent>();
+	nsc.AttachScript<CameraController>();
 }
 
 void EditorLayer::OnAttach()

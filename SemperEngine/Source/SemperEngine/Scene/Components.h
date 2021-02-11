@@ -84,6 +84,10 @@ namespace SemperEngine
 			transform.SetScale(scale);
 		}
 
+		void Move(ConstRef<Vec3> offset) { transform.Translate(offset); }
+		void Rotate(ConstRef<Vec3> offset) { transform.Rotate(offset); }
+		void Scale(ConstRef<Vec3> offset) { transform.Scale(offset); }
+
 		ConstRef<Mat4> GetMatrix() const
 		{
 			return transform.GetTransform();
@@ -143,29 +147,10 @@ namespace SemperEngine
 
 		~SceneCameraComponent() = default;
 
-		void SetPosition(ConstRef<Vec3> position)
-		{
-			camera.SetPosition(position);
-		}
-		void SetRotation(ConstRef<Vec3> rotation)
-		{
-			camera.SetRotation(rotation);
-		}
-
-		ConstRef<Vec3> GetPosition() const
-		{
-			return camera.GetPosition();
-		}
-		ConstRef<Vec3> GetRotation() const
-		{
-			return camera.GetRotation();
-		}
-
 		ConstRef<Mat4> GetProjectionViewMatrix()
 		{
 			return camera.GetProjectionView();
 		}
-
 		void SetBounds(float width, float height)
 		{
 			camera.SetBounds(width, height);
@@ -185,7 +170,7 @@ namespace SemperEngine
 			CreateInstance = []() {
 				return static_cast<ScriptableEntity *>(new Script());
 			};
-			DestroyInstance = [](NativeScripComponent *nsc) {
+			DestroyInstance = [](NativeScriptComponent *nsc) {
 				delete nsc->instance; 
 				nsc->instance = nullptr;
 			};
