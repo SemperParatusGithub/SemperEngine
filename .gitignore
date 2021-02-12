@@ -1,6 +1,7 @@
 # Binaries
 Binaries
-Scripts/Build
+
+**.log
 
 # Visual Studio files and folder
 .vs/
