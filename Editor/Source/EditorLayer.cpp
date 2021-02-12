@@ -43,11 +43,16 @@ EditorLayer::EditorLayer() :
 		{
 			auto &transform = Get<TransformComponent>();
 
-			transform.Rotate(Vec3(0.0f, dt, 0.0f));
+			transform.Rotate(Vec3(0.0f, m_RotationSpeed * dt, 0.0f));
 
 			Vec3 position = m_FocalPoint - GetForwardDirection() * m_Zoom;
 			transform.SetTranslation(position);
 		}	
+		virtual void OnGui() override
+		{
+			ImGui::SliderFloat("Zoom", &m_Zoom, 0.1f, 10.0f);
+			ImGui::SliderFloat("Rotation Speed", &m_RotationSpeed, 0.0f, 50.0f);
+		}
 		virtual void OnDestroy() override
 		{
 		}
@@ -61,31 +66,35 @@ EditorLayer::EditorLayer() :
 	private:
 		Vec3 m_FocalPoint = { 0.0f, 0.0f, 0.0f };
 		float m_Zoom = 10.0f;
+		float m_RotationSpeed = 1.0f;
 	};
 
-	m_CameraEntity = m_Scene->CreateEntity("Main Scene Camera");
+	// Example Scene
+	{
+		m_CameraEntity = m_Scene->CreateEntity("Main Scene Camera");
 
-	auto &cam = m_CameraEntity.Add<SceneCameraComponent>();
-	cam.primary = true;
+		auto &cam = m_CameraEntity.Add<SceneCameraComponent>();
+		cam.primary = true;
 
-	auto &nsc = m_CameraEntity.Add<NativeScriptComponent>();
-	nsc.AttachScript<CameraController>();
+		auto &nsc = m_CameraEntity.Add<NativeScriptComponent>();
+		nsc.AttachScript<CameraController>();
 
-	m_DirtEntity = m_Scene->CreateEntity("ground");
+		m_DirtEntity = m_Scene->CreateEntity("ground");
 
-	auto &sc = m_DirtEntity.Add<SpriteComponent>();
-	SharedPtr<Texture2D> groundTex;
-	groundTex.reset(Texture2D::Create("Assets/Textures/StoneTex.jpg"));
-	sc.SetTexture(groundTex);
+		auto &sc = m_DirtEntity.Add<SpriteComponent>();
+		SharedPtr<Texture2D> groundTex;
+		groundTex.reset(Texture2D::Create("Assets/Textures/StoneTex.jpg"));
+		sc.SetTexture(groundTex);
 
-	auto &tc = m_DirtEntity.Get<TransformComponent>();
-	tc.SetRotation(Vec3(glm::radians(90.0f), 0.0f, 0.0f));
-	tc.SetScale(Vec3(5.0f, 5.0f, 1.0f));
+		auto &tc = m_DirtEntity.Get<TransformComponent>();
+		tc.SetRotation(Vec3(glm::radians(90.0f), 0.0f, 0.0f));
+		tc.SetScale(Vec3(5.0f, 5.0f, 1.0f));
 
-	m_SquareEntity = m_Scene->CreateEntity("Square");
+		m_SquareEntity = m_Scene->CreateEntity("Square");
 
-	m_SquareEntity.Add<SpriteComponent>();
-	m_SquareEntity.Get<TransformComponent>().SetTranslation(Vec3(0.0f, 0.5f, 0.0f));
+		m_SquareEntity.Add<SpriteComponent>();
+		m_SquareEntity.Get<TransformComponent>().SetTranslation(Vec3(0.0f, 0.5f, 0.0f));
+	}
 }
 
 void EditorLayer::OnAttach()

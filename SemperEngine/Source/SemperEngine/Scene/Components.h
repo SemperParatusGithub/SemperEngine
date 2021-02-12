@@ -179,6 +179,10 @@ namespace SemperEngine
 		{
 			instance->OnCreate();
 		}
+		void OnGui()
+		{
+			instance->OnGui();
+		}
 		void OnUpdate(float deltaTime)
 		{
 			instance->OnUpdate(deltaTime);

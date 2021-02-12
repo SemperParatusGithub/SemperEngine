@@ -112,6 +112,7 @@ namespace SemperEngine
 		inline virtual void OnCreate() {}
 		inline virtual void OnUpdate(float deltaTime) {}
 		inline virtual void OnDestroy() {}
+		inline virtual void OnGui() {}
 
 		template<typename Component>
 		inline Component &Get() 

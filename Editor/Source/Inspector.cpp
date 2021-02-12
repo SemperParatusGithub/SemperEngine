@@ -412,8 +412,12 @@ namespace SemperEngine
 	template<>
 	void Inspector::DrawComponentInfo<NativeScriptComponent>(Entity entity)
 	{
+		auto &nsc = entity.Get<NativeScriptComponent>();
+
 		if (ImGui::CollapsingHeader("Native Script"))
 		{
+			if(nsc.instance != nullptr)
+				nsc.OnGui();
 		}
 	}
 }
