@@ -40,7 +40,9 @@ namespace SemperEngine
 		template<typename Archive>
 		void save(Archive &archive) const
 		{
-			std::string textureFilepath = m_Texture->GetFilepath();
+			std::string textureFilepath = "";
+			if(m_HasTexture || m_HasSpriteSheet)
+				textureFilepath = m_Texture->GetFilepath();
 
 			archive( cereal::make_nvp("HasTexture", m_HasTexture),
 					 cereal::make_nvp("HasSpriteSheet", m_HasSpriteSheet),
