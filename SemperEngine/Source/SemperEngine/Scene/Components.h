@@ -11,8 +11,8 @@
 
 #include "SemperEngine/Graphics/Camera/SceneCamera.h"
 
-#define ALL_COMPONENTS IdentificationComponent, TransformComponent, SpriteComponent, \
-							SceneCameraComponent, NativeScriptComponent
+#define ALL_COMPONENTS IdentificationComponent, TransformComponent, \
+						SpriteComponent, SceneCameraComponent
 
 
 namespace SemperEngine
@@ -154,6 +154,19 @@ namespace SemperEngine
 		void SetBounds(float width, float height)
 		{
 			camera.SetBounds(width, height);
+		}
+
+		template<typename Archive>
+		void save(Archive &archive) const
+		{
+			archive( cereal::make_nvp("Primary", primary),
+					 cereal::make_nvp("Camera", camera) );
+		}
+		template<typename Archive>
+		void load(Archive &archive)
+		{
+			archive( cereal::make_nvp("Primary", primary),
+					 cereal::make_nvp("Camera", camera) );
 		}
 	};
 

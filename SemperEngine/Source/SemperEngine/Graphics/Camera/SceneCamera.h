@@ -41,6 +41,39 @@ namespace SemperEngine
 		ConstRef<Vec3> GetPosition() const;
 		ConstRef<Vec3> GetRotation() const;
 
+		template<typename Archive>
+		void save(Archive &archive) const
+		{
+			archive( cereal::make_nvp("IsOrthographic", m_IsOrthographic),
+					 cereal::make_nvp("IsPerspective", m_IsPerspective),
+					 cereal::make_nvp("Position", m_Position),
+					 cereal::make_nvp("Rotation", m_Rotation),
+					 cereal::make_nvp("NearClip", m_NearClip),
+					 cereal::make_nvp("FarClip", m_FarClip),
+					 cereal::make_nvp("AspectRation", m_AspectRatio),
+					 cereal::make_nvp("FOV", m_FOV),
+					 cereal::make_nvp("Zoom", m_Zoom),
+					 cereal::make_nvp("ViewportWidth", m_ViewportWidth),
+					 cereal::make_nvp("ViewportHeight", m_ViewportHeight) );
+		}
+		template<typename Archive>
+		void load(Archive &archive)
+		{
+			archive( cereal::make_nvp("IsOrthographic", m_IsOrthographic),
+					 cereal::make_nvp("IsPerspective", m_IsPerspective),
+					 cereal::make_nvp("Position", m_Position),
+					 cereal::make_nvp("Rotation", m_Rotation),
+					 cereal::make_nvp("NearClip", m_NearClip),
+					 cereal::make_nvp("FarClip", m_FarClip),
+					 cereal::make_nvp("AspectRation", m_AspectRatio),
+					 cereal::make_nvp("FOV", m_FOV),
+					 cereal::make_nvp("Zoom", m_Zoom),
+					 cereal::make_nvp("ViewportWidth", m_ViewportWidth),
+					 cereal::make_nvp("ViewportHeight", m_ViewportHeight) );
+
+			RecalculateCameraMatrices();
+		}
+
 	private:
 		void RecalculateCameraMatrices();
 

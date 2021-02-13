@@ -210,7 +210,7 @@ namespace SemperEngine
 		archive->operator()( cereal::make_nvp("General", *this) );
 
 		// Serialize all entities of the scene
-		entt::snapshot { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent, SpriteComponent>(*archive);
+		entt::snapshot { m_Registry }.entities(*archive).component<ALL_COMPONENTS>(*archive);
 	
 		auto elapsed = timer.GetTime().time;
 		SE_CORE_INFO("Saving the Scene took: %.2f ms", elapsed);
@@ -231,7 +231,7 @@ namespace SemperEngine
 
 		// Load all entities
 		m_Registry.clear();
-		entt::snapshot_loader { m_Registry }.entities(*archive).component<IdentificationComponent, TransformComponent, SpriteComponent>(*archive);
+		entt::snapshot_loader { m_Registry }.entities(*archive).component<ALL_COMPONENTS>(*archive);
 	
 		auto elapsed = timer.GetTime().time;
 		SE_CORE_INFO("Loading the Scene took: %.2f ms", elapsed);
