@@ -7,6 +7,8 @@
 #include "SemperEngine/Core/EngineApplication.h"
 #include "SemperEngine/Scene/Components.h"
 
+#include "SemperEngine/Util/Filesystem.h"
+
 
 namespace SemperEngine
 {
@@ -257,7 +259,7 @@ namespace SemperEngine
 				ImGui::Image((void *) sprite.GetTexture()->GetHandle(), ImVec2(64.0f, 64.0f));
 				if (ImGui::IsItemClicked())
 				{
-					std::string filename = EngineApplication::Instance().OpenFile("");
+					std::string filename = Filesystem::OpenFileDialog("");
 					if (filename != "")
 					{
 						SharedPtr<Texture2D> texture;
@@ -286,7 +288,7 @@ namespace SemperEngine
 				ImGui::Image((void *) sprite.GetTexture()->GetHandle(), ImVec2(64.0f, 64.0f));
 				if (ImGui::IsItemClicked())
 				{
-					std::string filename = EngineApplication::Instance().OpenFile("");
+					std::string filename = Filesystem::OpenFileDialog("");
 					if (filename != "")
 					{
 						SharedPtr<Texture2D> texture;

@@ -23,53 +23,6 @@ namespace SemperEngine
 		RecalculateCameraMatrices();
 	}
 
-	bool EditorCamera::Is2D()
-	{
-		return m_Is2D;
-	}
-	bool EditorCamera::Is3D()
-	{
-		return m_Is3D;
-	}
-	bool EditorCamera::IsOrthoGraphic()
-	{
-		return m_IsOrthographic;
-	}
-	bool EditorCamera::IsPerspective()
-	{
-		return m_isPerspective;
-	}
-	void EditorCamera::Set2D()
-	{
-		m_Is2D = true;
-		m_Is3D = false;
-
-		RecalculateCameraMatrices();
-	}
-	void EditorCamera::Set3D()
-	{
-		m_Is3D = true;
-		m_Is2D = false;
-
-		RecalculateCameraMatrices();
-	}
-
-	void EditorCamera::SetOrthographic()
-	{
-		m_IsOrthographic = true;
-		m_isPerspective = false;
-
-		RecalculateCameraMatrices();
-	}
-
-	void EditorCamera::SetPerspective()
-	{
-		m_isPerspective = true;
-		m_IsOrthographic = false;
-
-		RecalculateCameraMatrices();
-	}
-
 	void EditorCamera::OnUpdate(float ts)
 	{
 		
@@ -77,18 +30,10 @@ namespace SemperEngine
 		Vec2 delta = (mouse - m_InitialMousePosition) * 0.0015f;
 		m_InitialMousePosition = mouse;
 
-		if (m_Is2D)
-		{
-			if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
-				MousePan(delta);
-		}
-		if (m_Is3D)
-		{
-			if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle))
-				MousePan(delta);
-			else if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
-				MouseRotate(delta);
-		}
+		if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle))
+			MousePan(delta);
+		else if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
+			MouseRotate(delta);
 
 		RecalculateCameraMatrices();
 	}
@@ -104,37 +49,6 @@ namespace SemperEngine
 		ImGui::Begin("Editor camera");
 
 		ImVec2 region = ImGui::GetContentRegionAvail();
-
-		const char *currentItemProjection = m_IsOrthographic ? "Orthographic" : "Perspective";
-
-		ImGui::SetNextItemWidth(region.x * 0.7f);
-		if (ImGui::BeginCombo("##Camera Projection", currentItemProjection))
-		{
-			if (ImGui::Selectable("Orthographic", &m_IsOrthographic))
-				SetOrthographic();
-
-			if (ImGui::Selectable("Perspective", &m_isPerspective))
-				SetPerspective();
-
-			ImGui::EndCombo();
-		}
-
-		const char *currentItem = Is2D() ? "2D" : "3D";
-
-		ImGui::SameLine();
-		ImGui::SetNextItemWidth(region.x * 0.3f - 5.0f);
-		if (ImGui::BeginCombo("##Camera Type", currentItem))
-		{
-			if (ImGui::Selectable("2D", &m_Is2D))
-				Set2D();
-
-			if (ImGui::Selectable("3D", &m_Is3D))
-				Set3D();
-
-			ImGui::EndCombo();
-		}
-
-		ImGui::Separator();
 
 		ImGui::Text("Near Clip");
 		ImGui::SameLine(100);
@@ -191,24 +105,7 @@ namespace SemperEngine
 	{
 		m_AspectRatio = m_ViewportWidth / m_ViewportHeight;
 
-		if (m_Is2D)
-		{
-			m_Yaw = m_Pitch = 0.0f;	// Lock rotation
-
-			if (m_IsOrthographic)
-			{
-				float zoom = m_Position.z;
-				m_Projection = glm::ortho(-m_AspectRatio * zoom, m_AspectRatio * zoom, -zoom, zoom, m_NearClip, m_FarClip);
-			}
-			else if (m_isPerspective)
-				m_Projection = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
-		}
-		else if (m_Is3D) 
-		{
-			// No Orthographic Projection in 3D
-			if (m_IsOrthographic  || m_isPerspective)
-				m_Projection = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
-		}
+		m_Projection = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
 
 		m_Position = CalculatePosition();
 

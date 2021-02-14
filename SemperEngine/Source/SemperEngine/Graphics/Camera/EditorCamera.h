@@ -12,18 +12,6 @@ namespace SemperEngine
 		EditorCamera() = default;
 		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);
 
-		bool Is2D();
-		bool Is3D();
-
-		bool IsOrthoGraphic();
-		bool IsPerspective();
-
-		void Set2D();
-		void Set3D();
-
-		void SetOrthographic();
-		void SetPerspective();
-
 		void OnUpdate(float ts);
 		void OnEvent(Event &e);
 
@@ -55,13 +43,8 @@ namespace SemperEngine
 		glm::vec3 CalculatePosition() const;
 
 	private:
-		bool m_Is2D = false;
-		bool m_Is3D = true;
-
-		bool m_IsOrthographic = false;
-		bool m_isPerspective = true;
-
-		float m_FOV = 45.0f, m_AspectRatio = 1.778f, m_NearClip = 0.1f, m_FarClip = 1000.0f;
+		float m_FOV = 45.0f, m_AspectRatio = 1.778f;
+		float m_NearClip = 0.1f, m_FarClip = 1000.0f;
 
 		Vec3 m_Position = { 0.0f, 0.0f, 0.0f };
 		Vec3 m_FocalPoint = { 0.0f, 0.0f, 0.0f };
@@ -69,7 +52,7 @@ namespace SemperEngine
 		Vec2 m_InitialMousePosition = { 0.0f, 0.0f };
 
 		float m_Distance = 10.0f;
-		float m_Yaw = 0.0f, m_Pitch = 0.0f;
+		float m_Yaw = 0.0f, m_Pitch = -25.0f;
 
 		float m_MovementSpeed = 1.5f;
 		float m_RotationSpeed = 1.0f;

@@ -1,5 +1,4 @@
 #include "EditorLayer.h"
-#include "SemperEngine/Core/EngineApplication.h"
 
 #include <GLFW/include/GLFW/glfw3.h>
 
@@ -8,6 +7,8 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
+
+#include "SemperEngine/Util/Filesystem.h"
 
 
 EditorLayer::EditorLayer() :
@@ -28,8 +29,6 @@ EditorLayer::EditorLayer() :
 	m_PlayButtonTexture.reset(Texture2D::Create("Assets/Textures/PlayButton.png"));
 	m_PauseButtonTexture.reset(Texture2D::Create("Assets/Textures/PauseButton.png"));
 	m_ExitButtonTexture.reset(Texture2D::Create("Assets/Textures/ExitButton.png"));
-
-	m_EditorCamera.Set3D();
 
 	class CameraController : public ScriptableEntity
 	{
@@ -327,7 +326,7 @@ void EditorLayer::OnEvent(Event &e)
 
 void EditorLayer::OpenScene()
 {
-	std::string filepath = EngineApplication::Instance().OpenFile("Semper Scene (*.semper)\0*.semper\0");
+	std::string filepath = Filesystem::OpenFileDialog("Semper Scene (*.semper)\0*.semper\0");
 	if (!filepath.empty())
 	{
 		m_Scene->Deserialize(filepath);
@@ -336,7 +335,7 @@ void EditorLayer::OpenScene()
 
 void EditorLayer::SaveSceneAs()
 {
-	std::string filepath = EngineApplication::Instance().SaveFile("Semper Scene (*.semper)\0*.semper\0");
+	std::string filepath = Filesystem::SaveFileDialog("Semper Scene (*.semper)\0*.semper\0");
 	if (!filepath.empty())
 	{
 		m_Scene->Serialize(filepath);

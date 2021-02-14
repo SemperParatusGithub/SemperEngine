@@ -37,9 +37,6 @@ namespace SemperEngine
 
 		float GetFrametime();	// ms
 		float GetFramerate();	
-
-		std::string OpenFile(const char *filter);
-		std::string SaveFile(const char *filter);
 		
 	private:
 		bool m_Running = false;
@@ -54,7 +51,5 @@ namespace SemperEngine
 
 	protected:
 		static EngineApplication *s_Instance;
-
-		unsigned int shaderProgram, vao;
 	};
 }
