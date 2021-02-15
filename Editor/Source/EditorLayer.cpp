@@ -120,7 +120,7 @@ void EditorLayer::OnUpdate(float deltaTime)
 	}
 
 	// Gizmos
-	if (Input::IsKeyPressed(Key::LeftControl))
+	if (Input::IsKeyPressed(Key::LeftControl) && !ImGuizmo::IsUsing())
 	{
 		if (Input::IsKeyPressed(Key::D1))
 			m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
