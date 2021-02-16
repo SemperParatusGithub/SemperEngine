@@ -16,7 +16,7 @@
 	#include "SemperEngine/Core/LayerStack.h"
 	#include "SemperEngine/Core/Platforms.h"
 	#include "SemperEngine/Core/Types.h"
-	#include "SemperEngine/Core/Window.h"
+	#include "SemperEngine/Core/Window/Window.h"
 /* ----------------------------------------------------------------------- */
 
 /* ------------------------------- Events -------------------------------- */

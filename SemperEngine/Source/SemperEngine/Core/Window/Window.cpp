@@ -1,9 +1,10 @@
 #include "Precompiled.h"
 #include "Window.h"
-#include "Platforms.h"
+
+#include "SemperEngine/Core/Platforms.h"
 
 #if defined(SE_PLATFORM_WINDOWS)
-    #include "Platform/GLFW/WindowGLFW.h"
+    #include "WindowGLFW.h"
 #endif
 
 namespace SemperEngine

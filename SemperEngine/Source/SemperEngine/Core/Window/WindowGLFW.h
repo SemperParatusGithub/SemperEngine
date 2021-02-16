@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SemperEngine/Core/Window.h"
+#include "SemperEngine/Core/Window/Window.h"
 #include "SemperEngine/Graphics/Backend/API/RenderContext.h"
 
 

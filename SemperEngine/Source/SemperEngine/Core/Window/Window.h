@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Types.h"
-#include "Defines.h"
+#include "SemperEngine/Core/Types.h"
+#include "SemperEngine/Core/Defines.h"
 #include "SemperEngine/Events/Event.h"
 
 

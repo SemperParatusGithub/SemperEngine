@@ -1,5 +1,5 @@
 #pragma once
-#include "SemperEngine/Core/Window.h"
+#include "SemperEngine/Core/Window/Window.h"
 
 #include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
 

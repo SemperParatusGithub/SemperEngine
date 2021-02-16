@@ -239,7 +239,7 @@ void EditorLayer::OnImGuiRender()
 	{
 		m_Scene->Play();
 		m_ImGuizmoOperation = -1;
-		SE_CORE_ERROR("Playing Scene");
+		SE_CORE_INFO("Playing Scene");
 	}
 
 	ImGui::SameLine();
@@ -247,7 +247,7 @@ void EditorLayer::OnImGuiRender()
 	if (ImGui::ImageButton(m_PauseButtonTexture->GetHandle(), { 32.0f, 32.0f }))
 	{
 		m_Scene->Pause();
-		SE_CORE_ERROR("Pausing Scene");
+		SE_CORE_INFO("Pausing Scene");
 	}
 
 	ImGui::SameLine();
@@ -255,7 +255,7 @@ void EditorLayer::OnImGuiRender()
 	if (ImGui::ImageButton(m_ExitButtonTexture->GetHandle(), { 32.0f, 32.0f }))
 	{
 		m_Scene->ReturnToEditing();
-		SE_CORE_ERROR("Return");
+		SE_CORE_INFO("Return");
 	}
 
 	ImGui::PopStyleColor(3);
