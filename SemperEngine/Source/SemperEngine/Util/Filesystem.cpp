@@ -60,4 +60,23 @@ namespace SemperEngine
 
 		return std::string("");
 	}
+	std::string Filesystem::ReadFile(ConstRef<std::string> filepath)
+	{
+		std::ifstream stream;
+		std::stringstream ss;
+
+		stream.open(filepath);
+		ss << stream.rdbuf();
+
+		std::string string = ss.str();
+
+		return string;
+	}
+	void Filesystem::WriteToFile(ConstRef<std::string> filepath, ConstRef<std::string> data)
+	{
+		std::ofstream stream;
+		stream.open(filepath);
+
+		stream << data;
+	}
 }
