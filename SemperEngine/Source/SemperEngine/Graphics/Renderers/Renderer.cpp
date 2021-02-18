@@ -12,9 +12,9 @@ namespace SemperEngine
 {
 	Backend *s_CurrentBackend = nullptr;
 
-	void Renderer::Init(Backend *backend)
+	void Renderer::Init()
 	{
-		s_CurrentBackend = backend;
+		s_CurrentBackend = Backend::Create();
 		s_CurrentBackend->Init();
 
 		Batcher2D::Init();
@@ -44,15 +44,21 @@ namespace SemperEngine
 	{
 		ImGui::Begin("Metrics");
 
+		const auto &caps = s_CurrentBackend->GetCapabilities();
+
 		if (ImGui::CollapsingHeader("General"))
 		{
 			ImGui::Text("Framerate: %.2f FPS", EngineApplication::Instance().GetFramerate());
 			ImGui::Text("Frametime: %.2f ms", EngineApplication::Instance().GetFrametime());
 			ImGui::Separator();
-			ImGui::Text("Render API: %s", s_CurrentBackend->GetRenderAPIString().c_str());
-			ImGui::Text("Vendor: %s", s_CurrentBackend->GetVendor().c_str());
-			ImGui::Text("Renderer: %s", s_CurrentBackend->GetRenderer().c_str());
-			ImGui::Text("Version: %s", s_CurrentBackend->GetVersion().c_str());
+			ImGui::Text("Render API: %s", caps.renderAPI.c_str());
+			ImGui::Text("Vendor: %s", caps.vendor.c_str());
+			ImGui::Text("Renderer: %s", caps.renderAPI.c_str());
+			ImGui::Text("Version: %s", caps.version.c_str());
+			ImGui::Separator();
+			ImGui::Text("Max Samples: %s", caps.maxSamples);
+			ImGui::Text("Max Textures: %s", caps.maxTextureUnits);
+			ImGui::Text("Max Anisotropy: %s", caps.maxAnisotropy);
 		}
 
 		auto metrics = Batcher2D::GetMetrics();

@@ -12,7 +12,7 @@ namespace SemperEngine
 	class Renderer
 	{
 	public:
-		static void Init(Backend *backend);
+		static void Init();
 		static void Shutdown();
 
 		static void SetClearColor(const glm::vec4 &clearColor);

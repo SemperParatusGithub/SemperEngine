@@ -46,7 +46,7 @@ namespace SemperEngine
 
 		GLFWwindow *window = (GLFWwindow *) EngineApplication::Instance().GetWindow().GetNativeWindow();
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init((char *) glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
+		ImGui_ImplOpenGL3_Init("#version 450");
 
 		// Load Fonts
 		io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Regular.ttf", 20);

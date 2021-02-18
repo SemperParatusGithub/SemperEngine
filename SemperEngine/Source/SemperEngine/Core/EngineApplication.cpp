@@ -23,8 +23,7 @@ namespace SemperEngine
 		m_Window->SetInterval(1);
 		m_Window->SetEventCallbackFunction(SE_BIND_EVENT_FN(EngineApplication::OnEvent));
 
-		m_Backend.reset(Backend::Create());
-		Renderer::Init(m_Backend.get());
+		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);

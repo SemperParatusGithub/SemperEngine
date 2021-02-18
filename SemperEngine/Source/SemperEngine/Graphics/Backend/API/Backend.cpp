@@ -9,6 +9,7 @@
 namespace SemperEngine
 {
 	Backend::API Backend::s_RenderAPI = Backend::API::OpenGL;
+	Backend::Capabilities Backend::s_Capabilities {};
 
 	Backend *Backend::Create()
 	{
@@ -40,5 +41,9 @@ namespace SemperEngine
 	Backend::API Backend::GetRenderAPI()
 	{
 		return s_RenderAPI;
+	}
+	Backend::Capabilities Backend::GetCapabilities()
+	{
+		return s_Capabilities;
 	}
 }
