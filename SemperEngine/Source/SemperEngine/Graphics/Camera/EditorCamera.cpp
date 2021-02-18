@@ -30,9 +30,9 @@ namespace SemperEngine
 		Vec2 delta = (mouse - m_InitialMousePosition) * 0.0015f;
 		m_InitialMousePosition = mouse;
 
-		if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle))
+		if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle) && Input::IsKeyPressed(Key::LeftControl))
 			MousePan(delta);
-		else if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
+		else if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle))
 			MouseRotate(delta);
 
 		RecalculateCameraMatrices();
@@ -135,7 +135,7 @@ namespace SemperEngine
 	{
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 		m_Yaw += yawSign * delta.x * m_RotationSpeed;
-		m_Pitch += delta.y * 0.8f;
+		m_Pitch += delta.y * 0.8f * m_RotationSpeed;
 	}
 
 	void EditorCamera::MouseZoom(float delta)

@@ -55,7 +55,7 @@ namespace SemperEngine
 		float m_Yaw = 0.0f, m_Pitch = -25.0f;
 
 		float m_MovementSpeed = 1.5f;
-		float m_RotationSpeed = 1.0f;
+		float m_RotationSpeed = 2.5f;
 		float m_ZoomSpeed = 0.5f;
 
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;

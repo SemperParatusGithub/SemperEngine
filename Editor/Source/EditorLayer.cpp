@@ -107,7 +107,7 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(float deltaTime)
 {
-	if (m_SceneViewPortHovered && Input::IsKeyPressed(Key::LeftShift) && !m_Scene->IsPlaying())
+	if (m_SceneViewPortHovered && !m_Scene->IsPlaying())
 		m_EditorCamera.OnUpdate(deltaTime);
 
 	bool allowEvents = m_SceneViewPortHovered || m_SceneViewPortFocused;
