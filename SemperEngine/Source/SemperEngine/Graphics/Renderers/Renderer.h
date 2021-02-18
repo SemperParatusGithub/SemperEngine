@@ -19,10 +19,7 @@ namespace SemperEngine
 		static void SetViewport(float x, float y, float width, float height);
 		static void Clear();
 
-		static std::string GetRenderAPIString();
-		static std::string GetVendor();
-		static std::string GetRenderer();
-		static std::string GetVersion();
+		static void OnImGui();
 
 		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader);
 		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count);

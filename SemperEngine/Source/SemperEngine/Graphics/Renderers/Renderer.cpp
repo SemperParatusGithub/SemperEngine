@@ -3,6 +3,8 @@
 
 #include "Batcher2D.h"
 
+#include "SemperEngine/Core/EngineApplication.h"
+
 #include <glad/glad.h>
 
 
@@ -38,24 +40,40 @@ namespace SemperEngine
 		s_CurrentBackend->Clear();
 	}
 
-	std::string Renderer::GetRenderAPIString()
+	void Renderer::OnImGui()
 	{
-		return s_CurrentBackend->GetRenderAPIString();
-	}
+		ImGui::Begin("Metrics");
 
-	std::string Renderer::GetVendor()
-	{
-		return s_CurrentBackend->GetVendor();
-	}
+		if (ImGui::CollapsingHeader("General"))
+		{
+			ImGui::Text("Framerate: %.2f FPS", EngineApplication::Instance().GetFramerate());
+			ImGui::Text("Frametime: %.2f ms", EngineApplication::Instance().GetFrametime());
+			ImGui::Separator();
+			ImGui::Text("Render API: %s", s_CurrentBackend->GetRenderAPIString().c_str());
+			ImGui::Text("Vendor: %s", s_CurrentBackend->GetVendor().c_str());
+			ImGui::Text("Renderer: %s", s_CurrentBackend->GetRenderer().c_str());
+			ImGui::Text("Version: %s", s_CurrentBackend->GetVersion().c_str());
+		}
 
-	std::string Renderer::GetRenderer()
-	{
-		return s_CurrentBackend->GetRenderer();
-	}
+		auto metrics = Batcher2D::GetMetrics();
+		if (ImGui::CollapsingHeader("Batcher2D Metrics"))
+		{
+			ImGui::Text("Batches: %d", metrics.batches);
+			ImGui::Text("Vertices: %d", metrics.vertices);
+			ImGui::Text("Indices: %d", metrics.indices);
+			ImGui::Text("Triangles: %d", metrics.triangles);
+		}
+		Batcher2D::ResetMetrics();
 
-	std::string Renderer::GetVersion()
-	{
-		return s_CurrentBackend->GetVersion();
+		auto &io = ImGui::GetIO();
+		if (ImGui::CollapsingHeader("ImGui Metrics"))
+		{
+			ImGui::Text("Vertices: %d", io.MetricsRenderVertices);
+			ImGui::Text("Indices: %d", io.MetricsRenderIndices);
+			ImGui::Text("%d active windows (%d visible)", io.MetricsActiveWindows, io.MetricsRenderWindows);
+			ImGui::Text("Triangles: %d", metrics.triangles);
+		}
+		ImGui::End();
 	}
 
 	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader)
