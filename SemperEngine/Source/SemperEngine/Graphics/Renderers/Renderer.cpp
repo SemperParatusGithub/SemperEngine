@@ -56,9 +56,9 @@ namespace SemperEngine
 			ImGui::Text("Renderer: %s", caps.renderAPI.c_str());
 			ImGui::Text("Version: %s", caps.version.c_str());
 			ImGui::Separator();
-			ImGui::Text("Max Samples: %s", caps.maxSamples);
-			ImGui::Text("Max Textures: %s", caps.maxTextureUnits);
-			ImGui::Text("Max Anisotropy: %s", caps.maxAnisotropy);
+			ImGui::Text("Max Samples: %d", caps.maxSamples);
+			ImGui::Text("Max Textures: %d", caps.maxTextureUnits);
+			ImGui::Text("Max Anisotropy: %.2f", caps.maxAnisotropy);
 		}
 
 		auto metrics = Batcher2D::GetMetrics();
