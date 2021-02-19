@@ -42,10 +42,9 @@ namespace SemperEngine
 
 	void Renderer::OnImGui()
 	{
-		ImGui::Begin("Metrics");
+		ImGui::Begin("Renderer");
 
 		const auto &caps = s_CurrentBackend->GetCapabilities();
-
 		if (ImGui::CollapsingHeader("General"))
 		{
 			ImGui::Text("Framerate: %.2f FPS", EngineApplication::Instance().GetFramerate());
@@ -61,7 +60,7 @@ namespace SemperEngine
 			ImGui::Text("Max Anisotropy: %.2f", caps.maxAnisotropy);
 		}
 
-		auto metrics = Batcher2D::GetMetrics();
+		const auto &metrics = Batcher2D::GetMetrics();
 		if (ImGui::CollapsingHeader("Batcher2D Metrics"))
 		{
 			ImGui::Text("Batches: %d", metrics.batches);
@@ -79,6 +78,14 @@ namespace SemperEngine
 			ImGui::Text("%d active windows (%d visible)", io.MetricsActiveWindows, io.MetricsRenderWindows);
 			ImGui::Text("Triangles: %d", metrics.triangles);
 		}
+
+		if (ImGui::CollapsingHeader("Texture Viewer"))
+		{
+			static U32 index = 0;
+			ImGui::Image(reinterpret_cast<void *>(index), ImVec2(128.0f, 128.0f), ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
+			ImGui::InputInt("Index", reinterpret_cast<int *>(&index), 1, 10);
+		} 
+
 		ImGui::End();
 	}
 
