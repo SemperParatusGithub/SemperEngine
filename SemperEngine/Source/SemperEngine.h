@@ -10,6 +10,7 @@
 
 /* --------------------------------- Core -------------------------------- */
 	#include "SemperEngine/Core/Assert.h"
+	#include "SemperEngine/Core/CoreSystem.h"
 	#include "SemperEngine/Core/Defines.h"
 	#include "SemperEngine/Core/EngineApplication.h"
 	#include "SemperEngine/Core/Input.h"

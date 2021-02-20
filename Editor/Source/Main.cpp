@@ -3,13 +3,15 @@
 
 int main(int argc, char *argv[])
 {
-	SemperEngine::Log::Init(true, true);
+	SemperEngine::CoreSystem::Initialize();
 
 	auto *Editor = Editor::CreateApplication("Semper Editor");
 
 	Editor->Run();
 
 	delete Editor;
+
+	SemperEngine::CoreSystem::Shutdown();
 
 	return EXIT_SUCCESS;
 }

@@ -31,6 +31,7 @@ namespace SemperEngine
 
 	EngineApplication::~EngineApplication()
 	{
+		Renderer::Shutdown();
 	}
 
 	void EngineApplication::Run()
