@@ -8,9 +8,9 @@ namespace SemperEngine
 	class GLTexture2D : public Texture2D
 	{
 	public:
-		GLTexture2D(TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
-		GLTexture2D(const std::string &filepath, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
-		GLTexture2D(U32 width, U32 height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
+		GLTexture2D(TextureInfo info);
+		GLTexture2D(ConstRef<std::string> filepath, TextureInfo info);
+		GLTexture2D(U32 width, U32 height, TextureInfo info);
 
 		~GLTexture2D();
 
@@ -32,7 +32,6 @@ namespace SemperEngine
 		std::string m_Filepath;
 		uint32_t m_Width, m_Height;
 
-		TextureData m_TextureData;
-		TextureLoadOptions m_TextureLoadOptions;
+		TextureInfo m_TextureInfo;
 	};
 }

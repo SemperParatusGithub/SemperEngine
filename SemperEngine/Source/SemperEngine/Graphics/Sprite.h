@@ -68,7 +68,7 @@ namespace SemperEngine
 			// Load Texture
 			if (m_HasTexture || m_HasSpriteSheet || !textureFilepath.empty())
 			{
-				m_Texture.reset(Texture2D::Create(textureFilepath));
+				m_Texture = Texture2D::Create(textureFilepath);
 			}
 		}
 

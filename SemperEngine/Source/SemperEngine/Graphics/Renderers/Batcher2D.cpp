@@ -31,7 +31,7 @@ namespace SemperEngine
 
 		SharedPtr<Shader> shader;
 
-		Texture2D *whiteTexture;
+		SharedPtr<Texture2D> whiteTexture;
 		std::array<const Texture2D *, MaxCombinedTextureUnits> textures;
 
 		Batcher2DMetrics metrics;
@@ -85,7 +85,7 @@ namespace SemperEngine
 		s_RenderData.whiteTexture = Texture2D::Create("Assets/Textures/WhiteTexture.png");
 
 		for (auto &texture : s_RenderData.textures)
-			texture = s_RenderData.whiteTexture;
+			texture = s_RenderData.whiteTexture.get();
 
 		int samplers[MaxCombinedTextureUnits];
 		for (U32 i = 0; i < MaxCombinedTextureUnits; i++)
@@ -124,7 +124,7 @@ namespace SemperEngine
 			s_RenderData.textures[i]->Bind(static_cast<U32>(i));
 
 		for (std::size_t i = 0; i < s_RenderData.textures.size(); i++)
-			s_RenderData.textures[i] = s_RenderData.whiteTexture;
+			s_RenderData.textures[i] = s_RenderData.whiteTexture.get();
 
 		U32 size = static_cast<U32>(reinterpret_cast<U8 *>(s_RenderData.bufferPtr) - reinterpret_cast<U8 *>(s_RenderData.buffer));
 		s_RenderData.vertexBuffer->SetData(s_RenderData.buffer, size);

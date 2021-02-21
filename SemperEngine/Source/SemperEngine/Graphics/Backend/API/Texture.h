@@ -39,61 +39,32 @@ namespace SemperEngine
 		DepthStencil
 	};
 
-	enum class TextureType
+	struct TextureInfo
 	{
-		Color,
-		Depth,
-		DepthArray,
-		Cube,
-		Other
-	};
-
-	struct TextureData
-	{
-		TextureData() :
-			textureType(TextureType::Color),
-			textureFormat(TextureFormat::RGBA32),
+		TextureInfo() :
+			format(TextureFormat::RGBA32),
 			minFilter(TextureFilter::Linear),
 			magFilter(TextureFilter::Linear),
-			textureWrap(TextureWrap::ClampToEdge)
+			wrap(TextureWrap::ClampToEdge),
+			flipY(true)
 		{
 		}
-		TextureData(TextureType textureType, TextureFormat textureFormat, TextureFilter minFilter, TextureFilter magFilter, TextureWrap textureWrap) :
-			textureType(textureType),
-			textureFormat(textureFormat),
+		TextureInfo(TextureFormat format, TextureFilter minFilter, TextureFilter magFilter, TextureWrap wrap, bool flipY = true) :
+			format(format),
 			minFilter(minFilter),
 			magFilter(magFilter),
-			textureWrap(textureWrap)
+			wrap(wrap),
+			flipY(flipY)
 		{
 		}
 
-		TextureType textureType;
-		TextureFormat textureFormat;
+		TextureFormat format;
 		TextureFilter minFilter;
 		TextureFilter magFilter;
-		TextureWrap textureWrap;
+		TextureWrap	  wrap;
+		bool		  flipY;
 	};
 
-	struct TextureLoadOptions
-	{
-		bool flipX;
-		bool flipY;
-		bool generateMipMaps;
-			
-		TextureLoadOptions()
-		{
-			flipX = false;
-			flipY = true;
-			generateMipMaps = false;
-		}
-
-		TextureLoadOptions(bool flipX, bool flipY, bool genMips = true) :
-			flipX(flipX),
-			flipY(flipY),
-			generateMipMaps(genMips)
-		{
-		}
-	};
 
 	class Texture
 	{
@@ -114,8 +85,8 @@ namespace SemperEngine
 	class Texture2D : public Texture
 	{
 	public:
-		static Texture2D *Create(TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
-		static Texture2D *Create(const std::string &filepath, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
-		static Texture2D *Create(U32 width, U32 height, TextureData data = TextureData(), TextureLoadOptions loadOptions = TextureLoadOptions());
+		static SharedPtr<Texture2D> Create(TextureInfo data = TextureInfo());
+		static SharedPtr<Texture2D> Create(ConstRef<std::string> filepath, TextureInfo info = TextureInfo());
+		static SharedPtr<Texture2D> Create(U32 width, U32 height, TextureInfo info = TextureInfo());
 	};
 }

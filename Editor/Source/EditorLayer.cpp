@@ -26,9 +26,9 @@ EditorLayer::EditorLayer() :
 	m_Hierarchy = MakeShared<Hierarchy>(m_Scene);
 	m_Inspector = MakeShared<Inspector>(m_Scene);
 
-	m_PlayButtonTexture.reset(Texture2D::Create("Assets/Textures/PlayButton.png"));
-	m_PauseButtonTexture.reset(Texture2D::Create("Assets/Textures/PauseButton.png"));
-	m_ExitButtonTexture.reset(Texture2D::Create("Assets/Textures/ExitButton.png"));
+	m_PlayButtonTexture = Texture2D::Create("Assets/Textures/PlayButton.png");
+	m_PauseButtonTexture = Texture2D::Create("Assets/Textures/PauseButton.png");
+	m_ExitButtonTexture = Texture2D::Create("Assets/Textures/ExitButton.png");
 
 	class CameraController : public ScriptableEntity
 	{
@@ -81,8 +81,7 @@ EditorLayer::EditorLayer() :
 		m_DirtEntity = m_Scene->CreateEntity("ground");
 
 		auto &sc = m_DirtEntity.Add<SpriteComponent>();
-		SharedPtr<Texture2D> groundTex;
-		groundTex.reset(Texture2D::Create("Assets/Textures/StoneTex.jpg"));
+		SharedPtr<Texture2D> groundTex = Texture2D::Create("Assets/Textures/StoneTex.jpg");
 		sc.SetTexture(groundTex);
 
 		auto &tc = m_DirtEntity.Get<TransformComponent>();

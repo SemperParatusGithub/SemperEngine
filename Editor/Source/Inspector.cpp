@@ -237,15 +237,13 @@ namespace SemperEngine
 			{
 				if (ImGui::Button("Add Texture")) 
 				{
-					SharedPtr<Texture2D> emptyTexture;
-					emptyTexture.reset(Texture2D::Create("Assets/Textures/EmptyTexture.png"));
+					SharedPtr<Texture2D> emptyTexture = Texture2D::Create("Assets/Textures/EmptyTexture.png");
 					sprite.SetTexture(emptyTexture);
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Add SpriteSheet"))
 				{
-					SharedPtr<Texture2D> emptyTexture;
-					emptyTexture.reset(Texture2D::Create("Assets/Textures/EmptyTexture.png"));
+					SharedPtr<Texture2D> emptyTexture = Texture2D::Create("Assets/Textures/EmptyTexture.png");
 					Vec2 textureSize = { static_cast<float>(emptyTexture->GetWidth()), static_cast<float>(emptyTexture->GetHeight()) };
 					sprite.SetSpriteSheet(emptyTexture, Vec2(0.0f, 0.0f), textureSize);
 				}
@@ -262,8 +260,7 @@ namespace SemperEngine
 					std::string filename = Filesystem::OpenFileDialog("");
 					if (filename != "")
 					{
-						SharedPtr<Texture2D> texture;
-						texture.reset(Texture2D::Create(filename));
+						SharedPtr<Texture2D> texture = Texture2D::Create(filename);
 						sprite.SetTexture(texture);
 					}
 				}
@@ -291,8 +288,7 @@ namespace SemperEngine
 					std::string filename = Filesystem::OpenFileDialog("");
 					if (filename != "")
 					{
-						SharedPtr<Texture2D> texture;
-						texture.reset(Texture2D::Create(filename));
+						SharedPtr<Texture2D> texture = Texture2D::Create(filename);
 						Vec2 textureSize = { static_cast<float>(texture->GetWidth()), static_cast<float>(texture->GetHeight()) };
 						sprite.SetSpriteSheet(texture, Vec2(0.0f, 0.0f), textureSize);
 					}

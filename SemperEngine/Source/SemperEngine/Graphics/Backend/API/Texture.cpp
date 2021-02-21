@@ -7,7 +7,7 @@
 
 namespace SemperEngine
 {
-	Texture2D *Texture2D::Create(TextureData data, TextureLoadOptions loadOptions)
+	SharedPtr<Texture2D> Texture2D::Create(TextureInfo info)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -20,14 +20,14 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLTexture2D(data, loadOptions);
+			return MakeShared<GLTexture2D>(info);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");
 			return nullptr;
 		}
 	}
-	Texture2D *Texture2D::Create(const std::string &filepath, TextureData data, TextureLoadOptions loadOptions)
+	SharedPtr<Texture2D> Texture2D::Create(ConstRef<std::string> filepath, TextureInfo info)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -40,14 +40,14 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLTexture2D(filepath, data, loadOptions);
+			return MakeShared<GLTexture2D>(filepath, info);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");
 			return nullptr;
 		}
 	}
-	Texture2D *Texture2D::Create(U32 width, U32 height, TextureData data, TextureLoadOptions loadOptions)
+	SharedPtr<Texture2D> Texture2D::Create(U32 width, U32 height, TextureInfo info)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -60,7 +60,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLTexture2D(width, height, data, loadOptions);
+			return MakeShared<GLTexture2D>(width, height, info);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");
