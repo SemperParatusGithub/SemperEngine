@@ -22,10 +22,15 @@ project "Editor"
 		"../SemperEngine/External/Glad/include",
 		"../SemperEngine/External/GLFW/include",
 		"../SemperEngine/External/entt/include",
-		"../SemperEngine/External/cereal/include"
+		"../SemperEngine/External/cereal/include",
+		"../SemperEngine/External/assimp/include"
 	}
 
-	links { "SemperEngine" }
+	links
+	{ 
+		"SemperEngine",
+		"../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.lib"
+	}
 
 	filter "system:windows"
 		systemversion "latest"

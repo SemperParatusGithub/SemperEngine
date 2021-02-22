@@ -5,8 +5,8 @@ project "Application"
 	cppdialect "C++17"
 	staticruntime "on"
 
-	targetdir	("../Binaries/" 		.. outputdir)
-	objdir 		("../Binaries/Intermediate/" 	.. outputdir)
+	targetdir	("../Binaries/" .. outputdir)
+	objdir 		("../Binaries/Intermediate/" .. outputdir)
 
 	files
 	{
@@ -21,10 +21,16 @@ project "Application"
 		"../SemperEngine/External/glm",
 		"../SemperEngine/External/Glad/include",
 		"../SemperEngine/External/GLFW/include",
-		"../SemperEngine/External/cereal/include"
+		"../SemperEngine/External/entt/include",
+		"../SemperEngine/External/cereal/include",
+		"../SemperEngine/External/assimp/include"
 	}
 
-	links { "SemperEngine" }
+	links
+	{ 
+		"SemperEngine",
+		"../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.lib"
+	}
 
 	filter "system:windows"
 		systemversion "latest"

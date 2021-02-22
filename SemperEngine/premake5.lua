@@ -56,7 +56,8 @@ project "SemperEngine"
         "../SemperEngine/External/stb_image",
 		"../SemperEngine/External/entt/include",
 		"../SemperEngine/External/ImGuizmo",
-		"../SemperEngine/External/cereal/include"
+		"../SemperEngine/External/cereal/include",
+		"../SemperEngine/External/assimp/include"
 	}
 
 	links
@@ -65,6 +66,12 @@ project "SemperEngine"
 		"Glad",
 		"ImGui",
 		"opengl32.lib"
+	}
+	postbuildcommands 
+	{
+		'{COPY} "../../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.dll" "%{cfg.targetdir}"',
+		'{COPY} "../../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.lib" "%{cfg.targetdir}"',
+		'{COPY} "../../Editor/Assets/" "%{cfg.targetdir}/Assets/"'
 	}
 
 	filter "system:windows"
