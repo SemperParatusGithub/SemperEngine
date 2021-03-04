@@ -89,6 +89,17 @@ namespace SemperEngine
 		ImGui::End();
 	}
 
+	void Renderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<Mat4> projectionView)
+	{
+		for (auto &subMesh : mesh->m_SubMeshes)
+		{
+			subMesh.m_MeshShader->Bind();
+			subMesh.m_MeshShader->SetUniformMat4f("u_Transform", transform.GetTransform());
+			subMesh.m_MeshShader->SetUniformMat4f("u_ProjectionView", projectionView);
+			DrawIndexed(subMesh.m_VertexArray, subMesh.m_MeshShader);
+		}
+	}
+
 	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader)
 	{
 		s_CurrentBackend->DrawIndexed(vertexArray, shader);

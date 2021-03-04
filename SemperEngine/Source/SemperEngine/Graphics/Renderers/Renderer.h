@@ -1,10 +1,15 @@
 #pragma once
 
+#include "SemperEngine/Core/Types.h"
+
 #include "SemperEngine/Graphics/Backend/API/Backend.h"
 #include "SemperEngine/Graphics/Backend/API/VertexArray.h"
 #include "SemperEngine/Graphics/Backend/API/Shader.h"
 
 #include <glm/glm.hpp>
+
+#include "SemperEngine/Graphics/Mesh.h"
+#include "SemperEngine/Graphics/Transform.h"
 
 
 namespace SemperEngine
@@ -20,6 +25,8 @@ namespace SemperEngine
 		static void Clear();
 
 		static void OnImGui();
+
+		static void SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<Mat4> projectionView);
 
 		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader);
 		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count);
