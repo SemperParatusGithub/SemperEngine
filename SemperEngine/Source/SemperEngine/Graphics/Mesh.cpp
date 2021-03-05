@@ -101,6 +101,7 @@ namespace SemperEngine
 		SE_CORE_INFO("Loading Mesh: %s", filepath.c_str());
 
 		m_Filepath = filepath;
+		m_SubMeshes.clear();
 
 		UniquePtr<Assimp::Importer> m_Importer;
 		m_Importer = MakeUnique<Assimp::Importer>();

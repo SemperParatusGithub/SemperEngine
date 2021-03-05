@@ -8,6 +8,7 @@
 
 #include "SemperEngine/Graphics/Transform.h"
 #include "SemperEngine/Graphics/Sprite.h"
+#include "SemperEngine/Graphics/Mesh.h"
 
 #include "SemperEngine/Graphics/Camera/SceneCamera.h"
 
@@ -203,6 +204,24 @@ namespace SemperEngine
 		void OnDestroy()
 		{
 			instance->OnDestroy();
+		}
+	};
+
+	struct MeshComponent
+	{
+		SharedPtr<Mesh> mesh;
+		std::string filepath;
+
+		MeshComponent() {
+			mesh = MakeShared<Mesh>();
+		}
+		MeshComponent(ConstRef<MeshComponent>) = default;
+
+		~MeshComponent() = default;
+
+		void Load()
+		{
+			mesh->Load(filepath);
 		}
 	};
 }

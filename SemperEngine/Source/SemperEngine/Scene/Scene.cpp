@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "Components.h"
 
+#include "SemperEngine/Graphics/Renderers/Renderer.h"
 #include "SemperEngine/Graphics/Renderers/Batcher2D.h"
 #include "SemperEngine/Util/Timer.h"
 
@@ -60,6 +61,13 @@ namespace SemperEngine
 				view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
 					{
 						Batcher2D::DrawSprite(tc.transform, sc.sprite);
+					});
+
+				auto view2 = m_Registry.view<const TransformComponent, const MeshComponent>();
+
+				view2.each([=](const auto ent, const TransformComponent &tc, const MeshComponent &mc)
+					{
+						Renderer::SubmitMesh(mc.mesh, tc.transform, projectionViewMatrix);
 					});
 
 				Batcher2D::EndScene();

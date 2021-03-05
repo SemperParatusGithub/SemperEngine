@@ -22,6 +22,8 @@ namespace SemperEngine
 	void Inspector::DrawComponentInfo<SceneCameraComponent>(Entity entity);
 	template<>
 	void Inspector::DrawComponentInfo<NativeScriptComponent>(Entity entity);
+	template<>
+	void Inspector::DrawComponentInfo<MeshComponent>(Entity entity);
 
 
 	Inspector::Inspector(SharedPtr<Scene> handle) : 
@@ -47,6 +49,9 @@ namespace SemperEngine
 
 		if (selectedEntity && selectedEntity.Has<NativeScriptComponent>())
 			DrawComponentInfo<NativeScriptComponent>(selectedEntity);
+
+		if (selectedEntity && selectedEntity.Has<MeshComponent>())
+			DrawComponentInfo<MeshComponent>(selectedEntity);
 
 		ImGui::End();
 	}
@@ -170,6 +175,10 @@ namespace SemperEngine
 				if (ImGui::MenuItem("Scene Camera"))
 					if (!entity.Has<SceneCameraComponent>())
 						entity.Add<SceneCameraComponent>(SceneCameraComponent {});
+
+				if (ImGui::MenuItem("Mesh"))
+					if (!entity.Has<MeshComponent>())
+						entity.Add<MeshComponent>(MeshComponent {});
 
 				ImGui::EndMenu();
 			}
@@ -412,10 +421,26 @@ namespace SemperEngine
 	{
 		auto &nsc = entity.Get<NativeScriptComponent>();
 
-		if (ImGui::CollapsingHeader("Native Script"))
+		if (ImGui::CollapsingHeader("Native Script Component"))
 		{
 			if(nsc.instance != nullptr)
 				nsc.OnGui();
+		}
+	}
+
+	template<>
+	void Inspector::DrawComponentInfo<MeshComponent>(Entity entity)
+	{
+		auto &mc = entity.Get<MeshComponent>();
+
+		if (ImGui::CollapsingHeader("Mesh Component"))
+		{
+			ImGui::TextWrapped("Filepath: %s", mc.filepath.c_str());
+			if (ImGui::Button("Load"))
+			{
+				mc.filepath = Filesystem::OpenFileDialog("");
+				mc.Load();
+			}
 		}
 	}
 }
