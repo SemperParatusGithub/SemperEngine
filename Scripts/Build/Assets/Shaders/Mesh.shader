@@ -15,7 +15,7 @@ out vec2 v_TexCoords;
 void main()
 {
 	v_TexCoords = a_TexCoords;
-	gl_Position = u_Transform * u_ProjectionView * vec4(a_Position, 1.0f);
+	gl_Position = u_ProjectionView * u_Transform * vec4(a_Position, 1.0f);
 }
 
 #shader fragment
