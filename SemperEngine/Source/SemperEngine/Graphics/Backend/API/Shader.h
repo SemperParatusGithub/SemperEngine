@@ -11,7 +11,7 @@ namespace SemperEngine
 	public:
 		virtual ~Shader() = default;
 
-		static Shader *Create(ConstRef<ShaderManager::ShaderSource> shaderSource);
+		static SharedPtr<Shader> Create(ConstRef<ShaderManager::ShaderSource> shaderSource);
 
 		virtual void Bind() const noexcept = 0;
 		virtual void UnBind() const noexcept = 0;

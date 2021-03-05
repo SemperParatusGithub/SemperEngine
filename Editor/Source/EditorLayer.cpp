@@ -17,7 +17,7 @@ EditorLayer::EditorLayer() :
 	m_SceneViewPortFocused(false), m_SceneViewPortHovered(false)
 {
 	FramebufferInfo info = { 1280, 720 };
-	m_Framebuffer.reset(Framebuffer::Create(info));
+	m_Framebuffer = Framebuffer::Create(info);
 
 	m_LogConsole = MakeShared<LogConsole>();
 	Log::SetLogConsoleInstance(m_LogConsole);

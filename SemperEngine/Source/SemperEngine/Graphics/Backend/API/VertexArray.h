@@ -13,8 +13,8 @@ namespace SemperEngine
 	public:
 		virtual ~VertexArray() = default;
 
-		static VertexArray *Create();
-		static VertexArray *Create(VertexBuffer *vertexBuffer, IndexBuffer *indexBuffer);
+		static SharedPtr<VertexArray> Create();
+		static SharedPtr<VertexArray> Create(VertexBuffer *vertexBuffer, IndexBuffer *indexBuffer);
 
 		virtual const VertexArray *AddIndexBuffer(IndexBuffer *indexBuffer ) = 0;
 		virtual const VertexArray *AddVertexBuffer(VertexBuffer *vertexBuffer) = 0;

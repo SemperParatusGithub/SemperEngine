@@ -14,7 +14,7 @@ namespace SemperEngine
 	public:
 		virtual ~Framebuffer() = default;
 
-		static Framebuffer *Create(ConstRef<FramebufferInfo> info);
+		static SharedPtr<Framebuffer> Create(ConstRef<FramebufferInfo> info);
 
 		virtual void Bind() const noexcept = 0;
 		virtual void UnBind() const noexcept = 0;

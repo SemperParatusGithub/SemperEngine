@@ -25,8 +25,8 @@ namespace SemperEngine
 	public:
 		virtual ~VertexBuffer() = default;
 
-		static VertexBuffer *Create(BufferUsage usage);
-		static VertexBuffer *Create(const void *vertices, U32 size, BufferUsage usage);
+		static SharedPtr<VertexBuffer> Create(BufferUsage usage);
+		static SharedPtr<VertexBuffer> Create(const void *vertices, U32 size, BufferUsage usage);
 
 		virtual void SetData(const void *vertices, U32 size) = 0;
 

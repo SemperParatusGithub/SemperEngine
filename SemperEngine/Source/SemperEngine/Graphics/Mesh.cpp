@@ -63,7 +63,7 @@ namespace SemperEngine
 	void SubMesh::PreparePipeline()
 	{
 		// Create VertexBuffer and set all Attributes
-		m_VertexBuffer.reset(VertexBuffer::Create(m_Vertices.data(), m_Vertices.size() * sizeof(Vertex), BufferUsage::Static));
+		m_VertexBuffer = VertexBuffer::Create(m_Vertices.data(), m_Vertices.size() * sizeof(Vertex), BufferUsage::Static);
 		m_VertexBuffer->AddAttribute({ "a_Position", VertexFormat::Float3, false });
 		m_VertexBuffer->AddAttribute({ "a_Normal", VertexFormat::Float3, false });
 		m_VertexBuffer->AddAttribute({ "a_Tangent", VertexFormat::Float3, false });
@@ -71,13 +71,13 @@ namespace SemperEngine
 		m_VertexBuffer->AddAttribute({ "a_TexCoords", VertexFormat::Float2, false });
 
 		// Create Index Buffer
-		m_IndexBuffer.reset(IndexBuffer::Create(m_Indices.data(), IndexFormat::Uint32, m_Indices.size() * sizeof(U32), BufferUsage::Static));
+		m_IndexBuffer = IndexBuffer::Create(m_Indices.data(), IndexFormat::Uint32, m_Indices.size() * sizeof(U32), BufferUsage::Static);
 
 		// Create Vertex Array
-		m_VertexArray.reset(VertexArray::Create(m_VertexBuffer.get(), m_IndexBuffer.get()));
+		m_VertexArray = VertexArray::Create(m_VertexBuffer.get(), m_IndexBuffer.get());
 
 		// Create Shader
-		m_MeshShader.reset(Shader::Create(ShaderManager::LoadFromFile("Assets/Shaders/Mesh.shader")));
+		m_MeshShader = Shader::Create(ShaderManager::LoadFromFile("Assets/Shaders/Mesh.shader"));
 	}
 
 	Mesh::Mesh()

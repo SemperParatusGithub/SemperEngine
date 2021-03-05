@@ -7,7 +7,7 @@
 
 namespace SemperEngine
 {
-	Shader *Shader::Create(ConstRef<ShaderManager::ShaderSource> shaderSource)
+	SharedPtr<Shader> Shader::Create(ConstRef<ShaderManager::ShaderSource> shaderSource)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -20,7 +20,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLShader(shaderSource);
+			return MakeShared<GLShader>(shaderSource);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");

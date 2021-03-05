@@ -44,7 +44,7 @@ namespace SemperEngine
 	{
 		// Initialize quad data
 		s_RenderData.buffer = new QuadVertex[MaxVertexCount];
-		s_RenderData.vertexBuffer.reset(VertexBuffer::Create(nullptr, MaxVertexCount * sizeof(QuadVertex), BufferUsage::Dynamic));
+		s_RenderData.vertexBuffer = VertexBuffer::Create(nullptr, MaxVertexCount * sizeof(QuadVertex), BufferUsage::Dynamic);
 
 		s_RenderData.vertexBuffer->AddAttribute({ "a_Position", VertexFormat::Float4, false });
 		s_RenderData.vertexBuffer->AddAttribute({ "a_Color", VertexFormat::Float4, false });
@@ -65,9 +65,9 @@ namespace SemperEngine
 
 			offset += 4;
 		}
-		s_RenderData.indexBuffer.reset(IndexBuffer::Create(indices, IndexFormat::Uint32, MaxIndexCount * sizeof(U32), BufferUsage::Static));
+		s_RenderData.indexBuffer = IndexBuffer::Create(indices, IndexFormat::Uint32, MaxIndexCount * sizeof(U32), BufferUsage::Static);
 
-		s_RenderData.vertexArray.reset(VertexArray::Create(s_RenderData.vertexBuffer.get(), s_RenderData.indexBuffer.get()));
+		s_RenderData.vertexArray = VertexArray::Create(s_RenderData.vertexBuffer.get(), s_RenderData.indexBuffer.get());
 
 		s_RenderData.vertexPositions[0] = { -0.5f, -0.5f,  0.0f,  1.0f };
 		s_RenderData.vertexPositions[1] = { 0.5f, -0.5f,  0.0f,  1.0f };
@@ -80,7 +80,7 @@ namespace SemperEngine
 		s_RenderData.textureCoords[3] = { 0.0f, 1.0f };
 
 		// General Initialization
-		s_RenderData.shader.reset(Shader::Create(ShaderManager::LoadFromFile("Assets/Shaders/Batch.shader")));
+		s_RenderData.shader = Shader::Create(ShaderManager::LoadFromFile("Assets/Shaders/Batch.shader"));
 
 		s_RenderData.whiteTexture = Texture2D::Create("Assets/Textures/WhiteTexture.png");
 

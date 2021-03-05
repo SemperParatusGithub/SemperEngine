@@ -7,7 +7,7 @@
 
 namespace SemperEngine
 {
-	VertexBuffer *VertexBuffer::Create(BufferUsage usage)
+	SharedPtr<VertexBuffer> VertexBuffer::Create(BufferUsage usage)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -20,7 +20,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLVertexBuffer(usage);
+			return MakeShared<GLVertexBuffer>(usage);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");
@@ -30,7 +30,7 @@ namespace SemperEngine
 		SE_ASSERT_MSG(false, "Unknown Render API");
 		return nullptr;
 	}
-	VertexBuffer *VertexBuffer::Create(const void *vertices, U32 size, BufferUsage usage)
+	SharedPtr<VertexBuffer> VertexBuffer::Create(const void *vertices, U32 size, BufferUsage usage)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -43,7 +43,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLVertexBuffer(vertices, size, usage);
+			return MakeShared<GLVertexBuffer>(vertices, size, usage);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");

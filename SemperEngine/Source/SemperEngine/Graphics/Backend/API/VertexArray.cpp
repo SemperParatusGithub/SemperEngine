@@ -6,7 +6,7 @@
 
 namespace SemperEngine
 {
-	VertexArray *VertexArray::Create()
+	SharedPtr<VertexArray> VertexArray::Create()
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -19,7 +19,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLVertexArray();
+			return MakeShared<GLVertexArray>();
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");
@@ -30,7 +30,7 @@ namespace SemperEngine
 		return nullptr;
 	}
 
-	VertexArray *VertexArray::Create(VertexBuffer *vertexBuffer, IndexBuffer *indexBuffer)
+	SharedPtr<VertexArray> VertexArray::Create(VertexBuffer *vertexBuffer, IndexBuffer *indexBuffer)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -43,7 +43,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLVertexArray(vertexBuffer, indexBuffer);
+			return MakeShared<GLVertexArray>(vertexBuffer, indexBuffer);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");

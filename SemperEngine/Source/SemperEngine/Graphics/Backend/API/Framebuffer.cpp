@@ -7,7 +7,7 @@
 
 namespace SemperEngine
 {
-    Framebuffer *Framebuffer::Create(ConstRef<FramebufferInfo> info)
+    SharedPtr<Framebuffer> Framebuffer::Create(ConstRef<FramebufferInfo> info)
     {
 		switch (Backend::GetRenderAPI())
 		{
@@ -20,7 +20,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLFramebuffer(info);
+			return MakeShared<GLFramebuffer>(info);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");

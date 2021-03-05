@@ -10,7 +10,7 @@
 
 namespace SemperEngine
 {
-	IndexBuffer *IndexBuffer::Create(BufferUsage usage)
+	SharedPtr<IndexBuffer> IndexBuffer::Create(BufferUsage usage)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -23,7 +23,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLIndexBuffer(usage);
+			return MakeShared<GLIndexBuffer>(usage);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");
@@ -34,7 +34,7 @@ namespace SemperEngine
 		return nullptr;
 	}
 
-	IndexBuffer *IndexBuffer::Create(void *indices, IndexFormat format, U32 size, BufferUsage usage)
+	SharedPtr<IndexBuffer> IndexBuffer::Create(void *indices, IndexFormat format, U32 size, BufferUsage usage)
 	{
 		switch (Backend::GetRenderAPI())
 		{
@@ -47,7 +47,7 @@ namespace SemperEngine
 			return nullptr;
 
 		case Backend::API::OpenGL:
-			return new GLIndexBuffer(indices, format, size, usage);
+			return MakeShared<GLIndexBuffer>(indices, format, size, usage);
 
 		case Backend::API::Vulkan:
 			SE_ASSERT_MSG(false, "Vulkan not supported");
