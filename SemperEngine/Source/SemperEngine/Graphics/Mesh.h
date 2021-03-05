@@ -63,6 +63,7 @@ namespace SemperEngine
 
 	private:
 		std::string m_Filepath;
+		bool m_IsLoaded;
 		std::vector<SubMesh> m_SubMeshes;
 
 		const aiScene *m_Scene;

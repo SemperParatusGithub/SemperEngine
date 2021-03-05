@@ -80,11 +80,16 @@ namespace SemperEngine
 		m_MeshShader = Shader::Create(ShaderManager::LoadFromFile("Assets/Shaders/Mesh.shader"));
 	}
 
-	Mesh::Mesh()
+	Mesh::Mesh() : 
+		m_Filepath(""),
+		m_IsLoaded(false),
+		m_Scene(nullptr)
 	{
 	}
 	Mesh::Mesh(ConstRef<std::string> filepath) : 
-		m_Filepath(filepath)
+		m_Filepath(filepath),
+		m_IsLoaded(false),
+		m_Scene(nullptr)
 	{
 		Load(filepath);
 	}
@@ -110,6 +115,8 @@ namespace SemperEngine
 		ProcessNode(m_Scene->mRootNode);
 
 		SE_CORE_INFO("Sub Meshes: %d", m_SubMeshes.size());
+
+		m_IsLoaded = true;
 	}
 
 	void Mesh::ProcessNode(aiNode *node)

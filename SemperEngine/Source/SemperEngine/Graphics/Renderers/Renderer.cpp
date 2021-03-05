@@ -91,12 +91,15 @@ namespace SemperEngine
 
 	void Renderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<Mat4> projectionView)
 	{
-		for (auto &subMesh : mesh->m_SubMeshes)
+		if (mesh->m_IsLoaded)
 		{
-			subMesh.m_MeshShader->Bind();
-			subMesh.m_MeshShader->SetUniformMat4f("u_Transform", transform.GetTransform());
-			subMesh.m_MeshShader->SetUniformMat4f("u_ProjectionView", projectionView);
-			DrawIndexed(subMesh.m_VertexArray, subMesh.m_MeshShader);
+			for (auto &subMesh : mesh->m_SubMeshes)
+			{
+				subMesh.m_MeshShader->Bind();
+				subMesh.m_MeshShader->SetUniformMat4f("u_Transform", transform.GetTransform());
+				subMesh.m_MeshShader->SetUniformMat4f("u_ProjectionView", projectionView);
+				DrawIndexed(subMesh.m_VertexArray, subMesh.m_MeshShader);
+			}
 		}
 	}
 
