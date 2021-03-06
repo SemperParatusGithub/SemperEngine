@@ -100,6 +100,8 @@ namespace SemperEngine
 	{
 		SE_CORE_INFO("Loading Mesh: %s", filepath.c_str());
 
+		LogStream::Initialize();
+
 		m_Filepath = filepath;
 		m_SubMeshes.clear();
 
@@ -164,9 +166,6 @@ namespace SemperEngine
 				};
 
 				currentVertex.texCoords = textureCoords;
-			}
-			else {
-				SE_ASSERT_MSG(false, "Mesh doesn't have any Texture Coordinates?");
 			}
 
 			vertices.push_back(currentVertex);

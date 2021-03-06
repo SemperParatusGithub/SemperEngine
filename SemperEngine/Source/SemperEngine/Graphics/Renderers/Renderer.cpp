@@ -35,6 +35,11 @@ namespace SemperEngine
 		s_CurrentBackend->SetViewport(x, y, width, height);
 	}
 
+	void Renderer::SetRenderMode(Backend::RenderMode mode)
+	{
+		s_CurrentBackend->SetRenderMode(mode);
+	}
+
 	void Renderer::Clear()
 	{
 		s_CurrentBackend->Clear();
@@ -45,10 +50,13 @@ namespace SemperEngine
 		ImGui::Begin("Renderer");
 
 		const auto &caps = s_CurrentBackend->GetCapabilities();
+		static bool drawLines = false;
 		if (ImGui::CollapsingHeader("General"))
 		{
 			ImGui::Text("Framerate: %.2f FPS", EngineApplication::Instance().GetFramerate());
 			ImGui::Text("Frametime: %.2f ms", EngineApplication::Instance().GetFrametime());
+			if (ImGui::Checkbox("Render Lines", &drawLines))
+				SetRenderMode(drawLines ? Backend::RenderMode::Lines : Backend::RenderMode::Default);
 			ImGui::Separator();
 			ImGui::Text("Render API: %s", caps.renderAPI.c_str());
 			ImGui::Text("Vendor: %s", caps.vendor.c_str());

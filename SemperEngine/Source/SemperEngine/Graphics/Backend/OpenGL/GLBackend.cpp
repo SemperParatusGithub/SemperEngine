@@ -64,6 +64,14 @@ namespace SemperEngine
 		glViewport(x, y, width, height);
 	}
 
+	void GLBackend::SetRenderMode(RenderMode mode)
+	{
+		if (mode == RenderMode::Default)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mode == RenderMode::Lines)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	
+	}
+
 	void GLBackend::Clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

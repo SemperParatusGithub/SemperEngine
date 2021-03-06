@@ -22,6 +22,11 @@ namespace SemperEngine
 			OpenGL,
 			Vulkan
 		};
+		enum class RenderMode
+		{
+			Default = 0,
+			Lines
+		};
 		struct Capabilities
 		{
 			std::string renderAPI;
@@ -44,6 +49,7 @@ namespace SemperEngine
 
 		virtual void SetClearColor(ConstRef<Vec4> clearColor) = 0;
 		virtual void SetViewport(float x, float y, float width, float height) = 0;
+		virtual void SetRenderMode(RenderMode mode) = 0;
 		virtual void Clear() = 0;
 
 		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader) = 0;

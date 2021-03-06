@@ -29,5 +29,5 @@ uniform sampler2D u_DiffuseTexture;
 
 void main()
 {
-	o_Color = vec4(1.0, 0.0, 0.0, 1.0);
+	o_Color = vec4(0.0, 0.0, 0.0, 1.0);
 }

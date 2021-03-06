@@ -22,6 +22,7 @@ namespace SemperEngine
 
 		static void SetClearColor(const glm::vec4 &clearColor);
 		static void SetViewport(float x, float y, float width, float height);
+		static void SetRenderMode(Backend::RenderMode mode);
 		static void Clear();
 
 		static void OnImGui();

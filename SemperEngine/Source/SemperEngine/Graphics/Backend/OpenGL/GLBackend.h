@@ -15,6 +15,7 @@ namespace SemperEngine
 
 		virtual void SetClearColor(ConstRef<Vec4> clearColor) override;
 		virtual void SetViewport(float x, float y, float width, float height) override;
+		virtual void SetRenderMode(RenderMode mode);
 		virtual void Clear() override;
 
 		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader) override;
