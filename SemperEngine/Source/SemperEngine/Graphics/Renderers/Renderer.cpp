@@ -12,12 +12,39 @@ namespace SemperEngine
 {
 	Backend *s_CurrentBackend = nullptr;
 
+	struct RenderData
+	{
+		SharedPtr<VertexArray> quadVertexArray;
+		SharedPtr<VertexBuffer> quadVertexBuffer;
+		SharedPtr<IndexBuffer> quadIndexBuffer;
+	};
+
+	static RenderData s_RenderData;
+
 	void Renderer::Init()
 	{
 		s_CurrentBackend = Backend::Create();
 		s_CurrentBackend->Init();
 
 		Batcher2D::Init();
+
+		float quadVertices[] = {
+		  // Position				Tex Coords
+			-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f,		1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f,		1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f,		0.0f, 1.0f
+		};
+		U32 quadIndices[] = {
+			0, 1, 2, 2, 3, 0
+		};
+
+		s_RenderData.quadVertexBuffer = VertexBuffer::Create(quadVertices, sizeof(quadVertices), BufferUsage::Static);
+		s_RenderData.quadVertexBuffer->AddAttribute({ "a_Position", VertexFormat::Float3, false });
+		s_RenderData.quadVertexBuffer->AddAttribute({ "a_TexCoords", VertexFormat::Float2, false });
+
+		s_RenderData.quadIndexBuffer = IndexBuffer::Create(quadIndices, IndexFormat::Uint32, sizeof(quadIndices), BufferUsage::Static);
+		s_RenderData.quadVertexArray = VertexArray::Create(s_RenderData.quadVertexBuffer.get(), s_RenderData.quadIndexBuffer.get());
 	}
 
 	void Renderer::Shutdown()
@@ -95,6 +122,15 @@ namespace SemperEngine
 		} 
 
 		ImGui::End();
+	}
+
+	void Renderer::SubmitQuad(ConstRef<Transform> transform, ConstRef<Mat4> projectionView, ConstRef<SharedPtr<Shader>> shader)
+	{
+		shader->Bind();
+		shader->SetUniformMat4f("u_ProjectionView", projectionView);
+		shader->SetUniformMat4f("u_Transform", transform.GetTransform());
+		s_RenderData.quadVertexArray->Bind();
+		DrawIndexed(s_RenderData.quadVertexArray, shader, 6);
 	}
 
 	void Renderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<Mat4> projectionView)

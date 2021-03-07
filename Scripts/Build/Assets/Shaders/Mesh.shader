@@ -25,8 +25,6 @@ layout(location = 0) out vec4 o_Color;
 
 in vec2 v_TexCoords;
 
-uniform sampler2D u_DiffuseTexture;
-
 void main()
 {
 	o_Color = vec4(0.0, 0.0, 0.0, 1.0);

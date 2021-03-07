@@ -48,5 +48,7 @@ private:
 	Entity m_SquareEntity;
 	Entity m_DirtEntity;
 
+	SharedPtr<Shader> m_RasterShader;
+
 	int m_ImGuizmoOperation = -1;
 };
