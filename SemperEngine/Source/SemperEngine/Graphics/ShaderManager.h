@@ -22,6 +22,8 @@ namespace SemperEngine
 		~ShaderManager() = default;
 
 		void AddShader(ConstRef<std::string> name, SharedPtr<Shader> shader);
+		void AddShaderFromFile(ConstRef<std::string> name, ConstRef<std::string> filepath);
+
 		SharedPtr<Shader> GetShader(ConstRef<std::string> name);
 
 		void Remove(ConstRef<std::string> name);

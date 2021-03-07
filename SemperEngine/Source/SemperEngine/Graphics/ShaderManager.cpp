@@ -14,6 +14,12 @@ namespace SemperEngine
 	{
 		m_ShaderStorage[name] = shader;
 	}
+	void ShaderManager::AddShaderFromFile(ConstRef<std::string> name, ConstRef<std::string> filepath)
+	{
+		SharedPtr<Shader> shader = Shader::Create(LoadFromFile(filepath));
+		AddShader(name, shader);
+	}
+
 	SharedPtr<Shader> ShaderManager::GetShader(ConstRef<std::string> name)
 	{
 		return m_ShaderStorage[name];
