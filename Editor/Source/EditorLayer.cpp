@@ -19,8 +19,8 @@ EditorLayer::EditorLayer() :
 	FramebufferInfo info = { 1280, 720 };
 	m_Framebuffer = Framebuffer::Create(info);
 
-	m_LogConsole = MakeShared<LogConsole>();
-	Log::SetLogConsoleInstance(m_LogConsole);
+	Log::EnableEditorLogConsole();
+	Log::EnableAutoFlush();
 
 	m_Scene = MakeUnique<Scene>();
 	m_Hierarchy = MakeShared<Hierarchy>(m_Scene);
@@ -135,14 +135,11 @@ void EditorLayer::OnImGuiRender()
 	ImGui::ShowDemoWindow();
 
 	m_Hierarchy->OnImGui();
-
 	m_Inspector->OnImGui(m_Hierarchy->GetSelectedEntity());
-
 	m_EditorCamera.OnImGui();
 
 	Renderer::OnImGui();
-
-	m_LogConsole->OnImGuiRender();
+	Log::OnEditorLogConsoleGui();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });
 	ImGui::Begin("Scene Viewport");

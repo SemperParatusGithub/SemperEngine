@@ -32,7 +32,6 @@ private:
 
 private:
 	SharedPtr<Framebuffer> m_Framebuffer;
-	SharedPtr<LogConsole> m_LogConsole;
 
 	SharedPtr<Scene> m_Scene;
 	SharedPtr<Hierarchy> m_Hierarchy;

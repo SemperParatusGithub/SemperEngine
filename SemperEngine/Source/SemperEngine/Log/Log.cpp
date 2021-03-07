@@ -4,28 +4,48 @@
 
 namespace SemperEngine
 {
-	bool Log::s_LogToFile = false;
-	bool Log::s_LogToConsole = false;
-
-	std::vector<LogElement> Log::s_TempBuffer;
+	std::vector<LogElement> Log::s_MessageBuffer;
+	bool Log::s_AutoFlush = false;
 
 	SharedPtr<ConsoleLogger> Log::s_ConsoleLogger;
 	SharedPtr<FileLogger> Log::s_FileLogger;
 	SharedPtr<LogConsole> Log::s_LogConsole;
 
-	void Log::Init(bool logToFile, bool logToConsole)
+	void Log::Init()
 	{
-		s_LogToFile = logToFile;
-		s_LogToConsole = logToConsole;
-
 		s_ConsoleLogger = MakeShared<ConsoleLogger>();
 		s_FileLogger = MakeShared<FileLogger>("Semper.log");
 	}
-	void Log::SetLogConsoleInstance(SharedPtr<LogConsole> instance)
+	void Log::EnableAutoFlush(bool enable)
 	{
-		if(s_LogToConsole)
-			s_LogConsole = instance;
-		else
-			LogMessage<Severity::Critical, LoggerType::Core>("Unable to set LogConsole Instance (loggin to LogConsole is switched off)");
+		s_AutoFlush = enable;
+	}
+	void Log::EnableEditorLogConsole()
+	{
+		s_LogConsole = MakeShared<LogConsole>();
+	}
+	void Log::OnEditorLogConsoleGui()
+	{
+		if(s_LogConsole)
+			s_LogConsole->OnImGuiRender();
+	}
+	void Log::FlushMessageBuffer()
+	{
+		for (const auto &element : s_MessageBuffer)
+		{
+			// Log to command window
+			s_ConsoleLogger->LogMessage(element);
+
+			// Log to logFile
+			s_FileLogger->LogMessage(element);
+
+			// Log to editor console
+			if (s_LogConsole)
+				s_LogConsole->LogMessage(element);
+		}
+
+		s_FileLogger->Flush();
+
+		s_MessageBuffer.clear();
 	}
 }

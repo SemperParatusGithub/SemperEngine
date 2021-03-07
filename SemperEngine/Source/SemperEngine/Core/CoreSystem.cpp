@@ -8,7 +8,7 @@ namespace SemperEngine
 {
 	void CoreSystem::Initialize()
 	{
-		Log::Init(true, true);
+		Log::Init();
 
 		SE_CORE_INFO("Initializing Core Engine");
 	}
