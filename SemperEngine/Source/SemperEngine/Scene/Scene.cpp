@@ -67,7 +67,7 @@ namespace SemperEngine
 
 				view2.each([=](const auto ent, const TransformComponent &tc, const MeshComponent &mc)
 					{
-						Renderer::SubmitMesh(mc.mesh, tc.transform, projectionViewMatrix);
+						Renderer::SubmitMesh(mc.mesh, tc.transform, camera);
 					});
 
 				Batcher2D::EndScene();
@@ -121,7 +121,6 @@ namespace SemperEngine
 						{
 							nsc.OnUpdate(deltaTime);
 						});
-
 				}
 
 				// Get primary camera entity and override scene camera with it
@@ -146,9 +145,9 @@ namespace SemperEngine
 
 				// Render all Sprites
 				{
-					Batcher2D::BeginScene(projectionViewMatrix);
-
 					auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
+
+					Batcher2D::BeginScene(projectionViewMatrix);
 
 					view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
 						{

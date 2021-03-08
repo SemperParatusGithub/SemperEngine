@@ -11,6 +11,13 @@ namespace SemperEngine
 {
 	class Entity;
 
+	struct DirectionalLight
+	{
+		Vec3 direction = Vec3(glm::radians(80.0f), glm::radians(20.0f), 0.0f);
+		Vec3 radiance = Vec3(0.0f, 0.0f, 0.0f);
+		float intensity = 1.0f;
+	};
+
 	class Scene
 	{
 	public:
@@ -56,6 +63,8 @@ namespace SemperEngine
 
 	private:
 		SceneState m_SceneState = SceneState::Editing;
+
+		DirectionalLight m_DirectionalLight;
 
 		std::string m_Name = "Unnamed";
 		std::string m_Version = "1.1";

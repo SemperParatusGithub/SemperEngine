@@ -14,6 +14,8 @@
 
 namespace SemperEngine
 {
+	class EditorCamera;
+
 	class Renderer
 	{
 	public:
@@ -27,8 +29,10 @@ namespace SemperEngine
 
 		static void OnImGui();
 
+		static ConstRef<SharedPtr<ShaderManager>> GetShaderManager();
+
 		static void SubmitQuad(ConstRef<Transform> transform, ConstRef<Mat4> projectionView, ConstRef<SharedPtr<Shader>> shader);
-		static void SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<Mat4> projectionView);
+		static void SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<EditorCamera> camera);
 
 		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader);
 		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count);

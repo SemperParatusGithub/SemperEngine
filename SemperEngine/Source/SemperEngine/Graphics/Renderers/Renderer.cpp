@@ -17,6 +17,8 @@ namespace SemperEngine
 		SharedPtr<VertexArray> quadVertexArray;
 		SharedPtr<VertexBuffer> quadVertexBuffer;
 		SharedPtr<IndexBuffer> quadIndexBuffer;
+
+		SharedPtr<ShaderManager> shaderManager;
 	};
 
 	static RenderData s_RenderData;
@@ -45,6 +47,10 @@ namespace SemperEngine
 
 		s_RenderData.quadIndexBuffer = IndexBuffer::Create(quadIndices, IndexFormat::Uint32, sizeof(quadIndices), BufferUsage::Static);
 		s_RenderData.quadVertexArray = VertexArray::Create(s_RenderData.quadVertexBuffer.get(), s_RenderData.quadIndexBuffer.get());
+
+		s_RenderData.shaderManager = MakeShared<ShaderManager>();
+
+		s_RenderData.shaderManager->AddShaderFromFile("PBR", "Assets/Shaders/PBR.shader");
 	}
 
 	void Renderer::Shutdown()
@@ -124,6 +130,11 @@ namespace SemperEngine
 		ImGui::End();
 	}
 
+	ConstRef<SharedPtr<ShaderManager>> Renderer::GetShaderManager()
+	{
+		return s_RenderData.shaderManager;
+	}
+
 	void Renderer::SubmitQuad(ConstRef<Transform> transform, ConstRef<Mat4> projectionView, ConstRef<SharedPtr<Shader>> shader)
 	{
 		shader->Bind();
@@ -133,7 +144,7 @@ namespace SemperEngine
 		DrawIndexed(s_RenderData.quadVertexArray, shader, 6);
 	}
 
-	void Renderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<Mat4> projectionView)
+	void Renderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<EditorCamera> camera)
 	{
 		if (mesh->m_IsLoaded)
 		{
@@ -141,7 +152,14 @@ namespace SemperEngine
 			{
 				subMesh.m_MeshShader->Bind();
 				subMesh.m_MeshShader->SetUniformMat4f("u_Transform", transform.GetTransform());
-				subMesh.m_MeshShader->SetUniformMat4f("u_ProjectionView", projectionView);
+				subMesh.m_MeshShader->SetUniformMat4f("u_ProjectionView", camera.GetProjectionView());
+				subMesh.m_MeshShader->SetUniformFloat3("u_CameraPosition", camera.GetPosition());
+				subMesh.m_MeshShader->SetUniformFloat3("u_DirectionalLights.Direction", Vec3(glm::radians(30.0f), glm::radians(20.0f), 0.0f));
+				subMesh.m_MeshShader->SetUniformFloat3("u_DirectionalLights.Radiance", Vec3(0.1f));
+				subMesh.m_MeshShader->SetUniformFloat("u_DirectionalLights.Multiplier", 10.0f);
+				subMesh.m_MeshShader->SetUniformFloat3("u_AlbedoColor", Vec3(0.7f, 0.2f, 0.4f));
+				subMesh.m_MeshShader->SetUniformFloat("u_Metalness", 0.9f);
+				subMesh.m_MeshShader->SetUniformFloat("u_Roughness", 0.3f);
 				DrawIndexed(subMesh.m_VertexArray, subMesh.m_MeshShader);
 			}
 		}
