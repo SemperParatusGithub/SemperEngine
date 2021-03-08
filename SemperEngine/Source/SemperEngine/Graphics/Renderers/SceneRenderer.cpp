@@ -23,6 +23,8 @@ namespace SemperEngine
 		SharedPtr<Shader> rasterShader;
 
 		std::vector<MeshObject> meshDrawList;
+
+		bool showRaster = true;
 	};
 
 	static SceneRenderData s_SceneRenderData;
@@ -40,6 +42,13 @@ namespace SemperEngine
 	{
 	}
 
+	void SceneRenderer::OnImGui()
+	{
+		ImGui::Begin("Scene Renderer");
+		ImGui::Checkbox("Raster", &s_SceneRenderData.showRaster);
+		ImGui::End();
+	}
+
 	void SceneRenderer::BeginScene(ConstRef<SceneInfo> sceneInfo)
 	{
 		s_SceneRenderData.currentSceneInfo = sceneInfo;
@@ -53,16 +62,19 @@ namespace SemperEngine
 		s_SceneRenderData.mainFramebuffer->Bind();
 		Renderer::Clear();
 
-		Transform rasterTransform;
-		rasterTransform.Rotate(Vec3(glm::radians(90.0f), 0.0f, 0.0f));
-		rasterTransform.SetScale(Vec3(25.0f, 25.0f, 25.0f));
-		rasterTransform.SetTranslation(Vec3(0.0f, -0.0000001f, 0.0f));
+		if (s_SceneRenderData.showRaster)
+		{
+			Transform rasterTransform;
+			rasterTransform.Rotate(Vec3(glm::radians(90.0f), 0.0f, 0.0f));
+			rasterTransform.SetScale(Vec3(25.0f, 25.0f, 25.0f));
+			rasterTransform.SetTranslation(Vec3(0.0f, -0.0000001f, 0.0f));
 
-		s_SceneRenderData.rasterShader->Bind();
-		s_SceneRenderData.rasterShader->SetUniformFloat3("u_GridColor", Vec3(0.2f, 0.2f, 0.2f));
-		s_SceneRenderData.rasterShader->SetUniformFloat("u_Segments", 32.0f);
+			s_SceneRenderData.rasterShader->Bind();
+			s_SceneRenderData.rasterShader->SetUniformFloat3("u_GridColor", Vec3(0.2f, 0.2f, 0.2f));
+			s_SceneRenderData.rasterShader->SetUniformFloat("u_Segments", 50.0f);
 
-		Renderer::SubmitQuad(rasterTransform, s_SceneRenderData.currentSceneInfo.projectionViewMatrix, s_SceneRenderData.rasterShader);
+			Renderer::SubmitQuad(rasterTransform, s_SceneRenderData.currentSceneInfo.projectionViewMatrix, s_SceneRenderData.rasterShader);
+		}
 
 		auto &meshShader = Renderer::GetShaderManager()->GetShader("PBR");
 		meshShader->Bind();

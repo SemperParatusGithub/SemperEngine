@@ -23,6 +23,8 @@ namespace SemperEngine
 		static void Init();
 		static void Shutdown();
 
+		static void OnImGui();
+
 		static void BeginScene(ConstRef<SceneInfo> sceneInfo);
 		static void EndScene();
 

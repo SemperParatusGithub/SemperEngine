@@ -116,6 +116,7 @@ void EditorLayer::OnImGuiRender()
 	m_EditorCamera.OnImGui();
 
 	Renderer::OnImGui();
+	SceneRenderer::OnImGui();
 	Log::OnEditorLogConsoleGui();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });

@@ -36,20 +36,23 @@ namespace SemperEngine
 
 	void GLFramebuffer::OnResize(U32 width, U32 height)
 	{
-		m_Info.width = width;
-		m_Info.height = height;
+		if (width != m_Info.width || height != m_Info.height)
+		{
+			m_Info.width = width;
+			m_Info.height = height;
 
-		if (width <= 0)
-			m_Info.width = 1;
-		if (height <= 0)
-			m_Info.height = 1;
+			if (width <= 0)
+				m_Info.width = 1;
+			if (height <= 0)
+				m_Info.height = 1;
 
-		if (width >= 8640)
-			m_Info.width = 8640;
-		if (height >= 8640)
-			m_Info.height = 8640;
+			if (width >= 8640)
+				m_Info.width = 8640;
+			if (height >= 8640)
+				m_Info.height = 8640;
 
-		Invalidate();
+			Invalidate();
+		}
 	}
 
 	void *GLFramebuffer::GetColorAttachmentHandle() const noexcept
