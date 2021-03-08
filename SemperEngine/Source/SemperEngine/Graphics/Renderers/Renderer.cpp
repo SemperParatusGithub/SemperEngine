@@ -144,30 +144,24 @@ namespace SemperEngine
 		DrawIndexed(s_RenderData.quadVertexArray, shader, 6);
 	}
 
-	void Renderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<EditorCamera> camera)
+	void Renderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<SharedPtr<Shader>> shader)
 	{
+		// TODO: Check somewhere else
 		if (mesh->m_IsLoaded)
 		{
 			for (auto &subMesh : mesh->m_SubMeshes)
 			{
-				subMesh.m_MeshShader->Bind();
-				subMesh.m_MeshShader->SetUniformMat4f("u_Transform", transform.GetTransform());
-				subMesh.m_MeshShader->SetUniformMat4f("u_ProjectionView", camera.GetProjectionView());
-				subMesh.m_MeshShader->SetUniformFloat3("u_CameraPosition", camera.GetPosition());
-				subMesh.m_MeshShader->SetUniformFloat3("u_DirectionalLights.Direction", Vec3(glm::radians(30.0f), glm::radians(20.0f), 0.0f));
-				subMesh.m_MeshShader->SetUniformFloat3("u_DirectionalLights.Radiance", Vec3(0.1f));
-				subMesh.m_MeshShader->SetUniformFloat("u_DirectionalLights.Multiplier", 10.0f);
-				subMesh.m_MeshShader->SetUniformFloat3("u_AlbedoColor", Vec3(0.7f, 0.2f, 0.4f));
-				subMesh.m_MeshShader->SetUniformFloat("u_Metalness", 0.9f);
-				subMesh.m_MeshShader->SetUniformFloat("u_Roughness", 0.3f);
-				DrawIndexed(subMesh.m_VertexArray, subMesh.m_MeshShader);
+				shader->Bind();
+				// TODO: Take Take subMesh transform into account
+				shader->SetUniformMat4f("u_Transform", transform.GetTransform());
+				DrawIndexed(subMesh.m_VertexArray);
 			}
 		}
 	}
 
-	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader)
+	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray)
 	{
-		s_CurrentBackend->DrawIndexed(vertexArray, shader);
+		s_CurrentBackend->DrawIndexed(vertexArray);
 	}
 
 	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count)

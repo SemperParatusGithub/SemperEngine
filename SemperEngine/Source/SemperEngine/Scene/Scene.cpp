@@ -11,6 +11,8 @@
 #include "SemperEngine/Graphics/Renderers/Batcher2D.h"
 #include "SemperEngine/Util/Timer.h"
 
+#include "SemperEngine/Graphics/Renderers/SceneRenderer.h"
+
 
 namespace SemperEngine
 {
@@ -54,108 +56,39 @@ namespace SemperEngine
 		{
 			case SceneState::Editing:
 			{
-				Batcher2D::BeginScene(projectionViewMatrix);
+				SceneInfo sceneInfo;
+				sceneInfo.context = this;
+				sceneInfo.viewportWidth = static_cast<U32>(viewportSize.x);
+				sceneInfo.viewportHeight = static_cast<U32>(viewportSize.y);
+				sceneInfo.projectionViewMatrix = camera.GetProjectionView();
+				sceneInfo.cameraPosition = camera.GetPosition();
 
-				auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
+				SceneRenderer::BeginScene(sceneInfo);
 
-				view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
+				auto view = m_Registry.view<const TransformComponent, const MeshComponent>();
+				view.each([=](const auto ent, const TransformComponent &tc, const MeshComponent &mc)
 					{
-						Batcher2D::DrawSprite(tc.transform, sc.sprite);
+						SceneRenderer::SubmitMesh(mc.mesh, tc.transform);
 					});
 
-				auto view2 = m_Registry.view<const TransformComponent, const MeshComponent>();
+				SceneRenderer::EndScene();
 
-				view2.each([=](const auto ent, const TransformComponent &tc, const MeshComponent &mc)
-					{
-						Renderer::SubmitMesh(mc.mesh, tc.transform, camera);
-					});
-
-				Batcher2D::EndScene();
 			} break;
 
 			case SceneState::Pausing:
 			{
 				// Don't update Scripts while pausing!
-
 				// Get primary camera entity and override scene camera with it
-				{
-					auto view = m_Registry.view<const TransformComponent, const SceneCameraComponent>();
-					for (const auto ent : view)
-					{
-						auto entity = Entity(ent, this);
-						auto &camera = entity.Get<SceneCameraComponent>();
-
-						camera.camera.SetPosition(entity.Get<TransformComponent>().transform.GetTranslation());
-						camera.camera.SetRotation(entity.Get<TransformComponent>().transform.GetRotation());
-						camera.SetBounds(viewportSize.x, viewportSize.y);
-
-						if (camera.primary)
-						{
-							projectionViewMatrix = camera.GetProjectionViewMatrix();
-							break;
-						}
-					}
-				}
-
-				// Render all Sprites
-				{
-					Batcher2D::BeginScene(projectionViewMatrix);
-
-					auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
-
-					view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
-						{
-							Batcher2D::DrawSprite(tc.transform, sc.sprite);
-						});
-
-					Batcher2D::EndScene();
-				}
-			}break;
+				// Render
+				SE_CORE_INFO("Pausing");
+			} break;
 
 			case SceneState::Playing:
 			{
 				// Update NativeScriptComponents
-				{
-					auto view = m_Registry.view<NativeScriptComponent>();
-					view.each([=](NativeScriptComponent &nsc)
-						{
-							nsc.OnUpdate(deltaTime);
-						});
-				}
-
 				// Get primary camera entity and override scene camera with it
-				{
-					auto view = m_Registry.view<const TransformComponent, const SceneCameraComponent>();
-					for (const auto ent : view)
-					{
-						auto entity = Entity(ent, this);
-						auto &camera = entity.Get<SceneCameraComponent>();
-
-						camera.camera.SetPosition(entity.Get<TransformComponent>().transform.GetTranslation());
-						camera.camera.SetRotation(entity.Get<TransformComponent>().transform.GetRotation());
-						camera.SetBounds(viewportSize.x, viewportSize.y);
-
-						if (camera.primary)
-						{
-							projectionViewMatrix = camera.GetProjectionViewMatrix();
-							break;
-						}
-					}
-				}
-
-				// Render all Sprites
-				{
-					auto view = m_Registry.view<const TransformComponent, const SpriteComponent>();
-
-					Batcher2D::BeginScene(projectionViewMatrix);
-
-					view.each([](const auto ent, const TransformComponent &tc, const SpriteComponent &sc)
-						{
-							Batcher2D::DrawSprite(tc.transform, sc.sprite);
-						});
-
-					Batcher2D::EndScene();
-				}
+				// Render
+				SE_CORE_INFO("Playing");
 			} break;
 		}
 	}

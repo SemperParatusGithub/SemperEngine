@@ -77,10 +77,9 @@ namespace SemperEngine
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void GLBackend::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader)
+	void GLBackend::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray)
 	{
 		vertexArray->Bind();
-		shader->Bind();
 		IndexFormat indexFormat = vertexArray->GetIndexBuffer()->GetFormat();
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GLTools::IndexFormatToGLType(indexFormat), nullptr);
 	}

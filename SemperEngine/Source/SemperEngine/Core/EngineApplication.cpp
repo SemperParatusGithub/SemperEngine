@@ -4,6 +4,7 @@
 
 #include "SemperEngine/Events/EventDispatcher.h"
 #include "SemperEngine/Graphics/Renderers/Renderer.h"
+#include "SemperEngine/Graphics/Renderers/SceneRenderer.h"
 
 #include <GLFW/glfw3.h>		// TODO: Remove
 
@@ -24,6 +25,7 @@ namespace SemperEngine
 		m_Window->SetEventCallbackFunction(SE_BIND_EVENT_FN(EngineApplication::OnEvent));
 
 		Renderer::Init();
+		SceneRenderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);

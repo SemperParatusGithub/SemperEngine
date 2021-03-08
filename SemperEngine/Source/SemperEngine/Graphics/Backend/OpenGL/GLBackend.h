@@ -18,7 +18,7 @@ namespace SemperEngine
 		virtual void SetRenderMode(RenderMode mode);
 		virtual void Clear() override;
 
-		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader) override;
+		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray) override;
 		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count) override;
 	};
 }

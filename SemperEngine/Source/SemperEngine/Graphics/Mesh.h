@@ -43,8 +43,6 @@ namespace SemperEngine
 		SharedPtr<VertexBuffer> m_VertexBuffer;
 		SharedPtr<IndexBuffer> m_IndexBuffer;
 
-		SharedPtr<Shader> m_MeshShader;
-
 		friend class Renderer;
 	};
 

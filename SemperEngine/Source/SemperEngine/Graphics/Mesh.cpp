@@ -75,9 +75,6 @@ namespace SemperEngine
 
 		// Create Vertex Array
 		m_VertexArray = VertexArray::Create(m_VertexBuffer.get(), m_IndexBuffer.get());
-
-		// Create Shader
-		m_MeshShader = Renderer::GetShaderManager()->GetShader("PBR");
 	}
 
 	Mesh::Mesh() : 

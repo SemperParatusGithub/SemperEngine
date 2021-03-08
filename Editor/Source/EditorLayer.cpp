@@ -2,6 +2,8 @@
 
 #include <GLFW/include/GLFW/glfw3.h>
 
+#include "SemperEngine/Graphics/Renderers/SceneRenderer.h"
+
 #include "ImGuizmo/ImGuizmo.h"
 #include "SemperEngine/Util/Math.h"
 
@@ -29,8 +31,6 @@ EditorLayer::EditorLayer() :
 	m_PlayButtonTexture = Texture2D::Create("Assets/Textures/PlayButton.png");
 	m_PauseButtonTexture = Texture2D::Create("Assets/Textures/PauseButton.png");
 	m_ExitButtonTexture = Texture2D::Create("Assets/Textures/ExitButton.png");
-
-	m_RasterShader = Shader::Create(ShaderManager::LoadFromFile("Assets/Shaders/Raster.shader"));
 }
 
 void EditorLayer::OnAttach()
@@ -69,31 +69,8 @@ void EditorLayer::OnUpdate(float deltaTime)
 			m_ImGuizmoOperation = -1;
 	}
 
-	// Render
-	{
-		m_Framebuffer->Bind();
-
-		Renderer::SetClearColor({ 0.86f,  0.86f,  0.86f,  0.86f });
-		Renderer::Clear();
-
-		// Render Raster
-		{
-			Transform rasterTransform;
-			rasterTransform.Rotate(Vec3(glm::radians(90.0f), 0.0f, 0.0f));
-			rasterTransform.SetScale(Vec3(25.0f, 25.0f, 25.0f));
-			rasterTransform.SetTranslation(Vec3(0.0f, -0.0000001f, 0.0f));
-
-			m_RasterShader->Bind();
-			m_RasterShader->SetUniformFloat3("u_GridColor", Vec3(0.2f, 0.2f, 0.2f));
-			m_RasterShader->SetUniformFloat("u_Segments", 32.0f);
-
-			Renderer::SubmitQuad(rasterTransform, m_EditorCamera.GetProjectionView(), m_RasterShader);
-		}
-
-		m_Scene->OnUpdate(deltaTime, m_EditorCamera, m_ViewportSize);
-
-		m_Framebuffer->UnBind();
-	}
+	// Update
+	m_Scene->OnUpdate(deltaTime, m_EditorCamera, m_ViewportSize);
 }
 
 void EditorLayer::OnImGuiRender()
@@ -193,7 +170,7 @@ void EditorLayer::OnImGuiRender()
 
 	uint64_t textureID = reinterpret_cast<U64>(m_Framebuffer->GetColorAttachmentHandle());
 
-	ImGui::Image(reinterpret_cast<ImTextureID>(textureID), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
+	ImGui::Image(SceneRenderer::GetFinalFramebufferColorAttachmentHandle(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 
 	// Gizmos
 	Entity activeEntity = m_Hierarchy->GetSelectedEntity();

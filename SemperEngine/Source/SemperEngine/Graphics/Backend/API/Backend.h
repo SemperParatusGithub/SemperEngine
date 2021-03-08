@@ -52,7 +52,7 @@ namespace SemperEngine
 		virtual void SetRenderMode(RenderMode mode) = 0;
 		virtual void Clear() = 0;
 
-		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader) = 0;
+		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray) = 0;
 		virtual void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count) = 0;
 
 	protected:
