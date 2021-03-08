@@ -47,10 +47,13 @@ namespace SemperEngine
 			for (auto *layer : m_LayerStack)
 				layer->OnUpdate(m_DeltaTime);
 
-			m_ImGuiLayer->Begin();
-			for (auto *layer : m_LayerStack)
-				layer->OnImGuiRender();
-			m_ImGuiLayer->End();
+			if (!m_Minimized)
+			{
+				m_ImGuiLayer->Begin();
+				for (auto *layer : m_LayerStack)
+					layer->OnImGuiRender();
+				m_ImGuiLayer->End();
+			}
 		}
 	}
 
