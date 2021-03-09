@@ -142,7 +142,7 @@ vec3 ApplyLighting(vec3 F0)
 vec3 ApplyIBL(vec3 F0, vec3 Lr)
 {
 	// TODO: Replace with proper IBL
-	return vec3(0.1) * m_Params.Albedo;
+	return vec3(0.3) * m_Params.Albedo;
 }
 
 void main()

@@ -5,6 +5,7 @@
 #include <assimp/DefaultLogger.hpp>
 
 #include "SemperEngine/Graphics/Renderers/Renderer.h"
+#include "SemperEngine/Scene/Components.h"
 
 
 namespace SemperEngine

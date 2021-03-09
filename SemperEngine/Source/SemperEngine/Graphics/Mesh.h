@@ -16,6 +16,7 @@
 namespace SemperEngine
 {
 	class Renderer;
+	struct MeshComponent;
 
 	struct Vertex
 	{
@@ -67,5 +68,6 @@ namespace SemperEngine
 		const aiScene *m_Scene;
 
 		friend class Renderer;
+		friend class MeshComponent;
 	};
 }

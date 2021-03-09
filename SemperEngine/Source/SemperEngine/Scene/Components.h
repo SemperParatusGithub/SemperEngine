@@ -13,7 +13,7 @@
 #include "SemperEngine/Graphics/Camera/SceneCamera.h"
 
 #define ALL_COMPONENTS IdentificationComponent, TransformComponent, \
-						SpriteComponent, SceneCameraComponent
+						SpriteComponent, SceneCameraComponent, MeshComponent
 
 
 namespace SemperEngine
@@ -222,6 +222,19 @@ namespace SemperEngine
 		void Load()
 		{
 			mesh->Load(filepath);
+		}
+
+		template<typename Archive>
+		void save(Archive &archive) const
+		{
+			archive( cereal::make_nvp("Filepath", mesh->m_Filepath) );
+		}
+		template<typename Archive>
+		void load(Archive &archive)
+		{
+			std::string filepath;
+			archive( cereal::make_nvp("Filepath", filepath) );
+			mesh = MakeShared<Mesh>(filepath);
 		}
 	};
 }
