@@ -60,7 +60,7 @@ in VertexShaderOutput
 	vec3 Bitangent;
 } vs_Input;
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 o_Color;
 
 uniform DirectionalLight u_DirectionalLights;
 uniform vec3 u_CameraPosition;
@@ -142,7 +142,7 @@ vec3 ApplyLighting(vec3 F0)
 vec3 ApplyIBL(vec3 F0, vec3 Lr)
 {
 	// TODO: Replace with proper IBL
-	return vec3(0.1) * m_Params.Albedo;
+	return vec3(0.03) * m_Params.Albedo;
 }
 
 void main()
@@ -167,5 +167,10 @@ void main()
 	vec3 lightContribution = ApplyLighting(F0);
 	vec3 iblContribution = ApplyIBL(F0, Lr);
 
-	color = vec4(lightContribution + iblContribution, 1.0);
+	vec3 color = lightContribution + iblContribution;
+
+	// gamma correction
+	color = pow(color, vec3(1.0 / 2.2));
+
+	o_Color = vec4(color, 1.0);
 }
