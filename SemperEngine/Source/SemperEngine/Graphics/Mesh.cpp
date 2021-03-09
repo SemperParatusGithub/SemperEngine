@@ -32,10 +32,9 @@ namespace SemperEngine
 
 		virtual void write(const char *message) override
 		{
-			char *msg = new char[strlen(message)];
-			strcpy(msg, message);
-			msg[strlen(message) - 1] = '\0';
-			SE_CORE_INFO("Assimp: %s", msg);
+			std::string msg = std::string(message);
+			std::replace(msg.begin(), msg.end(), '\n', ' ');
+			SE_CORE_INFO("Assimp: %s", msg.c_str());
 		}
 	};
 

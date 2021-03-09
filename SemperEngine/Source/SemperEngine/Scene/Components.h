@@ -227,14 +227,14 @@ namespace SemperEngine
 		template<typename Archive>
 		void save(Archive &archive) const
 		{
-			archive( cereal::make_nvp("Filepath", mesh->m_Filepath) );
+			archive( cereal::make_nvp("Filepath", filepath) );
 		}
 		template<typename Archive>
 		void load(Archive &archive)
 		{
-			std::string filepath;
 			archive( cereal::make_nvp("Filepath", filepath) );
-			mesh = MakeShared<Mesh>(filepath);
+			if(!filepath.empty())
+				Load();
 		}
 	};
 }
