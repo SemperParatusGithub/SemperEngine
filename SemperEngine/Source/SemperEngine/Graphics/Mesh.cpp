@@ -32,7 +32,10 @@ namespace SemperEngine
 
 		virtual void write(const char *message) override
 		{
-			SE_CORE_INFO("Assimp: %s", message);
+			char *msg = new char[strlen(message)];
+			strcpy(msg, message);
+			msg[strlen(message) - 1] = '\0';
+			SE_CORE_INFO("Assimp: %s", msg);
 		}
 	};
 
