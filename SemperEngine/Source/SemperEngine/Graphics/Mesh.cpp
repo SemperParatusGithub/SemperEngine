@@ -54,9 +54,10 @@ namespace SemperEngine
 		};
 	}
 
-	SubMesh::SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices) : 
+	SubMesh::SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices, SharedPtr<Material> material) : 
 		m_Vertices(vertices),
-		m_Indices(indices)
+		m_Indices(indices),
+		m_Material(material)
 	{
 		PreparePipeline();
 	}
@@ -182,6 +183,35 @@ namespace SemperEngine
 				indices.push_back(face.mIndices[j]);
 		}
 
-		return SubMesh { vertices, indices };
+		// Materials
+		aiMaterial *aiMaterial= m_Scene->mMaterials[mesh->mMaterialIndex];
+
+		aiColor3D aiColor;
+		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+
+		float shininess, metalness, roughness;
+		if (aiMaterial->Get(AI_MATKEY_SHININESS, shininess) != aiReturn_SUCCESS)
+			shininess = 80.0f; // Default value
+
+		if (aiMaterial->Get(AI_MATKEY_REFLECTIVITY, metalness) != aiReturn_SUCCESS)
+			metalness = 0.0f;
+
+		roughness = 1.0f - glm::sqrt(shininess / 100.0f);
+
+		PBRMaterialParameters params = {
+			Vec3(aiColor.r, aiColor.g, aiColor.b),	// Albedo
+			metalness,								// Metalness	
+			roughness								// Roughness
+		};
+
+		SE_CORE_INFO("Mesh Debug Info: %s: AlbedoColor: %.2f, %.2f, %.2f", aiMaterial->GetName().C_Str(), aiColor.r, aiColor.g, aiColor.b);
+		SE_CORE_INFO("Mesh Debug Info: %s: Metalness: %.2f", aiMaterial->GetName().C_Str(), metalness);
+		SE_CORE_INFO("Mesh Debug Info: %s: Rouggness: %.2f", aiMaterial->GetName().C_Str(), roughness);
+
+		SharedPtr<Shader> shader = Renderer::GetShaderManager()->GetShader("PBR");
+		SharedPtr<Material> material = MakeShared<Material>(aiMaterial->GetName().C_Str(), shader);
+		material->GetPBRMaterialParameters() = params;
+
+		return SubMesh { vertices, indices, material };
 	}
 }

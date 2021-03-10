@@ -60,8 +60,8 @@ namespace SemperEngine
 				sceneInfo.context = this;
 				sceneInfo.viewportWidth = static_cast<U32>(viewportSize.x);
 				sceneInfo.viewportHeight = static_cast<U32>(viewportSize.y);
-				sceneInfo.projectionViewMatrix = camera.GetProjectionView();
-				sceneInfo.cameraPosition = camera.GetPosition();
+				sceneInfo.cameraInfo.projectionViewMatrix = camera.GetProjectionView();
+				sceneInfo.cameraInfo.cameraPosition = camera.GetPosition();
 
 				SceneRenderer::BeginScene(sceneInfo);
 

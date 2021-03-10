@@ -73,23 +73,12 @@ namespace SemperEngine
 			s_SceneRenderData.rasterShader->SetUniformFloat3("u_GridColor", Vec3(0.2f, 0.2f, 0.2f));
 			s_SceneRenderData.rasterShader->SetUniformFloat("u_Segments", 50.0f);
 
-			Renderer::SubmitQuad(rasterTransform, s_SceneRenderData.currentSceneInfo.projectionViewMatrix, s_SceneRenderData.rasterShader);
+			Renderer::SubmitQuad(rasterTransform, s_SceneRenderData.currentSceneInfo.cameraInfo.projectionViewMatrix, s_SceneRenderData.rasterShader);
 		}
-
-		auto &meshShader = Renderer::GetShaderManager()->GetShader("PBR");
-		meshShader->Bind();
-		meshShader->SetUniformMat4f("u_ProjectionView", s_SceneRenderData.currentSceneInfo.projectionViewMatrix);
-		meshShader->SetUniformFloat3("u_CameraPosition", s_SceneRenderData.currentSceneInfo.cameraPosition);
-		meshShader->SetUniformFloat3("u_DirectionalLights.Direction", Vec3(glm::radians(30.0f), glm::radians(20.0f), 0.0f));
-		meshShader->SetUniformFloat3("u_DirectionalLights.Radiance", Vec3(0.1f));
-		meshShader->SetUniformFloat("u_DirectionalLights.Multiplier", 10.0f);
 
 		for (auto &meshObj : s_SceneRenderData.meshDrawList)
 		{
-			meshShader->SetUniformFloat3("u_AlbedoColor", Vec3(0.7f, 0.2f, 0.4f));
-			meshShader->SetUniformFloat("u_Metalness", 0.9f);
-			meshShader->SetUniformFloat("u_Roughness", 0.3f);
-			Renderer::SubmitMesh(meshObj.mesh, meshObj.transform, meshShader);
+			Renderer::SubmitMesh(meshObj.mesh, meshObj.transform, s_SceneRenderData.currentSceneInfo.cameraInfo);
 		}
 
 		// Clear mesh draw list

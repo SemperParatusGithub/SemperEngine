@@ -11,6 +11,7 @@
 
 #include "SemperEngine/Graphics/Backend/API/VertexArray.h"
 #include "SemperEngine/Graphics/Backend/API/Shader.h"
+#include "SemperEngine/Graphics/Material.h"
 
 
 namespace SemperEngine
@@ -30,7 +31,7 @@ namespace SemperEngine
 	class SubMesh
 	{
 	public:
-		SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices);
+		SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices, SharedPtr<Material> material);
 		~SubMesh();
 
 	private:
@@ -39,6 +40,8 @@ namespace SemperEngine
 	private:
 		std::vector<Vertex> m_Vertices;
 		std::vector<U32> m_Indices;
+
+		SharedPtr<Material> m_Material;
 
 		SharedPtr<VertexArray> m_VertexArray;
 		SharedPtr<VertexBuffer> m_VertexBuffer;

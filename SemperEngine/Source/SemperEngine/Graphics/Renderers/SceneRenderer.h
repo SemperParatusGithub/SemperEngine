@@ -6,12 +6,16 @@
 
 namespace SemperEngine
 {
+	struct CameraInfo
+	{
+		Vec3 cameraPosition;
+		Mat4 projectionViewMatrix;
+	};
 	struct SceneInfo
 	{
 		Scene *context;
 		U32 viewportWidth, viewportHeight;
-		Vec3 cameraPosition;
-		Mat4 projectionViewMatrix;
+		CameraInfo cameraInfo;
 	};
 
 	class Mesh;
