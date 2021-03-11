@@ -164,7 +164,7 @@ namespace SemperEngine
 
 				shader->SetUniformFloat3("u_AlbedoColor", material->GetPBRMaterialParameters().albedoColor);
 				shader->SetUniformFloat("u_Metalness", material->GetPBRMaterialParameters().metalness);
-				shader->SetUniformFloat("u_Roughness", material->GetPBRMaterialParameters().rougness);
+				shader->SetUniformFloat("u_Roughness", material->GetPBRMaterialParameters().roughness);
 
 				// TODO: Take Take subMesh transform into account
 				shader->SetUniformMat4f("u_Transform", transform.GetTransform());

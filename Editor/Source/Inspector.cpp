@@ -441,6 +441,30 @@ namespace SemperEngine
 				mc.filepath = Filesystem::OpenFileDialog("");
 				mc.Load();
 			}
+
+			static bool showMaterials = false;
+			if (ImGui::Button("Open Material Settings"))
+				showMaterials = true;
+
+			if (showMaterials)
+			{
+				ImGui::Begin("Materials", &showMaterials);
+
+				U32 i = 0;
+				for (auto &subMesh : mc.mesh->m_SubMeshes)
+				{
+					std::string name = subMesh.m_Material->GetName() + std::to_string(i);
+					++i;
+					if (ImGui::CollapsingHeader(name.c_str()))
+					{
+						auto &params = subMesh.m_Material->GetPBRMaterialParameters();
+						ImGui::ColorEdit3("Albedo Color", &params.albedoColor[0]);
+						ImGui::SliderFloat("Metalness", &params.metalness, 0.0f, 1.0f);
+						ImGui::SliderFloat("Roughness", &params.roughness, 0.0f, 1.0f);
+					}
+				}
+				ImGui::End();
+			}
 		}
 	}
 }

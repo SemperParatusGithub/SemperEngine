@@ -11,7 +11,7 @@ namespace SemperEngine
 	{
 		Vec3 albedoColor = Vec3(0.0f, 0.0f, 0.0f);
 		float metalness = 0.0f;
-		float rougness = 0.0f;
+		float roughness = 0.0f;
 	};
 	struct PBRMaterialTextures
 	{

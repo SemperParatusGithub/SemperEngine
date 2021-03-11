@@ -34,6 +34,8 @@ namespace SemperEngine
 		SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices, SharedPtr<Material> material);
 		~SubMesh();
 
+		inline ConstRef<SharedPtr<Material>> GetMaterial() const { return m_Material; }
+
 	private:
 		void PreparePipeline();
 
@@ -48,6 +50,7 @@ namespace SemperEngine
 		SharedPtr<IndexBuffer> m_IndexBuffer;
 
 		friend class Renderer;
+		friend class Inspector;
 	};
 
 	class Mesh
@@ -58,6 +61,9 @@ namespace SemperEngine
 		~Mesh();
 
 		void Load(ConstRef<std::string> filepath);
+
+		auto begin() const noexcept { return m_SubMeshes.begin(); }
+		auto end() const noexcept { return m_SubMeshes.end(); }
 
 	private:
 		void ProcessNode(aiNode *node);
@@ -76,5 +82,6 @@ namespace SemperEngine
 
 		friend class Renderer;
 		friend class MeshComponent;
+		friend class Inspector;
 	};
 }
