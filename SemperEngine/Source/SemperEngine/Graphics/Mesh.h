@@ -70,6 +70,10 @@ namespace SemperEngine
 
 		const aiScene *m_Scene;
 
+		// Metrics
+		U32 m_NumVertices = 0, m_NumIndices = 0;
+		U32 m_NumSubMeshes = 0;
+
 		friend class Renderer;
 		friend class MeshComponent;
 	};

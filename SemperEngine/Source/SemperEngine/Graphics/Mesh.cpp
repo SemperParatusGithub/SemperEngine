@@ -118,7 +118,9 @@ namespace SemperEngine
 
 		ProcessNode(m_Scene->mRootNode);
 
-		SE_CORE_INFO("Sub Meshes: %d", m_SubMeshes.size());
+		SE_CORE_INFO("Sub Meshes: %d", m_NumSubMeshes);
+		SE_CORE_INFO("Vertices: %d", m_NumVertices);
+		SE_CORE_INFO("Indices: %d", m_NumIndices);
 
 		m_IsLoaded = true;
 	}
@@ -211,6 +213,10 @@ namespace SemperEngine
 		SharedPtr<Shader> shader = Renderer::GetShaderManager()->GetShader("PBR");
 		SharedPtr<Material> material = MakeShared<Material>(aiMaterial->GetName().C_Str(), shader);
 		material->GetPBRMaterialParameters() = params;
+
+		m_NumVertices += vertices.size();
+		m_NumIndices += indices.size();
+		m_NumSubMeshes += 1;
 
 		return SubMesh { vertices, indices, material };
 	}
