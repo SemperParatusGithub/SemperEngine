@@ -31,7 +31,8 @@ namespace SemperEngine
 	class SubMesh
 	{
 	public:
-		SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices, SharedPtr<Material> material);
+		SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices,
+			SharedPtr<Material> material, ConstRef<Mat4> transform);
 		~SubMesh();
 
 		inline ConstRef<SharedPtr<Material>> GetMaterial() const { return m_Material; }
@@ -42,6 +43,8 @@ namespace SemperEngine
 	private:
 		std::vector<Vertex> m_Vertices;
 		std::vector<U32> m_Indices;
+
+		Mat4 m_Transform;
 
 		SharedPtr<Material> m_Material;
 
@@ -66,8 +69,8 @@ namespace SemperEngine
 		auto end() const noexcept { return m_SubMeshes.end(); }
 
 	private:
-		void ProcessNode(aiNode *node);
-		SubMesh ProcessMesh(aiMesh *mesh);
+		void ProcessNode(aiNode *node, ConstRef<Mat4> parenTransform);
+		SubMesh ProcessMesh(aiMesh *mesh, ConstRef<Mat4> meshTransform);
 
 	private:
 		std::string m_Filepath;

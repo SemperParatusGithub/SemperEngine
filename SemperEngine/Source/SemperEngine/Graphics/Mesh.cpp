@@ -54,10 +54,23 @@ namespace SemperEngine
 		};
 	}
 
-	SubMesh::SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices, SharedPtr<Material> material) : 
+	Mat4 AssimoMat4ToMat4(ConstRef<aiMatrix4x4> matrix)
+	{
+		Mat4 result;
+		//the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
+		result[0][0] = matrix.a1; result[1][0] = matrix.a2; result[2][0] = matrix.a3; result[3][0] = matrix.a4;
+		result[0][1] = matrix.b1; result[1][1] = matrix.b2; result[2][1] = matrix.b3; result[3][1] = matrix.b4;
+		result[0][2] = matrix.c1; result[1][2] = matrix.c2; result[2][2] = matrix.c3; result[3][2] = matrix.c4;
+		result[0][3] = matrix.d1; result[1][3] = matrix.d2; result[2][3] = matrix.d3; result[3][3] = matrix.d4;
+		return result;
+	}
+
+	SubMesh::SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices,
+		SharedPtr<Material> material, ConstRef<Mat4> transform) : 
 		m_Vertices(vertices),
 		m_Indices(indices),
-		m_Material(material)
+		m_Material(material),
+		m_Transform(transform)
 	{
 		PreparePipeline();
 	}
@@ -116,7 +129,7 @@ namespace SemperEngine
 		if (m_Scene->mAnimations != nullptr)
 			SE_ASSERT_MSG(false, "Animations currently not supported");
 
-		ProcessNode(m_Scene->mRootNode);
+		ProcessNode(m_Scene->mRootNode, Mat4(1.0f));
 
 		SE_CORE_INFO("Sub Meshes: %d", m_NumSubMeshes);
 		SE_CORE_INFO("Vertices: %d", m_NumVertices);
@@ -125,19 +138,21 @@ namespace SemperEngine
 		m_IsLoaded = true;
 	}
 
-	void Mesh::ProcessNode(aiNode *node)
+	void Mesh::ProcessNode(aiNode *node, ConstRef<Mat4> parenTransform)
 	{
+		Mat4 transform = parenTransform * AssimoMat4ToMat4(node->mTransformation);
+
 		for (uint32_t i = 0; i < node->mNumMeshes; i++)
 		{
 			aiMesh *mesh = m_Scene->mMeshes[node->mMeshes[i]];
-			m_SubMeshes.push_back(ProcessMesh(mesh));
+			m_SubMeshes.push_back(ProcessMesh(mesh, transform));
 		}
 		for (uint32_t i = 0; i < node->mNumChildren; i++)
 		{
-			ProcessNode(node->mChildren[i]);
+			ProcessNode(node->mChildren[i], transform);
 		}
 	}
-	SubMesh Mesh::ProcessMesh(aiMesh *mesh)
+	SubMesh Mesh::ProcessMesh(aiMesh *mesh, ConstRef<Mat4> meshTransform)
 	{		
 		// Vertices
 		std::vector<Vertex> vertices;
@@ -218,6 +233,6 @@ namespace SemperEngine
 		m_NumIndices += indices.size();
 		m_NumSubMeshes += 1;
 
-		return SubMesh { vertices, indices, material };
+		return SubMesh { vertices, indices, material, meshTransform };
 	}
 }
