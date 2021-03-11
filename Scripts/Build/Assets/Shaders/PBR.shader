@@ -1,6 +1,12 @@
 #shader vertex
 #version 450
 
+// PBR Shader in SemperEngine (under development)
+//  Ressources:
+//  - joey de vries (learnopengl):  https://learnopengl.com/PBR
+//  - TheCherno     (Hazel Engine): https://github.com/TheCherno/Hazel
+//  - Michal Siejak (PBR):          https://github.com/Nadrins
+
 layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec3 a_Tangent;
@@ -24,7 +30,7 @@ void main()
 {
 	vs_Output.WorldPosition = vec3(u_Transform * vec4(a_Position, 1.0));
 	vs_Output.Normal = mat3(u_Transform) * a_Normal;
-	vs_Output.TexCoord = vec2(a_TexCoords.x, 1.0 - a_TexCoords.y);
+	vs_Output.TexCoord = vec2(a_TexCoords.x, a_TexCoords.y);
 	vs_Output.WorldNormals = mat3(u_Transform) * mat3(a_Tangent, a_Bitangent, a_Normal);
 	vs_Output.WorldTransform = mat3(u_Transform);
 	vs_Output.Bitangent = a_Bitangent;
@@ -68,6 +74,9 @@ uniform vec3 u_CameraPosition;
 uniform vec3 u_AlbedoColor;
 uniform float u_Metalness;
 uniform float u_Roughness;
+
+uniform bool u_EnableAlbedoTexture;
+uniform sampler2D u_AlbedoTexture;
 
 
 struct PBRParameters
@@ -148,7 +157,7 @@ vec3 ApplyIBL(vec3 F0, vec3 Lr)
 void main()
 {
 	// Standard PBR inputs
-	m_Params.Albedo = u_AlbedoColor;
+	m_Params.Albedo = u_EnableAlbedoTexture ? texture(u_AlbedoTexture, vs_Input.TexCoord).xyz : u_AlbedoColor;
 	m_Params.Metalness = u_Metalness;
 	m_Params.Roughness = max(u_Roughness, 0.05);
 
