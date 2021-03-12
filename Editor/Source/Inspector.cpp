@@ -446,23 +446,66 @@ namespace SemperEngine
 			if (ImGui::Button("Open Material Settings"))
 				showMaterials = true;
 
-			if (showMaterials)
+			if (showMaterials && !mc.mesh->m_SubMeshes.empty())
 			{
-				ImGui::Begin("Materials", &showMaterials);
+				ImGui::Begin("Materials", &showMaterials, ImGuiWindowFlags_NoDocking);
 
-				U32 i = 0;
-				for (auto &subMesh : mc.mesh->m_SubMeshes)
+				static U32 selected = 0;
+
+				ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+				for (int i = 0; i < mc.mesh->m_SubMeshes.size(); i++)
 				{
-					std::string name = subMesh.m_Material->GetName() + std::to_string(i);
-					++i;
-					if (ImGui::CollapsingHeader(name.c_str()))
+					std::string name = mc.mesh->m_SubMeshes[i].m_Material->GetName() + std::to_string(i);
+					if (ImGui::Selectable(name.c_str(), i == selected))
+						selected = i;
+				}
+				ImGui::EndChild();
+				ImGui::SameLine();
+
+				// If the Mesh changed make sure we don't go out of bounds
+				selected = std::min(selected, (U32) mc.mesh->m_SubMeshes.size() - 1u);
+
+				ImGui::BeginChild("Settings");
+				std::string name = mc.mesh->m_SubMeshes[selected].GetMaterial()->GetName();
+				ImGui::Text(name.c_str());
+				ImGui::Separator();
+				if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
+				{
+					if (ImGui::BeginTabItem("Parameters"))
 					{
-						auto &params = subMesh.m_Material->GetPBRMaterialParameters();
+						auto &params = mc.mesh->m_SubMeshes[selected].GetMaterial()->GetPBRMaterialParameters();
 						ImGui::ColorEdit3("Albedo Color", &params.albedoColor[0]);
 						ImGui::SliderFloat("Metalness", &params.metalness, 0.0f, 1.0f);
 						ImGui::SliderFloat("Roughness", &params.roughness, 0.0f, 1.0f);
+						ImGui::EndTabItem();
 					}
+					if (ImGui::BeginTabItem("Textures"))
+					{
+						auto &textures = mc.mesh->m_SubMeshes[selected].GetMaterial()->GetPBRMaterialTextures();
+
+						ImGui::Text("Albedo Texture");
+						auto &albedoTexture = textures.albedoTexture;
+						if (!albedoTexture)
+						{
+							ImGui::Image(0, ImVec2(64.0f, 64.0f));
+						}
+						else {
+							void *handle = textures.albedoTexture->GetHandle();
+							ImGui::Image(handle, ImVec2(64.0f, 64.0f));
+						}
+						if (ImGui::IsItemClicked())
+						{
+							std::string filepath = Filesystem::OpenFileDialog("");
+							if (filepath != "")
+								textures.albedoTexture = Texture2D::Create(filepath);
+						}
+						ImGui::Checkbox("Enable##Albedo", &textures.useAlbedoTexture);
+
+						ImGui::EndTabItem();
+					}
+					ImGui::EndTabBar();
 				}
+				ImGui::EndChild();
 				ImGui::End();
 			}
 		}
