@@ -162,12 +162,20 @@ namespace SemperEngine
 				shader->SetUniformFloat3("u_DirectionalLights.Radiance", Vec3(0.1f));
 				shader->SetUniformFloat("u_DirectionalLights.Multiplier", 10.0f);
 
+				const auto &PBRTextures = material->GetPBRMaterialTextures();
+
+				shader->SetUniformInt("u_EnableAlbedoTexture", PBRTextures.useAlbedoTexture);
+				if (PBRTextures.albedoTexture)
+				{
+					shader->SetUniformInt("u_AlbedoTexture", 0);
+					PBRTextures.albedoTexture->Bind(0);
+				}
+
 				shader->SetUniformFloat3("u_AlbedoColor", material->GetPBRMaterialParameters().albedoColor);
 				shader->SetUniformFloat("u_Metalness", material->GetPBRMaterialParameters().metalness);
 				shader->SetUniformFloat("u_Roughness", material->GetPBRMaterialParameters().roughness);
 
-				// TODO: Take Take subMesh transform into account
-				shader->SetUniformMat4f("u_Transform", transform.GetTransform());
+				shader->SetUniformMat4f("u_Transform", transform.GetTransform() * subMesh.m_Transform);
 
 				DrawIndexed(subMesh.m_VertexArray);
 			}
