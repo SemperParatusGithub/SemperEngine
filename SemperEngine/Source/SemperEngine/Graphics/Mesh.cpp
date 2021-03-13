@@ -54,7 +54,7 @@ namespace SemperEngine
 		};
 	}
 
-	Mat4 AssimoMat4ToMat4(ConstRef<aiMatrix4x4> matrix)
+	Mat4 AssimpMat4ToMat4(ConstRef<aiMatrix4x4> matrix)
 	{
 		Mat4 result;
 		//the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
@@ -140,7 +140,7 @@ namespace SemperEngine
 
 	void Mesh::ProcessNode(aiNode *node, ConstRef<Mat4> parenTransform)
 	{
-		Mat4 transform = parenTransform * AssimoMat4ToMat4(node->mTransformation);
+		Mat4 transform = parenTransform * AssimpMat4ToMat4(node->mTransformation);
 
 		for (uint32_t i = 0; i < node->mNumMeshes; i++)
 		{
@@ -228,6 +228,9 @@ namespace SemperEngine
 		SharedPtr<Shader> shader = Renderer::GetShaderManager()->GetShader("PBR");
 		SharedPtr<Material> material = MakeShared<Material>(aiMaterial->GetName().C_Str(), shader);
 		material->GetPBRMaterialParameters() = params;
+
+		// TODO: Proper Material Texture Loading
+		auto &textures = material->GetPBRMaterialTextures();
 
 		m_NumVertices += vertices.size();
 		m_NumIndices += indices.size();
