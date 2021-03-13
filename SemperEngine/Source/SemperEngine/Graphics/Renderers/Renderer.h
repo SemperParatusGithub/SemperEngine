@@ -28,6 +28,9 @@ namespace SemperEngine
 		static void SetRenderMode(Backend::RenderMode mode);
 		static void Clear();
 
+		static ConstRef<SharedPtr<Texture2D>> GetWhiteTexture();
+		static ConstRef<SharedPtr<Texture2D>> GetEmptyTexture();
+
 		static void OnImGui();
 
 		static ConstRef<SharedPtr<ShaderManager>> GetShaderManager();
@@ -37,5 +40,8 @@ namespace SemperEngine
 
 		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray);
 		static void DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count);
+	
+	private:
+		static void LoadRequiredRendererAssets();
 	};
 }

@@ -15,7 +15,7 @@ namespace SemperEngine
 		float texIndex;			// 0 = whiteTexture --> FlatColor
 	};
 
-	struct RenderData
+	struct Batcher2DRenderData
 	{
 		SharedPtr<VertexArray> vertexArray;
 		SharedPtr<VertexBuffer> vertexBuffer;
@@ -37,7 +37,7 @@ namespace SemperEngine
 		Batcher2DMetrics metrics;
 	};
 
-	static RenderData s_RenderData;
+	static Batcher2DRenderData s_RenderData;
 
 
 	void Batcher2D::Init()

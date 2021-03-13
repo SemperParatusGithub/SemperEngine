@@ -20,6 +20,9 @@ namespace SemperEngine
 		SharedPtr<IndexBuffer> quadIndexBuffer;
 
 		SharedPtr<ShaderManager> shaderManager;
+
+		SharedPtr<Texture2D> whiteTexture;
+		SharedPtr<Texture2D> emptyTexture; // = Checkerboard Texture
 	};
 
 	static RenderData s_RenderData;
@@ -52,6 +55,8 @@ namespace SemperEngine
 		s_RenderData.shaderManager = MakeShared<ShaderManager>();
 
 		s_RenderData.shaderManager->AddShaderFromFile("PBR", "Assets/Shaders/PBR.shader");
+
+		LoadRequiredRendererAssets();
 	}
 
 	void Renderer::Shutdown()
@@ -77,6 +82,15 @@ namespace SemperEngine
 	void Renderer::Clear()
 	{
 		s_CurrentBackend->Clear();
+	}
+
+	ConstRef<SharedPtr<Texture2D>> Renderer::GetWhiteTexture()
+	{
+		return s_RenderData.whiteTexture;
+	}
+	ConstRef<SharedPtr<Texture2D>> Renderer::GetEmptyTexture()
+	{
+		return s_RenderData.emptyTexture;
 	}
 
 	void Renderer::OnImGui()
@@ -190,5 +204,11 @@ namespace SemperEngine
 	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray, ConstRef<SharedPtr<Shader>> shader, U32 count)
 	{
 		s_CurrentBackend->DrawIndexed(vertexArray, shader, count);
+	}
+
+	void Renderer::LoadRequiredRendererAssets()
+	{
+		s_RenderData.whiteTexture = Texture2D::Create("Assets/Textures/WhiteTexture.png");
+		s_RenderData.emptyTexture = Texture2D::Create("Assets/Textures/EmptyTexture.png");
 	}
 }

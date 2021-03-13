@@ -4,6 +4,8 @@
 #include <imgui/imgui_internal.h>
 #include "SemperEngine/Graphics/ImGui/ImGuiLayer.h"
 
+#include "SemperEngine/Graphics/Renderers/Renderer.h"
+
 #include "SemperEngine/Core/EngineApplication.h"
 #include "SemperEngine/Scene/Components.h"
 
@@ -466,9 +468,6 @@ namespace SemperEngine
 				selected = std::min(selected, (U32) mc.mesh->m_SubMeshes.size() - 1u);
 
 				ImGui::BeginChild("Settings");
-				std::string name = mc.mesh->m_SubMeshes[selected].GetMaterial()->GetName();
-				ImGui::Text(name.c_str());
-				ImGui::Separator();
 				if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
 				{
 					if (ImGui::BeginTabItem("Parameters"))
@@ -482,24 +481,65 @@ namespace SemperEngine
 					if (ImGui::BeginTabItem("Textures"))
 					{
 						auto &textures = mc.mesh->m_SubMeshes[selected].GetMaterial()->GetPBRMaterialTextures();
+						auto &whiteTexture = Renderer::GetEmptyTexture();
 
-						ImGui::Text("Albedo Texture");
-						auto &albedoTexture = textures.albedoTexture;
-						if (!albedoTexture)
+						auto CheckForClickAndSetTexture = [](SharedPtr<Texture2D> &texture)
 						{
-							ImGui::Image(0, ImVec2(64.0f, 64.0f));
-						}
-						else {
-							void *handle = textures.albedoTexture->GetHandle();
-							ImGui::Image(handle, ImVec2(64.0f, 64.0f));
-						}
-						if (ImGui::IsItemClicked())
+							if (ImGui::IsItemClicked())
+							{
+								std::string filepath = Filesystem::OpenFileDialog("");
+								if (filepath != "")
+									texture = Texture2D::Create(filepath);
+							}
+						};
+
+						// Albedo
 						{
-							std::string filepath = Filesystem::OpenFileDialog("");
-							if (filepath != "")
-								textures.albedoTexture = Texture2D::Create(filepath);
+							ImGui::Text("Albedo Texture");
+							if (!textures.albedoTexture)
+								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+							else
+								ImGui::Image(textures.albedoTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+
+							CheckForClickAndSetTexture(textures.albedoTexture);
+							ImGui::Checkbox("Enable##Albedo", &textures.useAlbedoTexture);
 						}
-						ImGui::Checkbox("Enable##Albedo", &textures.useAlbedoTexture);
+
+						// Normal Map
+						{
+							ImGui::Text("Normal Map");
+							if (!textures.normalMapTexture)
+								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+							else
+								ImGui::Image(textures.normalMapTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+
+							CheckForClickAndSetTexture(textures.normalMapTexture);
+							ImGui::Checkbox("Enable##Normal", &textures.useNormalMapTexture);
+						}
+
+						// Metalness
+						{
+							ImGui::Text("Metalness Texture");
+							if (!textures.metalnessTexture)
+								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+							else
+								ImGui::Image(textures.metalnessTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+
+							CheckForClickAndSetTexture(textures.metalnessTexture);
+							ImGui::Checkbox("Enable##Metalness", &textures.useMetalnessTexture);
+						}
+
+						// Roughness
+						{
+							ImGui::Text("Roughness Texture");
+							if (!textures.roughnessTexture)
+								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+							else
+								ImGui::Image(textures.roughnessTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+
+							CheckForClickAndSetTexture(textures.roughnessTexture);
+							ImGui::Checkbox("Enable##Metalness", &textures.useRoughnessTexture);
+						}
 
 						ImGui::EndTabItem();
 					}
