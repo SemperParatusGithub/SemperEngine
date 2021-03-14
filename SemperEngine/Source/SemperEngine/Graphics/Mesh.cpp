@@ -123,11 +123,8 @@ namespace SemperEngine
 		m_Importer = MakeUnique<Assimp::Importer>();
 		m_Scene = m_Importer->ReadFile(filepath, s_MeshImportFlags);
 
-		if (!m_Scene || !m_Scene->HasMeshes())
-			SE_ASSERT_MSG(false, "Failed to load Mesh");
-
-		if (m_Scene->mAnimations != nullptr)
-			SE_ASSERT_MSG(false, "Animations currently not supported");
+		SE_ASSERT_MSG(m_Scene && m_Scene->HasMeshes(), "Failed to load Mesh");
+		SE_ASSERT_MSG(m_Scene->mAnimations == nullptr, "Animations currently not supported");
 
 		ProcessNode(m_Scene->mRootNode, Mat4(1.0f));
 
@@ -229,8 +226,21 @@ namespace SemperEngine
 		SharedPtr<Material> material = MakeShared<Material>(aiMaterial->GetName().C_Str(), shader);
 		material->GetPBRMaterialParameters() = params;
 
-		// TODO: Proper Material Texture Loading
+		// TODO: Normal, metalness and roughness maps
 		auto &textures = material->GetPBRMaterialTextures();
+
+		aiString aiTexturePath;
+		if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiTexturePath) == AI_SUCCESS)
+		{
+			std::filesystem::path path = m_Filepath;
+			auto parentPath = path.parent_path();
+			parentPath /= std::string(aiTexturePath.data);
+			std::string texturePath = parentPath.string();
+			SE_CORE_INFO("Albedo Texture filepath = %s", texturePath.c_str());
+			auto texture = Texture2D::Create(texturePath);
+			textures.albedoTexture = texture;
+			textures.useAlbedoTexture = true;
+		}
 
 		m_NumVertices += vertices.size();
 		m_NumIndices += indices.size();
