@@ -38,8 +38,6 @@ namespace SemperEngine
 	{
 		if (width != m_Info.width || height != m_Info.height)
 		{
-			SE_CORE_INFO("Framebuffer Resized: %d, %d", width, height);
-
 			m_Info.width = width;
 			m_Info.height = height;
 

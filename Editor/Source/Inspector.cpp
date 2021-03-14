@@ -210,11 +210,11 @@ namespace SemperEngine
 			Vec3 rotationDeg = glm::degrees(rotation);
 
 			ImGui::PushID((int) (U64) UUID);
-			if (DrawSliderFloat3(" Translation", 100.0f, translation, 0.0f))
+			if (DrawSliderFloat3(" Translation", 110.0f, translation, 0.0f))
 				transform.SetTranslation(translation);
-			if (DrawSliderFloat3(" Rotation", 100.0f, rotationDeg, 0.0f))
+			if (DrawSliderFloat3(" Rotation", 110.0f, rotationDeg, 0.0f))
 				transform.SetRotation(glm::radians(rotationDeg));
-			if (DrawSliderFloat3(" Scale", 100.0f, scale, 1.0f))
+			if (DrawSliderFloat3(" Scale", 110.0f, scale, 1.0f))
 				transform.SetScale(scale);
 			ImGui::PopID();
 		}

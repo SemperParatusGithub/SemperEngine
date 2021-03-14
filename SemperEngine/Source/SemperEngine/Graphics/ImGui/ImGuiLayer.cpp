@@ -49,8 +49,8 @@ namespace SemperEngine
 		ImGui_ImplOpenGL3_Init("#version 450");
 
 		// Load Fonts
-		io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Regular.ttf", 20);
-		io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Bold.ttf", 20);
+		io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Regular.ttf", 22);
+		io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Bold.ttf", 22);
 
 		io.FontDefault = GetFont(OPEN_SANS_REGULAR);
 
