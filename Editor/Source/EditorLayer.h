@@ -25,6 +25,8 @@ private:
 	void OpenScene();
 	void SaveSceneAs();
 
+	void UpdateWindowTitle();
+
 private:
 	bool m_SceneViewPortFocused, m_SceneViewPortHovered;
 	Vec2f m_ViewportPosition;

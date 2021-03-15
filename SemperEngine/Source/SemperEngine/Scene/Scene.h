@@ -38,6 +38,9 @@ namespace SemperEngine
 
 		inline bool IsPlaying() const { return m_SceneState == SceneState::Playing; }
 
+		std::string GetName() const { return m_Name; }
+		std::string GetVersion() const { return m_Version; }
+
 		void Serialize(ConstRef<std::string> filepath);
 		void Deserialize(ConstRef<std::string> filepath);
 
@@ -57,7 +60,7 @@ namespace SemperEngine
 	private:
 		SceneState m_SceneState = SceneState::Editing;
 
-		std::string m_Name = "Unnamed";
+		std::string m_Name = "Unnamed Scene";
 		std::string m_Version = "1.1";
 
 		entt::registry m_Registry;

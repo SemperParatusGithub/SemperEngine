@@ -47,6 +47,8 @@ void EditorLayer::OnUpdate(float deltaTime)
 	if (m_SceneViewPortHovered && !m_Scene->IsPlaying())
 		m_EditorCamera.OnUpdate(deltaTime);
 
+	UpdateWindowTitle();
+
 	bool allowEvents = m_SceneViewPortHovered || m_SceneViewPortFocused;
 	EngineApplication::Instance().BlockImGuiEvents(!allowEvents);
 
@@ -236,4 +238,20 @@ void EditorLayer::SaveSceneAs()
 	{
 		m_Scene->Serialize(filepath);
 	}
+}
+
+void EditorLayer::UpdateWindowTitle()
+{
+	std::string title = "Semper Editor - ";
+
+	title += m_Scene->GetName() + " " + m_Scene->GetVersion();
+	title += " - ";
+
+#if defined(SE_DEBUG)
+	title += "Debug-x64";
+#elif defined(SE_RELEASED)
+	title += "Release-x64";
+#endif
+
+	EngineApplication::Instance().GetWindow().SetTitle(title);
 }
