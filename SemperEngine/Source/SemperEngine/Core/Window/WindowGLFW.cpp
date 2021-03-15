@@ -78,6 +78,11 @@ namespace SemperEngine
 		return m_Window;
 	}
 
+	void WindowGLFW::SetTitle(ConstRef<std::string> title)
+	{
+		glfwSetWindowTitle(m_Window, title.c_str());
+	}
+
 	void WindowGLFW::SetMinimumSize(U32 width, U32 height)
 	{
 		glfwSetWindowSizeLimits(m_Window, width, height, GLFW_DONT_CARE, GLFW_DONT_CARE);
