@@ -80,7 +80,6 @@ namespace SemperEngine
 				// Don't update Scripts while pausing!
 				// Get primary camera entity and override scene camera with it
 				// Render
-				SE_CORE_INFO("Pausing");
 			} break;
 
 			case SceneState::Playing:
@@ -88,7 +87,6 @@ namespace SemperEngine
 				// Update NativeScriptComponents
 				// Get primary camera entity and override scene camera with it
 				// Render
-				SE_CORE_INFO("Playing");
 			} break;
 		}
 	}
