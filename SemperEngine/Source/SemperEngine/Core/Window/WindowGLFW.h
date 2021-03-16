@@ -23,6 +23,7 @@ namespace SemperEngine
 
         virtual void *GetNativeWindow() override;
 
+        virtual void Maximize() override;
         virtual void SetTitle(ConstRef<std::string> title) override;
         virtual void SetMinimumSize(U32 width, U32 height) override;
         virtual void SetInterval(I32 interval) override;

@@ -18,9 +18,6 @@ EditorLayer::EditorLayer() :
 	m_ViewportSize({ 1280, 720 }),
 	m_SceneViewPortFocused(false), m_SceneViewPortHovered(false)
 {
-	FramebufferInfo info = { 1280, 720 };
-	m_Framebuffer = Framebuffer::Create(info);
-
 	Log::EnableEditorLogConsole();
 	Log::EnableAutoFlush();
 
@@ -36,6 +33,7 @@ EditorLayer::EditorLayer() :
 void EditorLayer::OnAttach()
 {
 	EngineApplication::Instance().GetWindow().SetInterval(0);
+	EngineApplication::Instance().GetWindow().Maximize();
 }
 
 void EditorLayer::OnDetach()
@@ -51,12 +49,6 @@ void EditorLayer::OnUpdate(float deltaTime)
 
 	bool allowEvents = m_SceneViewPortHovered || m_SceneViewPortFocused;
 	EngineApplication::Instance().BlockImGuiEvents(!allowEvents);
-
-	if (m_Framebuffer->GetSize() != static_cast<Vec2i>(m_ViewportSize)) 
-	{
-		m_Framebuffer->OnResize(static_cast<U32>(m_ViewportSize.x), static_cast<U32>(m_ViewportSize.y));
-		m_EditorCamera.SetBounds(m_ViewportSize.x, m_ViewportSize.y);
-	}
 
 	// Gizmos
 	if (Input::IsKeyPressed(Key::LeftControl) && !ImGuizmo::IsUsing())
@@ -170,8 +162,6 @@ void EditorLayer::OnImGuiRender()
 
 	m_SceneViewPortFocused = ImGui::IsWindowFocused();
 	m_SceneViewPortHovered = ImGui::IsWindowHovered();
-
-	uint64_t textureID = reinterpret_cast<U64>(m_Framebuffer->GetColorAttachmentHandle());
 
 	ImGui::Image(SceneRenderer::GetFinalFramebufferColorAttachmentHandle(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 

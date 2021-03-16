@@ -33,8 +33,6 @@ private:
 	Vec2f m_ViewportSize;
 
 private:
-	SharedPtr<Framebuffer> m_Framebuffer;
-
 	SharedPtr<Scene> m_Scene;
 	SharedPtr<Hierarchy> m_Hierarchy;
 	SharedPtr<Inspector> m_Inspector;
@@ -44,12 +42,6 @@ private:
 	SharedPtr<Texture2D> m_ExitButtonTexture;
 
 	EditorCamera m_EditorCamera;
-
-	Entity m_CameraEntity;
-	Entity m_SquareEntity;
-	Entity m_DirtEntity;
-
-	SharedPtr<Shader> m_RasterShader;
 
 	int m_ImGuizmoOperation = -1;
 };
