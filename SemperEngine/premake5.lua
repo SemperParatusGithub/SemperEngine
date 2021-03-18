@@ -69,8 +69,6 @@ project "SemperEngine"
 	}
 	postbuildcommands 
 	{		
-		'{COPY} "../../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.dll" "%{cfg.targetdir}"',
-		'{COPY} "../../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.lib" "%{cfg.targetdir}"',
 		'{COPY} "../../Editor/Assets" "%{cfg.targetdir}/Assets"'
 	}
 
@@ -81,13 +79,28 @@ project "SemperEngine"
 		defines "SE_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		postbuildcommands
+		{
+			'{COPY} "../../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.dll" "%{cfg.targetdir}"',
+			'{COPY} "../../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.lib" "%{cfg.targetdir}"'
+		}
 
 	filter "configurations:Release"
 		defines "SE_RELEASE"
 		runtime "Release"
 		optimize "on"
+		postbuildcommands
+		{
+			'{COPY} "../../SemperEngine/External/assimp/bin/Release/assimp-vc141-mt.dll" "%{cfg.targetdir}"',
+			'{COPY} "../../SemperEngine/External/assimp/bin/Release/assimp-vc141-mt.lib" "%{cfg.targetdir}"'
+		}
 
 	filter "configurations:Production"
 		defines "SE_PRODUCTION"
 		runtime "Release"
 		optimize "on"
+		postbuildcommands
+		{
+			'{COPY} "../../SemperEngine/External/assimp/bin/Release/assimp-vc141-mt.dll" "%{cfg.targetdir}"',
+			'{COPY} "../../SemperEngine/External/assimp/bin/Release/assimp-vc141-mt.lib" "%{cfg.targetdir}"'
+		}

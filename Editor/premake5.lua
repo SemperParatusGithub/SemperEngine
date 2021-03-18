@@ -28,8 +28,7 @@ project "Editor"
 
 	links
 	{ 
-		"SemperEngine",
-		"../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.lib"
+		"SemperEngine"
 	}
 
 	filter "system:windows"
@@ -39,13 +38,16 @@ project "Editor"
 		defines "SE_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		links { "../SemperEngine/External/assimp/bin/Debug/assimp-vc141-mtd.lib" }
 
 	filter "configurations:Release"
 		defines "SE_RELEASE"
 		runtime "Release"
 		optimize "on"
+		links { "../SemperEngine/External/assimp/bin/Release/assimp-vc141-mt.lib" }
 
 	filter "configurations:Production"
 		defines "SE_PRODUCTION"
 		runtime "Release"
 		optimize "on"
+		links { "../SemperEngine/External/assimp/bin/Release/assimp-vc141-mt.lib" }
