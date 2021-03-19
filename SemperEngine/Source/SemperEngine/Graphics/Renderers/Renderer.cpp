@@ -98,13 +98,10 @@ namespace SemperEngine
 		ImGui::Begin("Renderer");
 
 		const auto &caps = s_CurrentBackend->GetCapabilities();
-		static bool drawLines = false;
 		if (ImGui::CollapsingHeader("General"))
 		{
 			ImGui::Text("Framerate: %.2f FPS", EngineApplication::Instance().GetFramerate());
 			ImGui::Text("Frametime: %.2f ms", EngineApplication::Instance().GetFrametime());
-			if (ImGui::Checkbox("Render Lines", &drawLines))
-				SetRenderMode(drawLines ? Backend::RenderMode::Lines : Backend::RenderMode::Default);
 			ImGui::Separator();
 			ImGui::Text("Render API: %s", caps.renderAPI.c_str());
 			ImGui::Text("Vendor: %s", caps.vendor.c_str());
@@ -191,7 +188,12 @@ namespace SemperEngine
 
 				shader->SetUniformMat4f("u_Transform", transform.GetTransform() * subMesh.m_Transform);
 
+				if (material->HasFlag(MaterialFlag::NoFill))
+					SetRenderMode(Backend::RenderMode::Lines);
+
 				DrawIndexed(subMesh.m_VertexArray);
+
+				SetRenderMode(Backend::RenderMode::Default);
 			}
 		}
 	}

@@ -470,6 +470,17 @@ namespace SemperEngine
 				ImGui::BeginChild("Settings");
 				if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
 				{
+					if (ImGui::BeginTabItem("General"))
+					{
+						auto &material = mc.mesh->m_SubMeshes[selected].GetMaterial();
+						bool noFill = material->HasFlag(MaterialFlag::NoFill);
+						if (ImGui::Checkbox("No Fill", &noFill))
+							if (noFill)
+								material->AddFlag(MaterialFlag::NoFill);
+							else
+								material->RemoveFlag(MaterialFlag::NoFill);
+						ImGui::EndTabItem();
+					}
 					if (ImGui::BeginTabItem("Parameters"))
 					{
 						auto &params = mc.mesh->m_SubMeshes[selected].GetMaterial()->GetPBRMaterialParameters();
