@@ -30,6 +30,19 @@ namespace SemperEngine
 		return m_Shader;
 	}
 
+	void Material::AddFlag(MaterialFlag flag)
+	{
+		m_Flags |= (U32) flag;
+	}
+	void Material::RemoveFlag(MaterialFlag flag)
+	{
+		m_Flags &= ~(U32) flag;
+	}
+	bool Material::HasFlag(MaterialFlag flag)
+	{
+		return (U32) flag & m_Flags;
+	}
+
 	ConstRef<PBRMaterialParameters> Material::GetPBRMaterialParameters() const
 	{
 		return m_Parameters;

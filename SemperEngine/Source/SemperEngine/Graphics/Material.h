@@ -7,6 +7,12 @@
 
 namespace SemperEngine
 {
+	enum class MaterialFlag
+	{
+		None   = 1 << 0,
+		NoFill = 1 << 1
+	};
+
 	struct PBRMaterialParameters
 	{
 		Vec3 albedoColor = Vec3(0.0f, 0.0f, 0.0f);
@@ -37,6 +43,10 @@ namespace SemperEngine
 		ConstRef<std::string> GetName() const;
 		ConstRef<SharedPtr<Shader>> GetShader() const;
 
+		void AddFlag(MaterialFlag flag);
+		void RemoveFlag(MaterialFlag flag);
+		bool HasFlag(MaterialFlag flag);
+
 		ConstRef<PBRMaterialParameters> GetPBRMaterialParameters() const;
 		PBRMaterialParameters &GetPBRMaterialParameters();
 
@@ -45,6 +55,8 @@ namespace SemperEngine
 
 	private:
 		std::string m_MaterialName;
+		U32 m_Flags;
+
 		SharedPtr<Shader> m_Shader;
 
 		PBRMaterialParameters m_Parameters;
