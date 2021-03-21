@@ -25,7 +25,6 @@ namespace SemperEngine
 		m_Window->SetEventCallbackFunction(SE_BIND_EVENT_FN(EngineApplication::OnEvent));
 
 		Renderer::Init();
-		SceneRenderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);

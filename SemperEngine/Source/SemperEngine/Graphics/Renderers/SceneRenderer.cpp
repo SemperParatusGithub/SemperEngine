@@ -55,9 +55,6 @@ namespace SemperEngine
 	}
 	void SceneRenderer::EndScene()
 	{
-		s_SceneRenderData.mainFramebuffer->OnResize(s_SceneRenderData.currentSceneInfo.viewportWidth,
-			s_SceneRenderData.currentSceneInfo.viewportHeight);
-
 		// Render
 		s_SceneRenderData.mainFramebuffer->Bind();
 		Renderer::Clear();
@@ -85,6 +82,11 @@ namespace SemperEngine
 		s_SceneRenderData.meshDrawList.clear();
 
 		s_SceneRenderData.mainFramebuffer->UnBind();
+	}
+
+	void SceneRenderer::OnResize(U32 viewportWidth, U32 viewportHeight)
+	{
+		s_SceneRenderData.mainFramebuffer->OnResize(viewportWidth, viewportHeight);
 	}
 
 	void SceneRenderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform)

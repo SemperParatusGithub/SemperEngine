@@ -30,7 +30,9 @@ namespace SemperEngine
 
 		entt::registry &GetRegistry();
 
-		void OnUpdate(float deltaTime, ConstRef<EditorCamera> camera, ConstRef<Vec2> viewportSize);
+		void OnUpdate(float deltaTime, ConstRef<EditorCamera> camera);
+		// Doesn't resize the editor camera
+		void OnResize(U32 viewportWidth, U32 viewportHeight);
 
 		void Play();
 		void Pause();

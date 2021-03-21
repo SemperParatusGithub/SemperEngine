@@ -16,7 +16,8 @@
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
 	m_ViewportSize({ 1280, 720 }),
-	m_SceneViewPortFocused(false), m_SceneViewPortHovered(false)
+	m_SceneViewPortFocused(false), m_SceneViewPortHovered(false),
+	m_ViewportSizeChanged(false)
 {
 	Log::EnableEditorLogConsole();
 	Log::EnableAutoFlush();
@@ -50,6 +51,13 @@ void EditorLayer::OnUpdate(float deltaTime)
 	bool allowEvents = m_SceneViewPortHovered || m_SceneViewPortFocused;
 	EngineApplication::Instance().BlockImGuiEvents(!allowEvents);
 
+	if (m_ViewportSizeChanged)
+	{
+		m_EditorCamera.OnResize(static_cast<U32>(m_ViewportSize.x), static_cast<U32>(m_ViewportSize.y));
+		m_Scene->OnResize(static_cast<U32>(m_ViewportSize.x), static_cast<U32>(m_ViewportSize.y));
+		m_ViewportSizeChanged = false;
+	}
+
 	// Gizmos
 	if (Input::IsKeyPressed(Key::LeftControl) && !ImGuizmo::IsUsing())
 	{
@@ -64,7 +72,7 @@ void EditorLayer::OnUpdate(float deltaTime)
 	}
 
 	// Update
-	m_Scene->OnUpdate(deltaTime, m_EditorCamera, m_ViewportSize);
+	m_Scene->OnUpdate(deltaTime, m_EditorCamera);
 }
 
 void EditorLayer::OnImGuiRender()
@@ -155,10 +163,14 @@ void EditorLayer::OnImGuiRender()
 		ImGui::GetWindowPos().x + ImGui::GetCursorPos().x,
 		ImGui::GetWindowPos().y + ImGui::GetCursorPos().y 
 	};
-	m_ViewportSize = {
+	Vec2f newViewportSize = {
 		ImGui::GetWindowSize().x - ImGui::GetCursorPos().x,
 		ImGui::GetWindowSize().y - ImGui::GetCursorPos().y
 	};
+	if (newViewportSize != m_ViewportSize) {
+		m_ViewportSize = newViewportSize;
+		m_ViewportSizeChanged = true;
+	}
 
 	m_SceneViewPortFocused = ImGui::IsWindowFocused();
 	m_SceneViewPortHovered = ImGui::IsWindowHovered();

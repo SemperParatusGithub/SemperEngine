@@ -84,10 +84,10 @@ namespace SemperEngine
 		ImGui::End();
 	}
 
-	void EditorCamera::SetBounds(float width, float height)
+	void EditorCamera::OnResize(U32 width, U32 height)
 	{ 
-		m_ViewportWidth = width; 
-		m_ViewportHeight = height;
+		m_ViewportWidth = static_cast<float>(width); 
+		m_ViewportHeight = static_cast<float>(height);
 
 		RecalculateCameraMatrices(); 
 	}

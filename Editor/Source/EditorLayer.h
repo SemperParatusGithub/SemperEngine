@@ -29,6 +29,7 @@ private:
 
 private:
 	bool m_SceneViewPortFocused, m_SceneViewPortHovered;
+	bool m_ViewportSizeChanged;
 	Vec2f m_ViewportPosition;
 	Vec2f m_ViewportSize;
 

@@ -1,21 +1,19 @@
 #pragma once
 
 #include "SemperEngine/Core/Types.h"
-
 #include "SemperEngine/Graphics/Backend/API/Backend.h"
-#include "SemperEngine/Graphics/Backend/API/VertexArray.h"
-#include "SemperEngine/Graphics/Backend/API/Shader.h"
-
-#include <glm/glm.hpp>
-
-#include "SemperEngine/Graphics/Mesh.h"
-#include "SemperEngine/Graphics/Transform.h"
 
 
 namespace SemperEngine
 {
-	class EditorCamera;
 	struct CameraInfo;
+	class VertexArray;
+	class Shader;
+	class ShaderManager;
+	class Texture2D;
+	class Transform;
+	class Mesh;
+	class EditorCamera;
 
 	class Renderer
 	{

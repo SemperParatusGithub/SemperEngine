@@ -17,7 +17,7 @@ namespace SemperEngine
 
 		void OnImGui();
 
-		void SetBounds(float width, float height);
+		void OnResize(U32 width, U32 height);
 
 		ConstRef<Mat4> GetViewMatrix() const; 
 		ConstRef<Mat4> GetViewProjection() const;

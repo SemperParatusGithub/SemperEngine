@@ -14,7 +14,6 @@ namespace SemperEngine
 	struct SceneInfo
 	{
 		Scene *context;
-		U32 viewportWidth, viewportHeight;
 		CameraInfo cameraInfo;
 	};
 
@@ -31,6 +30,8 @@ namespace SemperEngine
 
 		static void BeginScene(ConstRef<SceneInfo> sceneInfo);
 		static void EndScene();
+
+		static void OnResize(U32 viewportWidth, U32 viewportHeight);
 
 		static void SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform);
 

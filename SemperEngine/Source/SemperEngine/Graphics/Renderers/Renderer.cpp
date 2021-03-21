@@ -2,9 +2,16 @@
 #include "Renderer.h"
 
 #include "Batcher2D.h"
+#include "SceneRenderer.h"
 
 #include "SemperEngine/Core/EngineApplication.h"
-#include "SceneRenderer.h"
+
+#include "SemperEngine/Graphics/Backend/API/Backend.h"
+#include "SemperEngine/Graphics/Backend/API/VertexArray.h"
+#include "SemperEngine/Graphics/Backend/API/Shader.h"
+
+#include "SemperEngine/Graphics/Mesh.h"
+#include "SemperEngine/Graphics/Transform.h"
 
 #include <glad/glad.h>
 
@@ -33,6 +40,7 @@ namespace SemperEngine
 		s_CurrentBackend->Init();
 
 		Batcher2D::Init();
+		SceneRenderer::Init();
 
 		float quadVertices[] = {
 		  // Position				Tex Coords
@@ -113,15 +121,15 @@ namespace SemperEngine
 			ImGui::Text("Max Anisotropy: %.2f", caps.maxAnisotropy);
 		}
 
-		const auto &metrics = Batcher2D::GetMetrics();
-		if (ImGui::CollapsingHeader("Batcher2D Metrics"))
-		{
-			ImGui::Text("Batches: %d", metrics.batches);
-			ImGui::Text("Vertices: %d", metrics.vertices);
-			ImGui::Text("Indices: %d", metrics.indices);
-			ImGui::Text("Triangles: %d", metrics.triangles);
-		}
-		Batcher2D::ResetMetrics();
+		// const auto &metrics = Batcher2D::GetMetrics();
+		// if (ImGui::CollapsingHeader("Batcher2D Metrics"))
+		// {
+		// 	ImGui::Text("Batches: %d", metrics.batches);
+		// 	ImGui::Text("Vertices: %d", metrics.vertices);
+		// 	ImGui::Text("Indices: %d", metrics.indices);
+		// 	ImGui::Text("Triangles: %d", metrics.triangles);
+		// }
+		// Batcher2D::ResetMetrics();
 
 		auto &io = ImGui::GetIO();
 		if (ImGui::CollapsingHeader("ImGui Metrics"))
@@ -129,17 +137,10 @@ namespace SemperEngine
 			ImGui::Text("Vertices: %d", io.MetricsRenderVertices);
 			ImGui::Text("Indices: %d", io.MetricsRenderIndices);
 			ImGui::Text("%d active windows (%d visible)", io.MetricsActiveWindows, io.MetricsRenderWindows);
-			ImGui::Text("Triangles: %d", metrics.triangles);
+			ImGui::Text("Active Allocations: %d", io.MetricsActiveAllocations);
 		}
 
-		if (ImGui::CollapsingHeader("Texture Viewer"))
-		{
-			static U32 index = 0;
-			ImGui::Image(reinterpret_cast<void *>(index), ImVec2(128.0f, 128.0f), ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
-			ImGui::InputInt("Index", reinterpret_cast<int *>(&index), 1, 10);
-		} 
-
-		ImGui::End();
+		ImGui::End();	// Renderer
 	}
 
 	ConstRef<SharedPtr<ShaderManager>> Renderer::GetShaderManager()

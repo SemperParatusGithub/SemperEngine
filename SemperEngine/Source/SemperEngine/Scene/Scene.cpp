@@ -48,7 +48,7 @@ namespace SemperEngine
 		return m_Registry;
 	}
 
-	void Scene::OnUpdate(float deltaTime, ConstRef<EditorCamera> camera, ConstRef<Vec2> viewportSize)
+	void Scene::OnUpdate(float deltaTime, ConstRef<EditorCamera> camera)
 	{
 		Mat4 projectionViewMatrix = camera.GetProjectionView();
 
@@ -58,8 +58,6 @@ namespace SemperEngine
 			{
 				SceneInfo sceneInfo;
 				sceneInfo.context = this;
-				sceneInfo.viewportWidth = static_cast<U32>(viewportSize.x);
-				sceneInfo.viewportHeight = static_cast<U32>(viewportSize.y);
 				sceneInfo.cameraInfo.projectionViewMatrix = camera.GetProjectionView();
 				sceneInfo.cameraInfo.cameraPosition = camera.GetPosition();
 
@@ -89,6 +87,11 @@ namespace SemperEngine
 				// Render
 			} break;
 		}
+	}
+
+	void Scene::OnResize(U32 viewportWidth, U32 viewportHeight)
+	{
+		SceneRenderer::OnResize(viewportWidth, viewportHeight);
 	}
 
 	void Scene::Play()
