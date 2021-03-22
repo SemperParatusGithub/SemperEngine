@@ -65,35 +65,6 @@ namespace SemperEngine
 		return result;
 	}
 
-	SubMesh::SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices,
-		SharedPtr<Material> material, ConstRef<Mat4> transform) : 
-		m_Vertices(vertices),
-		m_Indices(indices),
-		m_Material(material),
-		m_Transform(transform)
-	{
-		PreparePipeline();
-	}
-	SubMesh::~SubMesh()
-	{
-	}
-	void SubMesh::PreparePipeline()
-	{
-		// Create VertexBuffer and set all Attributes
-		m_VertexBuffer = VertexBuffer::Create(m_Vertices.data(), m_Vertices.size() * sizeof(Vertex), BufferUsage::Static);
-		m_VertexBuffer->AddAttribute({ "a_Position", VertexFormat::Float3, false });
-		m_VertexBuffer->AddAttribute({ "a_Normal", VertexFormat::Float3, false });
-		m_VertexBuffer->AddAttribute({ "a_Tangent", VertexFormat::Float3, false });
-		m_VertexBuffer->AddAttribute({ "a_Bitangent", VertexFormat::Float3, false });
-		m_VertexBuffer->AddAttribute({ "a_TexCoords", VertexFormat::Float2, false });
-
-		// Create Index Buffer
-		m_IndexBuffer = IndexBuffer::Create(m_Indices.data(), IndexFormat::Uint32, m_Indices.size() * sizeof(U32), BufferUsage::Static);
-
-		// Create Vertex Array
-		m_VertexArray = VertexArray::Create(m_VertexBuffer.get(), m_IndexBuffer.get());
-	}
-
 	Mesh::Mesh() : 
 		m_Filepath(""),
 		m_IsLoaded(false),
@@ -126,18 +97,24 @@ namespace SemperEngine
 		SE_ASSERT_MSG(m_Scene && m_Scene->HasMeshes(), "Failed to load Mesh");
 		SE_ASSERT_MSG(m_Scene->mAnimations == nullptr, "Animations currently not supported");
 
+		m_Material = MakeShared<Material>("Base Material");
+
+		// Process mesh recursively
 		ProcessNode(m_Scene->mRootNode, Mat4(1.0f));
 
-		SE_CORE_INFO("Sub Meshes: %d", m_NumSubMeshes);
-		SE_CORE_INFO("Vertices: %d", m_NumVertices);
-		SE_CORE_INFO("Indices: %d", m_NumIndices);
+		SE_CORE_INFO("Total sub meshes: %d", m_SubMeshes.size());
+		SE_CORE_INFO("Total mesh vertices: %d", m_Vertices.size());
+		SE_CORE_INFO("Total mesh indices: %d", m_Indices.size());
+
+		SE_CORE_INFO("Preparing Pipeline");
+		PreparePipeline();
 
 		m_IsLoaded = true;
 	}
 
-	void Mesh::ProcessNode(aiNode *node, ConstRef<Mat4> parenTransform)
+	void Mesh::ProcessNode(aiNode *node, ConstRef<Mat4> parentTransform)
 	{
-		Mat4 transform = parenTransform * AssimpMat4ToMat4(node->mTransformation);
+		Mat4 transform = parentTransform * AssimpMat4ToMat4(node->mTransformation);
 
 		for (uint32_t i = 0; i < node->mNumMeshes; i++)
 		{
@@ -151,9 +128,12 @@ namespace SemperEngine
 	}
 	SubMesh Mesh::ProcessMesh(aiMesh *mesh, ConstRef<Mat4> meshTransform)
 	{		
-		// Vertices
-		std::vector<Vertex> vertices;
+		SubMesh subMesh;
+		subMesh.transform = meshTransform;
+		subMesh.vertexOffset = m_Vertices.size();
+		subMesh.indexOffset = m_Indices.size();
 
+		// Vertices
 		for (uint32_t i = 0; i < mesh->mNumVertices; i++)
 		{
 			Vertex currentVertex;
@@ -183,69 +163,105 @@ namespace SemperEngine
 				currentVertex.texCoords = textureCoords;
 			}
 
-			vertices.push_back(currentVertex);
+			m_Vertices.push_back(currentVertex);
 		}
 
 		// Indices
-		std::vector<U32> indices;
-
 		for (uint32_t i = 0; i < mesh->mNumFaces; i++)
 		{
 			aiFace face = mesh->mFaces[i];
 
 			for (uint32_t j = 0; j < face.mNumIndices; j++)
-				indices.push_back(face.mIndices[j]);
+				m_Indices.push_back(face.mIndices[j]);
 		}
+
+		// handle offsets
+		subMesh.vertexCount = m_Vertices.size() - subMesh.vertexOffset;
+		subMesh.indexCount = m_Indices.size() - subMesh.indexOffset;
+
 
 		// Materials
 		aiMaterial *aiMaterial= m_Scene->mMaterials[mesh->mMaterialIndex];
 
-		aiColor3D aiColor;
-		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+		U32 materialIndex = m_Material->GetSubMaterials().size();
+		std::string materialName = aiMaterial->GetName().C_Str();
+		bool materialFound = false;
 
-		float shininess, metalness, roughness;
-		if (aiMaterial->Get(AI_MATKEY_SHININESS, shininess) != aiReturn_SUCCESS)
-			shininess = 80.0f; // Default value
-
-		if (aiMaterial->Get(AI_MATKEY_REFLECTIVITY, metalness) != aiReturn_SUCCESS)
-			metalness = 0.0f;
-
-		roughness = 1.0f - glm::sqrt(shininess / 100.0f);
-
-		PBRMaterialParameters params = {
-			Vec3(aiColor.r, aiColor.g, aiColor.b),	// Albedo
-			metalness,								// Metalness	
-			roughness								// Roughness
-		};
-
-		SE_CORE_INFO("Mesh Debug Info: %s: AlbedoColor: %.2f, %.2f, %.2f", aiMaterial->GetName().C_Str(), aiColor.r, aiColor.g, aiColor.b);
-		SE_CORE_INFO("Mesh Debug Info: %s: Metalness: %.2f", aiMaterial->GetName().C_Str(), metalness);
-		SE_CORE_INFO("Mesh Debug Info: %s: Rouggness: %.2f", aiMaterial->GetName().C_Str(), roughness);
-
-		SharedPtr<Shader> shader = Renderer::GetShaderManager()->GetShader("PBR");
-		SharedPtr<Material> material = MakeShared<Material>(aiMaterial->GetName().C_Str(), shader);
-		material->GetPBRMaterialParameters() = params;
-
-		// TODO: Normal, metalness and roughness maps
-		auto &textures = material->GetPBRMaterialTextures();
-
-		aiString aiTexturePath;
-		if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiTexturePath) == AI_SUCCESS)
+		for (int i = 0; i < m_Material->GetSubMaterials().size(); i++)
 		{
-			std::filesystem::path path = m_Filepath;
-			auto parentPath = path.parent_path();
-			parentPath /= std::string(aiTexturePath.data);
-			std::string texturePath = parentPath.string();
-			SE_CORE_INFO("Albedo Texture filepath = %s", texturePath.c_str());
-			auto texture = Texture2D::Create(texturePath);
-			textures.albedoTexture = texture;
-			textures.useAlbedoTexture = true;
+			if (m_Material->GetSubMaterials()[i].GetName() == materialName)
+			{
+				materialIndex = i;
+				materialFound = true;
+			}
 		}
 
-		m_NumVertices += vertices.size();
-		m_NumIndices += indices.size();
-		m_NumSubMeshes += 1;
+		if (!materialFound)
+		{
+			SubMaterial subMaterial(materialName);
 
-		return SubMesh { vertices, indices, material, meshTransform };
+			aiColor3D aiColor;
+			aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+
+			float shininess, metalness, roughness;
+			if (aiMaterial->Get(AI_MATKEY_SHININESS, shininess) != aiReturn_SUCCESS)
+				shininess = 80.0f; // Default value
+
+			if (aiMaterial->Get(AI_MATKEY_REFLECTIVITY, metalness) != aiReturn_SUCCESS)
+				metalness = 0.0f;
+
+			roughness = 1.0f - glm::sqrt(shininess / 100.0f);
+
+			PBRMaterialParameters params = {
+				Vec3(aiColor.r, aiColor.g, aiColor.b),	// Albedo
+				metalness,								// Metalness	
+				roughness								// Roughness
+			};
+
+			SE_CORE_INFO("Mesh Debug Info: %s: AlbedoColor: %.2f, %.2f, %.2f", aiMaterial->GetName().C_Str(), aiColor.r, aiColor.g, aiColor.b);
+			SE_CORE_INFO("Mesh Debug Info: %s: Metalness: %.2f", aiMaterial->GetName().C_Str(), metalness);
+			SE_CORE_INFO("Mesh Debug Info: %s: Rouggness: %.2f", aiMaterial->GetName().C_Str(), roughness);
+
+			subMaterial.GetPBRMaterialParameters() = params;
+
+			// TODO: Normal, metalness and roughness maps
+			auto &textures = subMaterial.GetPBRMaterialTextures();
+
+			aiString aiTexturePath;
+			if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiTexturePath) == AI_SUCCESS)
+			{
+				std::filesystem::path path = m_Filepath;
+				auto parentPath = path.parent_path();
+				parentPath /= std::string(aiTexturePath.data);
+				std::string texturePath = parentPath.string();
+				SE_CORE_INFO("Albedo Texture filepath = %s", texturePath.c_str());
+				auto texture = Texture2D::Create(texturePath);
+				textures.albedoTexture = texture;
+				textures.useAlbedoTexture = true;
+			}
+
+			m_Material->AddSubMaterial(subMaterial);
+		}
+
+		subMesh.materialIndex = materialIndex;
+
+		return subMesh;
+	}
+
+	void Mesh::PreparePipeline()
+	{
+		// Create VertexBuffer and set all Attributes
+		m_VertexBuffer = VertexBuffer::Create(m_Vertices.data(), m_Vertices.size() * sizeof(Vertex), BufferUsage::Static);
+		m_VertexBuffer->AddAttribute({ "a_Position",  VertexFormat::Float3, false });
+		m_VertexBuffer->AddAttribute({ "a_Normal",	  VertexFormat::Float3, false });
+		m_VertexBuffer->AddAttribute({ "a_Tangent",	  VertexFormat::Float3, false });
+		m_VertexBuffer->AddAttribute({ "a_Bitangent", VertexFormat::Float3, false });
+		m_VertexBuffer->AddAttribute({ "a_TexCoords", VertexFormat::Float2, false });
+
+		// Create Index Buffer
+		m_IndexBuffer = IndexBuffer::Create(m_Indices.data(), IndexFormat::Uint32, m_Indices.size() * sizeof(U32), BufferUsage::Static);
+
+		// Create Vertex Array
+		m_VertexArray = VertexArray::Create(m_VertexBuffer.get(), m_IndexBuffer.get());
 	}
 }

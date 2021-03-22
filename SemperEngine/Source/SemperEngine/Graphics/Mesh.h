@@ -17,7 +17,10 @@
 namespace SemperEngine
 {
 	class Renderer;
+	class SceneRenderer;
 	struct MeshComponent;
+
+	using Index = U32;
 
 	struct Vertex
 	{
@@ -28,32 +31,12 @@ namespace SemperEngine
 		Vec2 texCoords;
 	};
 
-	class SubMesh
+	struct SubMesh
 	{
-	public:
-		SubMesh(const std::vector<Vertex> &vertices, const std::vector<U32> &indices,
-			SharedPtr<Material> material, ConstRef<Mat4> transform);
-		~SubMesh();
-
-		inline ConstRef<SharedPtr<Material>> GetMaterial() const { return m_Material; }
-
-	private:
-		void PreparePipeline();
-
-	private:
-		std::vector<Vertex> m_Vertices;
-		std::vector<U32> m_Indices;
-
-		Mat4 m_Transform;
-
-		SharedPtr<Material> m_Material;
-
-		SharedPtr<VertexArray> m_VertexArray;
-		SharedPtr<VertexBuffer> m_VertexBuffer;
-		SharedPtr<IndexBuffer> m_IndexBuffer;
-
-		friend class Renderer;
-		friend class Inspector;
+		U32 vertexOffset, indexOffset;
+		U32 vertexCount, indexCount;
+		U32 materialIndex;
+		Mat4 transform;
 	};
 
 	class Mesh
@@ -72,18 +55,27 @@ namespace SemperEngine
 		void ProcessNode(aiNode *node, ConstRef<Mat4> parenTransform);
 		SubMesh ProcessMesh(aiMesh *mesh, ConstRef<Mat4> meshTransform);
 
+		void PreparePipeline();
+
 	private:
 		std::string m_Filepath;
 		bool m_IsLoaded;
 		std::vector<SubMesh> m_SubMeshes;
 
+		SharedPtr<Material> m_Material;
+
 		const aiScene *m_Scene;
 
-		// Metrics
-		U32 m_NumVertices = 0, m_NumIndices = 0;
-		U32 m_NumSubMeshes = 0;
+		std::vector<Vertex> m_Vertices;
+		std::vector<Index> m_Indices;
+
+		// Pipeline
+		SharedPtr<VertexArray> m_VertexArray;
+		SharedPtr<VertexBuffer> m_VertexBuffer;
+		SharedPtr<IndexBuffer> m_IndexBuffer;
 
 		friend class Renderer;
+		friend class SceneRenderer;
 		friend class MeshComponent;
 		friend class Inspector;
 	};

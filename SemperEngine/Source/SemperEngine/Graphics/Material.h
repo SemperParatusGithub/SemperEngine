@@ -32,20 +32,44 @@ namespace SemperEngine
 		SharedPtr<Texture2D> metalnessTexture;
 	};
 
+	class Renderer;
+	class SubMaterial;
+
 	class Material
 	{
 	public:
-		Material(ConstRef<std::string> materialName, SharedPtr<Shader> shaderName);
+		Material(ConstRef<std::string> name);
+		Material(ConstRef<std::string> name, const std::vector<SubMaterial> subMaterials);
+		~Material() = default;
 
-		void SetName(ConstRef<std::string> materialName);
-		void SetShader(SharedPtr<Shader> shader);
+		void OnImGui();
 
-		ConstRef<std::string> GetName() const;
-		ConstRef<SharedPtr<Shader>> GetShader() const;
+		std::string GetName() const;
 
-		void AddFlag(MaterialFlag flag);
-		void RemoveFlag(MaterialFlag flag);
-		bool HasFlag(MaterialFlag flag);
+		void SetFlag(MaterialFlag flag, bool value = true);
+		bool GetFlag(MaterialFlag flag);
+
+		void AddSubMaterial(ConstRef<SubMaterial> material);
+
+		ConstRef<std::vector<SubMaterial>> GetSubMaterials() const;
+
+	private:
+		std::string m_MaterialName;
+
+		std::vector<SubMaterial> m_SubMaterials;
+		SharedPtr<Shader> m_MaterialShader;
+		U32 m_MaterialFlags;
+
+		friend class Renderer;
+	};
+
+	class SubMaterial
+	{
+	public:
+		SubMaterial(ConstRef<std::string> name);
+		~SubMaterial() = default;
+
+		std::string GetName() const;
 
 		ConstRef<PBRMaterialParameters> GetPBRMaterialParameters() const;
 		PBRMaterialParameters &GetPBRMaterialParameters();
@@ -54,10 +78,7 @@ namespace SemperEngine
 		PBRMaterialTextures &GetPBRMaterialTextures();	
 
 	private:
-		std::string m_MaterialName;
-		U32 m_Flags;
-
-		SharedPtr<Shader> m_Shader;
+		std::string m_SubMaterialName;
 
 		PBRMaterialParameters m_Parameters;
 		PBRMaterialTextures m_Textures;

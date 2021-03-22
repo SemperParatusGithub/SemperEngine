@@ -13,6 +13,7 @@
 #include "SemperEngine/Graphics/Mesh.h"
 #include "SemperEngine/Graphics/Transform.h"
 
+// TODO: Remove me!!!
 #include <glad/glad.h>
 
 
@@ -159,43 +160,40 @@ namespace SemperEngine
 
 	void Renderer::SubmitMesh(SharedPtr<Mesh> mesh, ConstRef<Transform> transform, ConstRef<CameraInfo> info)
 	{
-		// TODO: Check somewhere else
-		if (mesh->m_IsLoaded)
+		auto &material = mesh->m_Material;
+		auto &shader = material->m_MaterialShader;
+
+		shader->Bind();
+		shader->SetUniformMat4f("u_ProjectionView", info.projectionViewMatrix);
+		shader->SetUniformFloat3("u_CameraPosition", info.cameraPosition);
+		shader->SetUniformFloat3("u_DirectionalLights.Direction", Vec3(glm::radians(30.0f), glm::radians(20.0f), 0.0f));
+		shader->SetUniformFloat3("u_DirectionalLights.Radiance", Vec3(0.1f));
+		shader->SetUniformFloat("u_DirectionalLights.Multiplier", 10.0f);
+
+		mesh->m_VertexArray->Bind();
+		mesh->m_IndexBuffer->Bind();
+
+		for (auto &subMesh : mesh->m_SubMeshes)
 		{
-			for (auto &subMesh : mesh->m_SubMeshes)
+			auto &subMaterial = material->GetSubMaterials()[subMesh.materialIndex];
+
+			auto &params = subMaterial.GetPBRMaterialParameters();
+			shader->SetUniformFloat3("u_AlbedoColor", params.albedoColor);
+			shader->SetUniformFloat("u_Metalness", params.metalness);
+			shader->SetUniformFloat("u_Roughness", params.roughness);
+
+			auto &textures = subMaterial.GetPBRMaterialTextures();
+			if (textures.useAlbedoTexture)
 			{
-				auto &material = subMesh.m_Material;
-				auto &shader = material->GetShader();
-
-				shader->Bind();
-				shader->SetUniformMat4f("u_ProjectionView", info.projectionViewMatrix);
-				shader->SetUniformFloat3("u_CameraPosition", info.cameraPosition);
-				shader->SetUniformFloat3("u_DirectionalLights.Direction", Vec3(glm::radians(30.0f), glm::radians(20.0f), 0.0f));
-				shader->SetUniformFloat3("u_DirectionalLights.Radiance", Vec3(0.1f));
-				shader->SetUniformFloat("u_DirectionalLights.Multiplier", 10.0f);
-
-				const auto &PBRTextures = material->GetPBRMaterialTextures();
-
-				shader->SetUniformInt("u_EnableAlbedoTexture", PBRTextures.useAlbedoTexture);
-				if (PBRTextures.albedoTexture)
-				{
-					shader->SetUniformInt("u_AlbedoTexture", 0);
-					PBRTextures.albedoTexture->Bind(0);
-				}
-
-				shader->SetUniformFloat3("u_AlbedoColor", material->GetPBRMaterialParameters().albedoColor);
-				shader->SetUniformFloat("u_Metalness", material->GetPBRMaterialParameters().metalness);
-				shader->SetUniformFloat("u_Roughness", material->GetPBRMaterialParameters().roughness);
-
-				shader->SetUniformMat4f("u_Transform", transform.GetTransform() * subMesh.m_Transform);
-
-				if (material->HasFlag(MaterialFlag::NoFill))
-					SetRenderMode(Backend::RenderMode::Lines);
-
-				DrawIndexed(subMesh.m_VertexArray);
-
-				SetRenderMode(Backend::RenderMode::Default);
+				shader->SetUniformInt("u_EnableAlbedoTexture", 1);
+				textures.albedoTexture->Bind(0);
+				shader->SetUniformInt("u_AlbedoTexture", 0);
 			}
+
+			shader->SetUniformMat4f("u_Transform", transform.GetTransform() * subMesh.transform);
+
+			glDrawElementsBaseVertex(GL_TRIANGLES, subMesh.indexCount, GL_UNSIGNED_INT,
+				(const void *) (sizeof(U32) * subMesh.indexOffset), subMesh.vertexOffset);
 		}
 	}
 

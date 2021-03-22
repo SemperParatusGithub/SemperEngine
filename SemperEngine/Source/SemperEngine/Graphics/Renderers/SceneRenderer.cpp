@@ -75,7 +75,8 @@ namespace SemperEngine
 
 		for (auto &meshObj : s_SceneRenderData.meshDrawList)
 		{
-			Renderer::SubmitMesh(meshObj.mesh, meshObj.transform, s_SceneRenderData.currentSceneInfo.cameraInfo);
+			if(meshObj.mesh->m_IsLoaded)
+				Renderer::SubmitMesh(meshObj.mesh, meshObj.transform, s_SceneRenderData.currentSceneInfo.cameraInfo);
 		}
 
 		// Clear mesh draw list

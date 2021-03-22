@@ -6,57 +6,81 @@
 
 namespace SemperEngine
 {
-	Material::Material(ConstRef<std::string> materialName, SharedPtr<Shader> shader) :
-		m_MaterialName(materialName),
-		m_Shader(shader)
+	Material::Material(ConstRef<std::string> name):
+		m_MaterialName(name),
+		m_MaterialFlags(0)
 	{
+		m_MaterialShader = Renderer::GetShaderManager()->GetShader("PBR");
+	}
+	Material::Material(ConstRef<std::string> name, const std::vector<SubMaterial> subMaterials) :
+		m_MaterialName(name),
+		m_SubMaterials(subMaterials),
+		m_MaterialFlags(0)
+	{
+		m_MaterialShader = Renderer::GetShaderManager()->GetShader("PBR");
 	}
 
-	void Material::SetName(ConstRef<std::string> materialName)
+	void Material::OnImGui()
 	{
-		m_MaterialName = materialName;
-	}
-	void Material::SetShader(SharedPtr<Shader> shader)
-	{
-		m_Shader = shader;
+		if (ImGui::CollapsingHeader("Materials"))
+		{
+			for (auto &subMaterial : m_SubMaterials)
+				ImGui::Text("%s", subMaterial.GetName().c_str());
+		}
 	}
 
-	ConstRef<std::string> Material::GetName() const
+	std::string Material::GetName() const
 	{
 		return m_MaterialName;
 	}
-	ConstRef<SharedPtr<Shader>> Material::GetShader() const
+	void Material::SetFlag(MaterialFlag flag, bool value)
 	{
-		return m_Shader;
+		if (value)
+			m_MaterialFlags |= (U32) flag;
+		else
+			m_MaterialFlags &= ~(U32) flag;
+
+	}
+	bool Material::GetFlag(MaterialFlag flag)
+	{
+		return (U32) flag & m_MaterialFlags;
 	}
 
-	void Material::AddFlag(MaterialFlag flag)
+	void Material::AddSubMaterial(ConstRef<SubMaterial> material)
 	{
-		m_Flags |= (U32) flag;
-	}
-	void Material::RemoveFlag(MaterialFlag flag)
-	{
-		m_Flags &= ~(U32) flag;
-	}
-	bool Material::HasFlag(MaterialFlag flag)
-	{
-		return (U32) flag & m_Flags;
+		m_SubMaterials.push_back(material);
 	}
 
-	ConstRef<PBRMaterialParameters> Material::GetPBRMaterialParameters() const
+	ConstRef<std::vector<SubMaterial>> Material::GetSubMaterials() const
+	{
+		return m_SubMaterials;
+	}
+
+
+	SubMaterial::SubMaterial(ConstRef<std::string> name) : 
+		m_SubMaterialName(name)
+	{
+	}
+
+	std::string SubMaterial::GetName() const
+	{
+		return m_SubMaterialName;
+	}
+
+	ConstRef<PBRMaterialParameters> SubMaterial::GetPBRMaterialParameters() const
 	{
 		return m_Parameters;
 	}
-	PBRMaterialParameters &Material::GetPBRMaterialParameters()
+	PBRMaterialParameters &SubMaterial::GetPBRMaterialParameters()
 	{
 		return m_Parameters;
 	}
 
-	ConstRef<PBRMaterialTextures> Material::GetPBRMaterialTextures() const
+	ConstRef<PBRMaterialTextures> SubMaterial::GetPBRMaterialTextures() const
 	{
 		return m_Textures;
 	}
-	PBRMaterialTextures &Material::GetPBRMaterialTextures()
+	PBRMaterialTextures &SubMaterial::GetPBRMaterialTextures()
 	{
 		return m_Textures;
 	}
