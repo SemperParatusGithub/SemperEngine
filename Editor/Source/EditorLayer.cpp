@@ -12,6 +12,9 @@
 
 #include "SemperEngine/Util/Filesystem.h"
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
+
 
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
@@ -92,7 +95,7 @@ void EditorLayer::OnImGuiRender()
 	ImGui::PopStyleVar(3);
 
 	ImGuiID dockSpaceID = ImGui::GetID("DockSpace");
-	ImGui::DockSpace(dockSpaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+	ImGui::DockSpace(dockSpaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoWindowMenuButton);
 
 	if (ImGui::BeginMenuBar())
 	{
@@ -120,6 +123,13 @@ void EditorLayer::OnImGuiRender()
 	Renderer::OnImGui();
 	SceneRenderer::OnImGui();
 	Log::OnEditorLogConsoleGui();
+
+	if (ImGuiDockNode *node = ImGui::DockBuilderGetCentralNode(dockSpaceID))
+	{
+		node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+		node->LocalFlags |= ImGuiDockNodeFlags_NoDockingInCentralNode;
+		node->LocalFlags |= ImGuiDockNodeFlags_NoSplit;
+	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });
 	ImGui::Begin("Scene Viewport");

@@ -220,7 +220,7 @@ namespace SemperEngine
 
 			SE_CORE_INFO("Mesh Debug Info: %s: AlbedoColor: %.2f, %.2f, %.2f", aiMaterial->GetName().C_Str(), aiColor.r, aiColor.g, aiColor.b);
 			SE_CORE_INFO("Mesh Debug Info: %s: Metalness: %.2f", aiMaterial->GetName().C_Str(), metalness);
-			SE_CORE_INFO("Mesh Debug Info: %s: Rouggness: %.2f", aiMaterial->GetName().C_Str(), roughness);
+			SE_CORE_INFO("Mesh Debug Info: %s: Roughness: %.2f", aiMaterial->GetName().C_Str(), roughness);
 
 			subMaterial.GetPBRMaterialParameters() = params;
 
