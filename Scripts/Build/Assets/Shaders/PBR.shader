@@ -78,6 +78,15 @@ uniform float u_Roughness;
 uniform bool u_EnableAlbedoTexture;
 uniform sampler2D u_AlbedoTexture;
 
+uniform bool u_EnableNormalMapTexture;
+uniform sampler2D u_NormalMapTexture;
+
+uniform bool u_EnableMetalnessTexture;
+uniform sampler2D u_MetalnessTexture;
+
+uniform bool u_EnableRoughnessTexture;
+uniform sampler2D u_RoughnessTexture;
+
 
 struct PBRParameters
 {
@@ -158,11 +167,17 @@ void main()
 {
 	// Standard PBR inputs
 	m_Params.Albedo = u_EnableAlbedoTexture ? texture(u_AlbedoTexture, vs_Input.TexCoord).xyz : u_AlbedoColor;
-	m_Params.Metalness = u_Metalness;
-	m_Params.Roughness = max(u_Roughness, 0.05);
+	m_Params.Metalness = u_EnableMetalnessTexture ? texture(u_MetalnessTexture, vs_Input.TexCoord).x : u_Metalness;
+	m_Params.Roughness = u_EnableRoughnessTexture ? texture(u_RoughnessTexture, vs_Input.TexCoord).x : u_Roughness;
+	m_Params.Roughness = max(m_Params.Roughness, 0.05);
 
 	// TODO: Normal map
 	m_Params.Normal = normalize(vs_Input.Normal);
+	if (u_EnableNormalMapTexture)
+	{
+		m_Params.Normal = normalize(2.0 * texture(u_NormalMapTexture, vs_Input.TexCoord).rgb - 1.0);
+		m_Params.Normal = normalize(vs_Input.WorldNormals * m_Params.Normal);
+	}
 
 	m_Params.View = normalize(u_CameraPosition - vs_Input.WorldPosition);
 	m_Params.NdotV = max(dot(m_Params.Normal, m_Params.View), 0.0);

@@ -444,6 +444,121 @@ namespace SemperEngine
 				mc.Load();
 			}
 
+			static bool showMaterials = false;
+			if (ImGui::Button("Open Material Settings"))
+				showMaterials = true;
+
+			if (showMaterials && !mc.mesh->m_SubMeshes.empty())
+			{
+				auto &subMaterials = mc.mesh->m_Material->m_SubMaterials;
+
+				ImGui::Begin("Materials", &showMaterials, ImGuiWindowFlags_NoDocking);
+
+				static U32 selected = 0;
+
+				ImGui::BeginChild("left pane", ImVec2(150, 0), true);
+				for (int i = 0; i < subMaterials.size(); i++)
+				{
+					std::string name = subMaterials[i].GetName();
+					if (ImGui::Selectable(name.c_str(), i == selected))
+						selected = i;
+				}
+				ImGui::EndChild();
+				ImGui::SameLine();
+
+				// If the Mesh changed make sure we don't go out of bounds
+				selected = selected >= subMaterials.size() ? 0 : selected;
+
+				ImGui::BeginChild("Settings");
+				if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
+				{
+					if (ImGui::BeginTabItem("General"))
+					{
+						auto &material = mc.mesh->m_Material;
+						bool noFill = material->GetFlag(MaterialFlag::NoFill);
+						if (ImGui::Checkbox("No Fill", &noFill))
+								material->SetFlag(MaterialFlag::NoFill, noFill);
+						ImGui::EndTabItem();
+					}
+					if (ImGui::BeginTabItem("Parameters"))
+					{
+						auto &params = subMaterials[selected].GetPBRMaterialParameters();
+						ImGui::ColorEdit3("Albedo Color", &params.albedoColor[0]);
+						ImGui::SliderFloat("Metalness", &params.metalness, 0.0f, 1.0f);
+						ImGui::SliderFloat("Roughness", &params.roughness, 0.0f, 1.0f);
+						ImGui::EndTabItem();
+					}
+					if (ImGui::BeginTabItem("Textures"))
+					{
+						auto &textures = subMaterials[selected].GetPBRMaterialTextures();
+						auto &whiteTexture = Renderer::GetEmptyTexture();
+
+						auto CheckForClickAndSetTexture = [](SharedPtr<Texture2D> &texture)
+						{
+							if (ImGui::IsItemClicked())
+							{
+								std::string filepath = Filesystem::OpenFileDialog("");
+								if (filepath != "")
+									texture = Texture2D::Create(filepath);
+							}
+						};
+
+						// Albedo
+						{
+							ImGui::Text("Albedo Texture");
+							if (!textures.albedoTexture)
+								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+							else
+								ImGui::Image(textures.albedoTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+
+							CheckForClickAndSetTexture(textures.albedoTexture);
+							ImGui::Checkbox("Enable##Albedo", &textures.useAlbedoTexture);
+						}
+
+						// Normal Map
+						{
+							ImGui::Text("Normal Map");
+							if (!textures.normalMapTexture)
+								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+							else
+								ImGui::Image(textures.normalMapTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+
+							CheckForClickAndSetTexture(textures.normalMapTexture);
+							ImGui::Checkbox("Enable##Normal", &textures.useNormalMapTexture);
+						}
+
+						// Metalness
+						{
+							ImGui::Text("Metalness Texture");
+							if (!textures.metalnessTexture)
+								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+							else
+								ImGui::Image(textures.metalnessTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+
+							CheckForClickAndSetTexture(textures.metalnessTexture);
+							ImGui::Checkbox("Enable##Metalness", &textures.useMetalnessTexture);
+						}
+
+						// Roughness
+						{
+							ImGui::Text("Roughness Texture");
+							if (!textures.roughnessTexture)
+								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+							else
+								ImGui::Image(textures.roughnessTexture->GetHandle(), ImVec2(64.0f, 64.0f));
+
+							CheckForClickAndSetTexture(textures.roughnessTexture);
+							ImGui::Checkbox("Enable##Roughness", &textures.useRoughnessTexture);
+						}
+
+						ImGui::EndTabItem();
+					}
+					ImGui::EndTabBar();
+				}
+				ImGui::EndChild();
+				ImGui::End();
+			}
+
 			auto &material = mc.mesh->m_Material;
 			material->OnImGui();
 		}

@@ -61,6 +61,7 @@ namespace SemperEngine
 		U32 m_MaterialFlags;
 
 		friend class Renderer;
+		friend class Inspector;
 	};
 
 	class SubMaterial

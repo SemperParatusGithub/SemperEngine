@@ -225,20 +225,20 @@ namespace SemperEngine
 			subMaterial.GetPBRMaterialParameters() = params;
 
 			// TODO: Normal, metalness and roughness maps
-			auto &textures = subMaterial.GetPBRMaterialTextures();
-
-			aiString aiTexturePath;
-			if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiTexturePath) == AI_SUCCESS)
-			{
-				std::filesystem::path path = m_Filepath;
-				auto parentPath = path.parent_path();
-				parentPath /= std::string(aiTexturePath.data);
-				std::string texturePath = parentPath.string();
-				SE_CORE_INFO("Albedo Texture filepath = %s", texturePath.c_str());
-				auto texture = Texture2D::Create(texturePath);
-				textures.albedoTexture = texture;
-				textures.useAlbedoTexture = true;
-			}
+			// auto &textures = subMaterial.GetPBRMaterialTextures();
+			// 
+			// aiString aiTexturePath;
+			// if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiTexturePath) == AI_SUCCESS)
+			// {
+			// 	std::filesystem::path path = m_Filepath;
+			// 	auto parentPath = path.parent_path();
+			// 	parentPath /= std::string(aiTexturePath.data);
+			// 	std::string texturePath = parentPath.string();
+			// 	SE_CORE_INFO("Albedo Texture filepath = %s", texturePath.c_str());
+			// 	auto texture = Texture2D::Create(texturePath);
+			// 	textures.albedoTexture = texture;
+			// 	textures.useAlbedoTexture = true;
+			// }
 
 			m_Material->AddSubMaterial(subMaterial);
 		}

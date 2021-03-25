@@ -168,7 +168,7 @@ namespace SemperEngine
 		shader->SetUniformFloat3("u_CameraPosition", info.cameraPosition);
 		shader->SetUniformFloat3("u_DirectionalLights.Direction", Vec3(glm::radians(30.0f), glm::radians(20.0f), 0.0f));
 		shader->SetUniformFloat3("u_DirectionalLights.Radiance", Vec3(0.1f));
-		shader->SetUniformFloat("u_DirectionalLights.Multiplier", 10.0f);
+		shader->SetUniformFloat("u_DirectionalLights.Multiplier", 1.0f);
 
 		mesh->m_VertexArray->Bind();
 		mesh->m_IndexBuffer->Bind();
@@ -183,17 +183,36 @@ namespace SemperEngine
 			shader->SetUniformFloat("u_Roughness", params.roughness);
 
 			auto &textures = subMaterial.GetPBRMaterialTextures();
+
+			shader->SetUniformInt("u_EnableAlbedoTexture", textures.useAlbedoTexture);
+			shader->SetUniformInt("u_EnableNormalMapTexture", textures.useNormalMapTexture);
+			shader->SetUniformInt("u_EnableMetalnessTexture", textures.useMetalnessTexture);
+			shader->SetUniformInt("u_EnableRoughnessTexture", textures.useRoughnessTexture);
+			
+			shader->SetUniformInt("u_AlbedoTexture", 0);
+			shader->SetUniformInt("u_NormalMapTexture", 1);
+			shader->SetUniformInt("u_MetalnessTexture", 2);
+			shader->SetUniformInt("u_RoughnessTexture", 3);
+
 			if (textures.useAlbedoTexture)
-			{
-				shader->SetUniformInt("u_EnableAlbedoTexture", 1);
 				textures.albedoTexture->Bind(0);
-				shader->SetUniformInt("u_AlbedoTexture", 0);
-			}
+			if (textures.useNormalMapTexture)
+				textures.albedoTexture->Bind(1);
+			if (textures.useMetalnessTexture)
+				textures.metalnessTexture->Bind(2);
+			if (textures.useRoughnessTexture)
+				textures.roughnessTexture->Bind(3);
+			
 
 			shader->SetUniformMat4f("u_Transform", transform.GetTransform() * subMesh.transform);
 
+			if (material->GetFlag(MaterialFlag::NoFill))
+				SetRenderMode(Backend::RenderMode::Lines);
+
 			glDrawElementsBaseVertex(GL_TRIANGLES, subMesh.indexCount, GL_UNSIGNED_INT,
 				(const void *) (sizeof(U32) * subMesh.indexOffset), subMesh.vertexOffset);
+
+			SetRenderMode(Backend::RenderMode::Default);
 		}
 	}
 
