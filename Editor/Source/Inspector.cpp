@@ -444,6 +444,14 @@ namespace SemperEngine
 				mc.Load();
 			}
 
+			if (mc.mesh->m_IsLoaded)
+			{
+				auto &material = mc.mesh->m_Material;
+				bool noFill = material->GetFlag(MaterialFlag::NoFill);
+				if (ImGui::Checkbox("No Fill", &noFill))
+					material->SetFlag(MaterialFlag::NoFill, noFill);
+			}
+
 			static bool showMaterials = false;
 			if (ImGui::Button("Open Material Settings"))
 				showMaterials = true;
@@ -472,14 +480,6 @@ namespace SemperEngine
 				ImGui::BeginChild("Settings");
 				if (ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
 				{
-					if (ImGui::BeginTabItem("General"))
-					{
-						auto &material = mc.mesh->m_Material;
-						bool noFill = material->GetFlag(MaterialFlag::NoFill);
-						if (ImGui::Checkbox("No Fill", &noFill))
-								material->SetFlag(MaterialFlag::NoFill, noFill);
-						ImGui::EndTabItem();
-					}
 					if (ImGui::BeginTabItem("Parameters"))
 					{
 						auto &params = subMaterials[selected].GetPBRMaterialParameters();
@@ -506,7 +506,7 @@ namespace SemperEngine
 						// Albedo
 						{
 							ImGui::Text("Albedo Texture");
-							if (!textures.albedoTexture)
+							if (!textures.albedoTexture->IsLoaded())
 								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
 							else
 								ImGui::Image(textures.albedoTexture->GetHandle(), ImVec2(64.0f, 64.0f));
@@ -518,7 +518,7 @@ namespace SemperEngine
 						// Normal Map
 						{
 							ImGui::Text("Normal Map");
-							if (!textures.normalMapTexture)
+							if (!textures.normalMapTexture->IsLoaded())
 								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
 							else
 								ImGui::Image(textures.normalMapTexture->GetHandle(), ImVec2(64.0f, 64.0f));
@@ -530,7 +530,7 @@ namespace SemperEngine
 						// Metalness
 						{
 							ImGui::Text("Metalness Texture");
-							if (!textures.metalnessTexture)
+							if (!textures.metalnessTexture->IsLoaded())
 								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
 							else
 								ImGui::Image(textures.metalnessTexture->GetHandle(), ImVec2(64.0f, 64.0f));
@@ -542,7 +542,7 @@ namespace SemperEngine
 						// Roughness
 						{
 							ImGui::Text("Roughness Texture");
-							if (!textures.roughnessTexture)
+							if (!textures.roughnessTexture->IsLoaded())
 								ImGui::Image(whiteTexture->GetHandle(), ImVec2(64.0f, 64.0f));
 							else
 								ImGui::Image(textures.roughnessTexture->GetHandle(), ImVec2(64.0f, 64.0f));
@@ -558,9 +558,6 @@ namespace SemperEngine
 				ImGui::EndChild();
 				ImGui::End();
 			}
-
-			auto &material = mc.mesh->m_Material;
-			material->OnImGui();
 		}
 	}
 }

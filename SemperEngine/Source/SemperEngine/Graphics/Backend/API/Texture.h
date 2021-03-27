@@ -71,15 +71,17 @@ namespace SemperEngine
 	public:
 		virtual ~Texture() = default;
 
-		virtual void *GetHandle() const noexcept = 0;
+		virtual void *GetHandle() const = 0;
 
-		virtual U32 GetWidth() const noexcept = 0;
-		virtual U32 GetHeight() const noexcept = 0;
+		virtual bool IsLoaded() const = 0;
 
-		virtual std::string GetFilepath() const noexcept = 0;
+		virtual U32 GetWidth() const = 0;
+		virtual U32 GetHeight() const = 0;
 
-		virtual void Bind(U32 slot = 0) const noexcept = 0;
-		virtual void UnBind(U32 slot = 0) const noexcept = 0;
+		virtual std::string GetFilepath() const = 0;
+
+		virtual void Bind(U32 slot = 0) const = 0;
+		virtual void UnBind(U32 slot = 0) const = 0;
 	};
 
 	class Texture2D : public Texture

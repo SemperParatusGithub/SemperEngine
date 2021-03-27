@@ -173,6 +173,9 @@ namespace SemperEngine
 		mesh->m_VertexArray->Bind();
 		mesh->m_IndexBuffer->Bind();
 
+		if (material->GetFlag(MaterialFlag::NoFill))
+			SetRenderMode(Backend::RenderMode::Lines);
+
 		for (auto &subMesh : mesh->m_SubMeshes)
 		{
 			auto &subMaterial = material->GetSubMaterials()[subMesh.materialIndex];
@@ -182,38 +185,41 @@ namespace SemperEngine
 			shader->SetUniformFloat("u_Metalness", params.metalness);
 			shader->SetUniformFloat("u_Roughness", params.roughness);
 
-			auto &textures = subMaterial.GetPBRMaterialTextures();
+			auto &textures = subMaterial.GetPBRMaterialTextures();			
 
-			shader->SetUniformInt("u_EnableAlbedoTexture", textures.useAlbedoTexture);
-			shader->SetUniformInt("u_EnableNormalMapTexture", textures.useNormalMapTexture);
-			shader->SetUniformInt("u_EnableMetalnessTexture", textures.useMetalnessTexture);
-			shader->SetUniformInt("u_EnableRoughnessTexture", textures.useRoughnessTexture);
-			
-			shader->SetUniformInt("u_AlbedoTexture", 0);
-			shader->SetUniformInt("u_NormalMapTexture", 1);
-			shader->SetUniformInt("u_MetalnessTexture", 2);
-			shader->SetUniformInt("u_RoughnessTexture", 3);
-
-			if (textures.useAlbedoTexture)
+			if (textures.useAlbedoTexture && textures.albedoTexture->IsLoaded())
+			{
+				shader->SetUniformInt("u_EnableAlbedoTexture", textures.useAlbedoTexture);
+				shader->SetUniformInt("u_AlbedoTexture", 0);
 				textures.albedoTexture->Bind(0);
-			if (textures.useNormalMapTexture)
-				textures.albedoTexture->Bind(1);
-			if (textures.useMetalnessTexture)
+			}
+			if (textures.useNormalMapTexture && textures.normalMapTexture->IsLoaded())
+			{
+				shader->SetUniformInt("u_EnableNormalMapTexture", textures.useNormalMapTexture);
+				shader->SetUniformInt("u_NormalMapTexture", 1);
+				textures.normalMapTexture->Bind(1);
+			}
+			if (textures.useMetalnessTexture && textures.metalnessTexture->IsLoaded())
+			{
+				shader->SetUniformInt("u_EnableMetalnessTexture", textures.useMetalnessTexture);
+				shader->SetUniformInt("u_MetalnessTexture", 2);
 				textures.metalnessTexture->Bind(2);
-			if (textures.useRoughnessTexture)
-				textures.roughnessTexture->Bind(3);
+			}
+			if (textures.useRoughnessTexture && textures.roughnessTexture->IsLoaded())
+			{
+				shader->SetUniformInt("u_RoughnessTexture", 3);
+				shader->SetUniformInt("u_EnableRoughnessTexture", textures.useRoughnessTexture);
+				textures.roughnessTexture->Bind(3); 
+			}
 			
 
 			shader->SetUniformMat4f("u_Transform", transform.GetTransform() * subMesh.transform);
 
-			if (material->GetFlag(MaterialFlag::NoFill))
-				SetRenderMode(Backend::RenderMode::Lines);
-
 			glDrawElementsBaseVertex(GL_TRIANGLES, subMesh.indexCount, GL_UNSIGNED_INT,
 				(const void *) (sizeof(U32) * subMesh.indexOffset), subMesh.vertexOffset);
-
-			SetRenderMode(Backend::RenderMode::Default);
 		}
+		if (material->GetFlag(MaterialFlag::NoFill))
+			SetRenderMode(Backend::RenderMode::Default);
 	}
 
 	void Renderer::DrawIndexed(ConstRef<SharedPtr<VertexArray>> vertexArray)

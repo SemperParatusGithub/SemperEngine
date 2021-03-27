@@ -20,15 +20,6 @@ namespace SemperEngine
 		m_MaterialShader = Renderer::GetShaderManager()->GetShader("PBR");
 	}
 
-	void Material::OnImGui()
-	{
-		if (ImGui::CollapsingHeader("Materials"))
-		{
-			for (auto &subMaterial : m_SubMaterials)
-				ImGui::Text("%s", subMaterial.GetName().c_str());
-		}
-	}
-
 	std::string Material::GetName() const
 	{
 		return m_MaterialName;

@@ -12,7 +12,8 @@ namespace SemperEngine
 	GLTexture2D::GLTexture2D(TextureInfo info) :
 		m_Filepath(""),
 		m_Width(0), m_Height(0),
-		m_TextureInfo(info)
+		m_TextureInfo(info),
+		m_IsLoaded(false)
 	{
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 	}
@@ -25,7 +26,8 @@ namespace SemperEngine
 	GLTexture2D::GLTexture2D(U32 width, U32 height, TextureInfo info) : 
 		m_Width(width),
 		m_Height(height),
-		m_TextureInfo(info)
+		m_TextureInfo(info),
+		m_IsLoaded(false)
 	{
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, GL_RGBA8, m_Width, m_Height);
@@ -41,30 +43,35 @@ namespace SemperEngine
 		glDeleteTextures(1, &m_RendererID);
 	}
 
-	void *GLTexture2D::GetHandle() const noexcept
+	void *GLTexture2D::GetHandle() const 
 	{
-		return reinterpret_cast<void *>(m_RendererID);
+		return reinterpret_cast<void *>(m_RendererID); 
 	}
 
-	std::string GLTexture2D::GetFilepath() const noexcept
+	bool GLTexture2D::IsLoaded() const
+	{
+		return m_IsLoaded;
+	}
+
+	std::string GLTexture2D::GetFilepath() const
 	{
 		return m_Filepath;
 	}
 
-	U32 GLTexture2D::GetWidth() const noexcept
+	U32 GLTexture2D::GetWidth() const 
 	{
 		return m_Width;
 	}
-	U32 GLTexture2D::GetHeight() const noexcept
+	U32 GLTexture2D::GetHeight() const 
 	{
 		return m_Height;
 	}
 
-	void GLTexture2D::Bind(U32 slot) const noexcept
+	void GLTexture2D::Bind(U32 slot) const 
 	{
 		glBindTextureUnit(slot, m_RendererID);
 	}
-	void GLTexture2D::UnBind(U32 slot) const noexcept
+	void GLTexture2D::UnBind(U32 slot) const 
 	{
 		glBindTextureUnit(slot, 0);
 	}
@@ -83,32 +90,41 @@ namespace SemperEngine
 		stbi_uc *localBuffer;
 		localBuffer = stbi_load(m_Filepath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 
-		SE_ASSERT_MSG(localBuffer, "Failed to load Texture");
+		if (localBuffer)
+		{
+			m_IsLoaded = true;
 
-		m_Width = static_cast<U32>(texWidth);
-		m_Height = static_cast<U32>(texHeight);
+			m_Width = static_cast<U32>(texWidth);
+			m_Height = static_cast<U32>(texHeight);
 
-		//TODO support different texChannels
-		if (texChannels != 4)
-			texChannels = 4;
+			//TODO support different texChannels
+			if (texChannels != 4)
+				texChannels = 4;
 
-		int bits = texChannels * sizeofChannel; // texChannels;	  //32 bits for 4 bytes r g b a
-		m_TextureInfo.format = GLTools::BitsToTextureFormat(static_cast<U32>(bits));
+			int bits = texChannels * sizeofChannel; // texChannels;	  //32 bits for 4 bytes r g b a
+			m_TextureInfo.format = GLTools::BitsToTextureFormat(static_cast<U32>(bits));
 
-		U32 localHandle;
-		glCreateTextures(GL_TEXTURE_2D, 1, &localHandle);
-		glTextureStorage2D(localHandle, 1, GL_RGBA8, m_Width, m_Height);
+			U32 localHandle;
+			glCreateTextures(GL_TEXTURE_2D, 1, &localHandle);
+			glTextureStorage2D(localHandle, 1, GL_RGBA8, m_Width, m_Height);
 
-		glTextureParameteri(localHandle, GL_TEXTURE_MIN_FILTER, m_TextureInfo.minFilter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
-		glTextureParameteri(localHandle, GL_TEXTURE_MAG_FILTER, m_TextureInfo.magFilter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
+			glTextureParameteri(localHandle, GL_TEXTURE_MIN_FILTER, m_TextureInfo.minFilter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
+			glTextureParameteri(localHandle, GL_TEXTURE_MAG_FILTER, m_TextureInfo.magFilter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
 
-		glTextureParameteri(localHandle, GL_TEXTURE_WRAP_S, GLTools::TextureWrapToGL(m_TextureInfo.wrap));
-		glTextureParameteri(localHandle, GL_TEXTURE_WRAP_T, GLTools::TextureWrapToGL(m_TextureInfo.wrap));
+			glTextureParameteri(localHandle, GL_TEXTURE_WRAP_S, GLTools::TextureWrapToGL(m_TextureInfo.wrap));
+			glTextureParameteri(localHandle, GL_TEXTURE_WRAP_T, GLTools::TextureWrapToGL(m_TextureInfo.wrap));
 
-		glTextureSubImage2D(localHandle, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer);
+			glTextureSubImage2D(localHandle, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_UNSIGNED_BYTE, localBuffer);
 
-		stbi_image_free(localBuffer);
+			stbi_image_free(localBuffer);
 
-		return localHandle;
+			return localHandle;
+		}
+		else
+		{
+			m_IsLoaded = false;
+			SE_CORE_ERROR("Failed to load Texture: %s", m_Filepath.c_str());
+			return 0;
+		}
 	}
 }

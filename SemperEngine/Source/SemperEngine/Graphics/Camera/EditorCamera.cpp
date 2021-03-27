@@ -25,7 +25,6 @@ namespace SemperEngine
 
 	void EditorCamera::OnUpdate(float ts)
 	{
-		
 		ConstRef<Vec2> mouse = Input::GetMousePosition();
 		Vec2 delta = (mouse - m_InitialMousePosition) * 0.0015f;
 		m_InitialMousePosition = mouse;
@@ -80,6 +79,7 @@ namespace SemperEngine
 		ImGui::Separator();
 
 		ImGui::Text("Position: %.2f, %.2f, %.2f", m_Position.x, m_Position.y, m_Position.z);
+		ImGui::Text("Yaw: %.2f, %.2f", m_Yaw, m_Pitch);
 
 		ImGui::End();
 	}

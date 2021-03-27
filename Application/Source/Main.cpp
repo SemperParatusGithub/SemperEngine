@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-	SemperEngine::Log::Init(true, false);
+	SemperEngine::Log::Init();
 
 	/* Startup */
 	auto *App = Application::CreateApplication("Semper Application");

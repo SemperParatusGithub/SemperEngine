@@ -28,8 +28,8 @@ namespace SemperEngine
 
 		SharedPtr<Texture2D> albedoTexture;
 		SharedPtr<Texture2D> normalMapTexture;
-		SharedPtr<Texture2D> roughnessTexture;
 		SharedPtr<Texture2D> metalnessTexture;
+		SharedPtr<Texture2D> roughnessTexture;
 	};
 
 	class Renderer;
@@ -41,8 +41,6 @@ namespace SemperEngine
 		Material(ConstRef<std::string> name);
 		Material(ConstRef<std::string> name, const std::vector<SubMaterial> subMaterials);
 		~Material() = default;
-
-		void OnImGui();
 
 		std::string GetName() const;
 

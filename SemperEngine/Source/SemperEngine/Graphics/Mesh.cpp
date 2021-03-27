@@ -94,22 +94,30 @@ namespace SemperEngine
 		m_Importer = MakeUnique<Assimp::Importer>();
 		m_Scene = m_Importer->ReadFile(filepath, s_MeshImportFlags);
 
-		SE_ASSERT_MSG(m_Scene && m_Scene->HasMeshes(), "Failed to load Mesh");
-		SE_ASSERT_MSG(m_Scene->mAnimations == nullptr, "Animations currently not supported");
+		if (!m_Scene || !m_Scene->HasMeshes())
+		{
+			SE_CORE_ERROR("Failed to load mesh: %s", m_Filepath.c_str());
+		}
+		else if (m_Scene->mAnimations)
+		{
+			SE_CORE_ERROR("Animations currently not supported: %s", m_Filepath.c_str());
+		}
+		else {
+			m_Material = MakeShared<Material>("Base Material");
 
-		m_Material = MakeShared<Material>("Base Material");
+			// Process mesh recursively
+			ProcessNode(m_Scene->mRootNode, Mat4(1.0f));
 
-		// Process mesh recursively
-		ProcessNode(m_Scene->mRootNode, Mat4(1.0f));
+			SE_CORE_INFO("Total sub meshes: %d", m_SubMeshes.size());
+			SE_CORE_INFO("Total mesh vertices: %d", m_Vertices.size());
+			SE_CORE_INFO("Total mesh indices: %d", m_Indices.size());
 
-		SE_CORE_INFO("Total sub meshes: %d", m_SubMeshes.size());
-		SE_CORE_INFO("Total mesh vertices: %d", m_Vertices.size());
-		SE_CORE_INFO("Total mesh indices: %d", m_Indices.size());
+			SE_CORE_INFO("Preparing Pipeline");
+			PreparePipeline();
+			SE_CORE_INFO("Pipeline was succesfully prepared");
 
-		SE_CORE_INFO("Preparing Pipeline");
-		PreparePipeline();
-
-		m_IsLoaded = true;
+			m_IsLoaded = true;
+		}
 	}
 
 	void Mesh::ProcessNode(aiNode *node, ConstRef<Mat4> parentTransform)
@@ -223,6 +231,16 @@ namespace SemperEngine
 			SE_CORE_INFO("Mesh Debug Info: %s: Roughness: %.2f", aiMaterial->GetName().C_Str(), roughness);
 
 			subMaterial.GetPBRMaterialParameters() = params;
+
+			PBRMaterialTextures textures = {
+				false, false, false, false,
+				Texture2D::Create(),
+				Texture2D::Create(),
+				Texture2D::Create(),
+				Texture2D::Create()
+			};
+
+			subMaterial.GetPBRMaterialTextures() = textures;
 
 			// TODO: Normal, metalness and roughness maps
 			// auto &textures = subMaterial.GetPBRMaterialTextures();

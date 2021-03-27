@@ -51,8 +51,8 @@ namespace SemperEngine
 
 		Vec2 m_InitialMousePosition = { 0.0f, 0.0f };
 
-		float m_Distance = 10.0f;
-		float m_Yaw = 0.0f, m_Pitch = -25.0f;
+		float m_Distance = 25.0f;
+		float m_Yaw = -0.75f, m_Pitch = 0.6f;
 
 		float m_MovementSpeed = 1.5f;
 		float m_RotationSpeed = 2.5f;
