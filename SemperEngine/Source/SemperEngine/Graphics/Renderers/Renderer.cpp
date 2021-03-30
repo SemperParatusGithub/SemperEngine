@@ -189,27 +189,39 @@ namespace SemperEngine
 
 			if (textures.useAlbedoTexture && textures.albedoTexture->IsLoaded())
 			{
-				shader->SetUniformInt("u_EnableAlbedoTexture", textures.useAlbedoTexture);
+				shader->SetUniformInt("u_EnableAlbedoTexture", 1);
 				shader->SetUniformInt("u_AlbedoTexture", 0);
 				textures.albedoTexture->Bind(0);
 			}
+			else {
+				shader->SetUniformInt("u_EnableAlbedoTexture", 0);
+			}
 			if (textures.useNormalMapTexture && textures.normalMapTexture->IsLoaded())
 			{
-				shader->SetUniformInt("u_EnableNormalMapTexture", textures.useNormalMapTexture);
+				shader->SetUniformInt("u_EnableNormalMapTexture", 1);
 				shader->SetUniformInt("u_NormalMapTexture", 1);
 				textures.normalMapTexture->Bind(1);
 			}
+			else {
+				shader->SetUniformInt("u_EnableNormalMapTexture", 0);
+			}
 			if (textures.useMetalnessTexture && textures.metalnessTexture->IsLoaded())
 			{
-				shader->SetUniformInt("u_EnableMetalnessTexture", textures.useMetalnessTexture);
+				shader->SetUniformInt("u_EnableMetalnessTexture", 1);
 				shader->SetUniformInt("u_MetalnessTexture", 2);
 				textures.metalnessTexture->Bind(2);
+			}
+			else {
+				shader->SetUniformInt("u_EnableMetalnessTexture", 0);
 			}
 			if (textures.useRoughnessTexture && textures.roughnessTexture->IsLoaded())
 			{
 				shader->SetUniformInt("u_RoughnessTexture", 3);
-				shader->SetUniformInt("u_EnableRoughnessTexture", textures.useRoughnessTexture);
+				shader->SetUniformInt("u_EnableRoughnessTexture", 1);
 				textures.roughnessTexture->Bind(3); 
+			}
+			else {
+				shader->SetUniformInt("u_EnableRoughnessTexture", 0);
 			}
 			
 

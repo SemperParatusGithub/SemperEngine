@@ -13,11 +13,11 @@ namespace SemperEngine
 	static const uint32_t s_MeshImportFlags =
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
-		aiProcess_SortByPType |           
-		aiProcess_GenNormals |           
-		aiProcess_GenUVCoords |           
-		aiProcess_OptimizeMeshes |        
-		aiProcess_ValidateDataStructure;  
+		aiProcess_SortByPType |
+		aiProcess_GenNormals |
+		aiProcess_GenUVCoords |
+		aiProcess_OptimizeMeshes |
+		aiProcess_ValidateDataStructure;
 
 	struct LogStream : public Assimp::LogStream
 	{
@@ -120,6 +120,21 @@ namespace SemperEngine
 		}
 	}
 
+	bool Mesh::IsLoaded() const
+	{
+		return m_IsLoaded;
+	}
+
+	SharedPtr<Material> Mesh::GetMaterial()
+	{
+		return m_Material;
+	}
+
+	std::vector<SubMesh> &Mesh::GetSubMeshes()
+	{
+		return m_SubMeshes;
+	}
+
 	void Mesh::ProcessNode(aiNode *node, ConstRef<Mat4> parentTransform)
 	{
 		Mat4 transform = parentTransform * AssimpMat4ToMat4(node->mTransformation);
@@ -179,6 +194,8 @@ namespace SemperEngine
 		{
 			aiFace face = mesh->mFaces[i];
 
+			SE_ASSERT(face.mNumIndices == 3);
+
 			for (uint32_t j = 0; j < face.mNumIndices; j++)
 				m_Indices.push_back(face.mIndices[j]);
 		}
@@ -232,6 +249,7 @@ namespace SemperEngine
 
 			subMaterial.GetPBRMaterialParameters() = params;
 
+			// TODO: Normal, metalness and roughness maps
 			PBRMaterialTextures textures = {
 				false, false, false, false,
 				Texture2D::Create(),
@@ -239,24 +257,23 @@ namespace SemperEngine
 				Texture2D::Create(),
 				Texture2D::Create()
 			};
+			
+			aiString aiTexturePath;
+			if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiTexturePath) == AI_SUCCESS)
+			{
+				std::filesystem::path path = m_Filepath;
+				auto parentPath = path.parent_path();
+				parentPath /= std::string(aiTexturePath.data);
+				std::string texturePath = parentPath.string();
+				SE_CORE_INFO("Albedo Texture filepath = %s", texturePath.c_str());
+				auto texture = Texture2D::Create(texturePath);
+				textures.albedoTexture = texture;
+				if(texture->IsLoaded())
+					textures.useAlbedoTexture = true;
+			}
 
 			subMaterial.GetPBRMaterialTextures() = textures;
 
-			// TODO: Normal, metalness and roughness maps
-			// auto &textures = subMaterial.GetPBRMaterialTextures();
-			// 
-			// aiString aiTexturePath;
-			// if (aiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aiTexturePath) == AI_SUCCESS)
-			// {
-			// 	std::filesystem::path path = m_Filepath;
-			// 	auto parentPath = path.parent_path();
-			// 	parentPath /= std::string(aiTexturePath.data);
-			// 	std::string texturePath = parentPath.string();
-			// 	SE_CORE_INFO("Albedo Texture filepath = %s", texturePath.c_str());
-			// 	auto texture = Texture2D::Create(texturePath);
-			// 	textures.albedoTexture = texture;
-			// 	textures.useAlbedoTexture = true;
-			// }
 
 			m_Material->AddSubMaterial(subMaterial);
 		}

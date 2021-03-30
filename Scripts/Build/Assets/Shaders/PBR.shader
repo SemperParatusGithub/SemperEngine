@@ -197,4 +197,5 @@ void main()
 	color = pow(color, vec3(1.0 / 2.2));
 
 	o_Color = vec4(color, 1.0);
+	//o_Color = vec4(vs_Input.TexCoord.x, vs_Input.TexCoord.y, 0.0, 1.0);
 }

@@ -12,135 +12,85 @@
 #include "SemperEngine/Util/Filesystem.h"
 
 
-namespace SemperEngine
+namespace Widget
 {
 	template<>
-	void Inspector::DrawComponentInfo<IdentificationComponent>(Entity entity);
+	void Inspector::DrawComponentInfo<IdentificationComponent>();
 	template<>
-	void Inspector::DrawComponentInfo<TransformComponent>(Entity entity);
+	void Inspector::DrawComponentInfo<TransformComponent>();
 	template<>
-	void Inspector::DrawComponentInfo<SpriteComponent>(Entity entity);
+	void Inspector::DrawComponentInfo<SpriteComponent>();
 	template<>
-	void Inspector::DrawComponentInfo<SceneCameraComponent>(Entity entity);
+	void Inspector::DrawComponentInfo<SceneCameraComponent>();
 	template<>
-	void Inspector::DrawComponentInfo<NativeScriptComponent>(Entity entity);
+	void Inspector::DrawComponentInfo<NativeScriptComponent>();
 	template<>
-	void Inspector::DrawComponentInfo<MeshComponent>(Entity entity);
+	void Inspector::DrawComponentInfo<MeshComponent>();
 
 
-	Inspector::Inspector(SharedPtr<Scene> handle) : 
-		m_SceneHandle(handle)
+	Inspector::Inspector()
+	{
+	}
+	Inspector::~Inspector()
+	{
+	}
+	void Inspector::Open()
+	{
+	}
+	void Inspector::Close()
 	{
 	}
 
-	void Inspector::OnImGui(Entity selectedEntity)
+	ConstRef<std::string> Inspector::GetName() const
 	{
-		ImGui::Begin("Inspector");
-		
-		if (selectedEntity && selectedEntity.Has<IdentificationComponent>())
-			DrawComponentInfo<IdentificationComponent>(selectedEntity);
-		
-		if(selectedEntity && selectedEntity.Has<TransformComponent>())
-			DrawComponentInfo<TransformComponent>(selectedEntity);
-		
-		if (selectedEntity && selectedEntity.Has<SpriteComponent>())
-			DrawComponentInfo<SpriteComponent>(selectedEntity);
-
-		if(selectedEntity && selectedEntity.Has<SceneCameraComponent>())
-			DrawComponentInfo<SceneCameraComponent>(selectedEntity);
-
-		if (selectedEntity && selectedEntity.Has<NativeScriptComponent>())
-			DrawComponentInfo<NativeScriptComponent>(selectedEntity);
-
-		if (selectedEntity && selectedEntity.Has<MeshComponent>())
-			DrawComponentInfo<MeshComponent>(selectedEntity);
-
-		ImGui::End();
+		return m_Name;
+	}
+	bool Inspector::IsOpen() const
+	{
+		return m_IsOpen;
 	}
 
-	bool Inspector::DrawSliderFloat3(ConstRef<std::string> name, float labelWidth, Vec3 &vector, float resetValue)
+	void Inspector::OnRender()
 	{
-		bool valuesChanged = false;
-
-		auto openSansRegular = ImGuiLayer::GetFont(OPEN_SANS_REGULAR);
-		auto openSansBold = ImGuiLayer::GetFont(OPEN_SANS_BOLD);
-
-		float regionWidth = ImGui::GetContentRegionAvail().x - labelWidth;
-		float sz = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-
-		ImVec2 buttonSize = { sz, sz };
-		float sliderSize = regionWidth / 3.0f - buttonSize.x;
-
-		ImGui::PushID(name.c_str());
-
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 2.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2 { 0.0f, 5.0f });
-		ImGui::PushFont(openSansRegular);
-
-		ImGui::Text(name.c_str());
-		ImGui::SameLine(labelWidth);
-
-		ImGui::SetNextItemWidth(sliderSize);
-		if (ImGui::DragFloat("##x", &vector[0], 0.1f, 0.0f, 0.0f, "%.3f"))
-			valuesChanged = true;
-
-		ImGui::SameLine();
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.8f, 0.1f, 0.15f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.9f, 0.2f, 0.2f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.8f, 0.1f, 0.15f, 1.0f });
-		ImGui::PushFont(openSansBold);
-		if (ImGui::Button("X", buttonSize)) {
-			vector.x = resetValue;
-			valuesChanged = true;
+		if (m_IsOpen)
+		{
+			ImGui::Begin(m_Name.c_str(), &m_IsOpen, ImGuiWindowFlags_None);
+			if (m_SelectedEntity)
+				DrawComponents();
+			ImGui::End();
 		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		ImGui::SetNextItemWidth(sliderSize);
-		if (ImGui::DragFloat("##y", &vector[1], 0.1f, 0.0f, 0.0f, "%.3f"))
-			valuesChanged = true;
-
-		ImGui::SameLine();
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.2f, 0.7f, 0.2f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.3f, 0.8f, 0.3f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.2f, 0.7f, 0.2f, 1.0f });
-		ImGui::PushFont(openSansBold);
-		if (ImGui::Button("Y", buttonSize)) {
-			vector.y = resetValue;
-			valuesChanged = true;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		ImGui::SetNextItemWidth(sliderSize);
-		if (ImGui::DragFloat("##z", &vector[2], 0.1f, 0.0f, 0.0f, "%.3f"))
-			valuesChanged = true;
-
-		ImGui::SameLine();
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.1f, 0.25f, 0.8f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.2f, 0.35f, 0.9f, 1.0f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.1f, 0.25f, 0.8f, 1.0f });
-		ImGui::PushFont(openSansBold);
-		if (ImGui::Button("Z", buttonSize)) {
-			vector.z = resetValue;
-			valuesChanged = true;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::PopFont();	// openSansRegular
-		ImGui::PopStyleVar(2);	// Item Spacing, Frame Rounding
-
-		ImGui::PopID();
-
-		return valuesChanged;
 	}
+
+	void Inspector::SetSelectedEntity(Entity entity)
+	{
+		m_SelectedEntity = entity;
+	}
+	Entity Inspector::GetSelectedEntity()
+	{
+		return m_SelectedEntity;
+	}
+
+	void Inspector::DrawComponents()
+	{
+		// Might delete the entity
+		DrawComponentInfo<IdentificationComponent>();
+
+		// Check if entity was deleted
+		if (m_SelectedEntity)
+		{
+			DrawComponentInfo<TransformComponent>();
+			DrawComponentInfo<SceneCameraComponent>();
+			DrawComponentInfo<MeshComponent>();
+		}
+	}
+
+
 
 	template<>
-	void Inspector::DrawComponentInfo<IdentificationComponent>(Entity entity)
+	void Inspector::DrawComponentInfo<IdentificationComponent>()
 	{
+		Entity entity = m_SelectedEntity;
+
 		auto &idc = entity.Get<IdentificationComponent>();
 		UUID entityUUID = idc.ID;
 
@@ -195,8 +145,11 @@ namespace SemperEngine
 	}
 
 	template<>
-	void Inspector::DrawComponentInfo<TransformComponent>(Entity entity)
+	void Inspector::DrawComponentInfo<TransformComponent>()
 	{
+		auto &entity = m_SelectedEntity;
+		if (!entity.Has<TransformComponent>())
+			return;
 		auto &transform = entity.Get<TransformComponent>().transform;
 		auto [translation, rotation, scale] = entity.Get<TransformComponent>().GetTranslationRotationScale();
 
@@ -231,8 +184,9 @@ namespace SemperEngine
 	}
 
 	template<>
-	void Inspector::DrawComponentInfo<SpriteComponent>(Entity entity)
+	void Inspector::DrawComponentInfo<SpriteComponent>()
 	{
+		Entity entity = m_SelectedEntity;
 		auto &sprite = entity.Get<SpriteComponent>().sprite;
 
 		if (ImGui::CollapsingHeader("Sprite Component"))
@@ -336,8 +290,11 @@ namespace SemperEngine
 		}
 	}
 	template<>
-	void Inspector::DrawComponentInfo<SceneCameraComponent>(Entity entity)
+	void Inspector::DrawComponentInfo<SceneCameraComponent>()
 	{
+		Entity entity = m_SelectedEntity;
+		if (!entity.Has<SceneCameraComponent>())
+			return;
 		auto &cc = entity.Get<SceneCameraComponent>();
 		auto &camera = cc.camera;
 
@@ -419,8 +376,9 @@ namespace SemperEngine
 		}
 	}
 	template<>
-	void Inspector::DrawComponentInfo<NativeScriptComponent>(Entity entity)
+	void Inspector::DrawComponentInfo<NativeScriptComponent>()
 	{
+		Entity entity = m_SelectedEntity;
 		auto &nsc = entity.Get<NativeScriptComponent>();
 
 		if (ImGui::CollapsingHeader("Native Script Component"))
@@ -431,8 +389,11 @@ namespace SemperEngine
 	}
 
 	template<>
-	void Inspector::DrawComponentInfo<MeshComponent>(Entity entity)
+	void Inspector::DrawComponentInfo<MeshComponent>()
 	{
+		Entity entity = m_SelectedEntity;
+		if (!entity.Has<MeshComponent>())
+			return;
 		auto &mc = entity.Get<MeshComponent>();
 
 		if (ImGui::CollapsingHeader("Mesh Component"))
@@ -444,9 +405,9 @@ namespace SemperEngine
 				mc.Load();
 			}
 
-			if (mc.mesh->m_IsLoaded)
+			if (mc.mesh->IsLoaded())
 			{
-				auto &material = mc.mesh->m_Material;
+				auto &material = mc.mesh->GetMaterial();
 				bool noFill = material->GetFlag(MaterialFlag::NoFill);
 				if (ImGui::Checkbox("No Fill", &noFill))
 					material->SetFlag(MaterialFlag::NoFill, noFill);
@@ -456,9 +417,9 @@ namespace SemperEngine
 			if (ImGui::Button("Open Material Settings"))
 				showMaterials = true;
 
-			if (showMaterials && !mc.mesh->m_SubMeshes.empty())
+			if (showMaterials && !mc.mesh->GetSubMeshes().empty())
 			{
-				auto &subMaterials = mc.mesh->m_Material->m_SubMaterials;
+				auto &subMaterials = mc.mesh->GetMaterial()->GetSubMaterials();
 
 				ImGui::Begin("Materials", &showMaterials, ImGuiWindowFlags_NoDocking);
 
@@ -559,5 +520,85 @@ namespace SemperEngine
 				ImGui::End();
 			}
 		}
+	}
+
+	bool Inspector::DrawSliderFloat3(ConstRef<std::string> name, float labelWidth, Vec3 &vector, float resetValue)
+	{
+		bool valuesChanged = false;
+
+		auto openSansRegular = ImGuiLayer::GetFont(OPEN_SANS_REGULAR);
+		auto openSansBold = ImGuiLayer::GetFont(OPEN_SANS_BOLD);
+
+		float regionWidth = ImGui::GetContentRegionAvail().x - labelWidth;
+		float sz = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
+		ImVec2 buttonSize = { sz, sz };
+		float sliderSize = regionWidth / 3.0f - buttonSize.x;
+
+		ImGui::PushID(name.c_str());
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 2.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2 { 0.0f, 5.0f });
+		ImGui::PushFont(openSansRegular);
+
+		ImGui::Text(name.c_str());
+		ImGui::SameLine(labelWidth);
+
+		ImGui::SetNextItemWidth(sliderSize);
+		if (ImGui::DragFloat("##x", &vector[0], 0.1f, 0.0f, 0.0f, "%.3f"))
+			valuesChanged = true;
+
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.9f, 0.2f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushFont(openSansBold);
+		if (ImGui::Button("X", buttonSize)) {
+			vector.x = resetValue;
+			valuesChanged = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(sliderSize);
+		if (ImGui::DragFloat("##y", &vector[1], 0.1f, 0.0f, 0.0f, "%.3f"))
+			valuesChanged = true;
+
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.3f, 0.8f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.2f, 0.7f, 0.2f, 1.0f });
+		ImGui::PushFont(openSansBold);
+		if (ImGui::Button("Y", buttonSize)) {
+			vector.y = resetValue;
+			valuesChanged = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(sliderSize);
+		if (ImGui::DragFloat("##z", &vector[2], 0.1f, 0.0f, 0.0f, "%.3f"))
+			valuesChanged = true;
+
+		ImGui::SameLine();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 { 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 { 0.2f, 0.35f, 0.9f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 { 0.1f, 0.25f, 0.8f, 1.0f });
+		ImGui::PushFont(openSansBold);
+		if (ImGui::Button("Z", buttonSize)) {
+			vector.z = resetValue;
+			valuesChanged = true;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::PopFont();	// openSansRegular
+		ImGui::PopStyleVar(2);	// Item Spacing, Frame Rounding
+
+		ImGui::PopID();
+
+		return valuesChanged;
 	}
 }

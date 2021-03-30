@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
 	SemperEngine::CoreSystem::Initialize();
 
-	auto *Editor = Editor::CreateApplication("Semper Editor");
+	auto *Editor = EditorApplication::CreateApplication("Semper Editor");
 
 	Editor->Run();
 

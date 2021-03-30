@@ -42,7 +42,7 @@ namespace SemperEngine
 		m_SubMaterials.push_back(material);
 	}
 
-	ConstRef<std::vector<SubMaterial>> Material::GetSubMaterials() const
+	std::vector<SubMaterial> &Material::GetSubMaterials()
 	{
 		return m_SubMaterials;
 	}

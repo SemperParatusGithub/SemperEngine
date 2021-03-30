@@ -26,8 +26,10 @@ EditorLayer::EditorLayer() :
 	Log::EnableAutoFlush();
 
 	m_Scene = MakeUnique<Scene>();
-	m_Hierarchy = MakeShared<Hierarchy>(m_Scene);
-	m_Inspector = MakeShared<Inspector>(m_Scene);
+
+	m_WidgetManager = MakeUnique<Widget::Manager>(m_Scene);
+	m_WidgetManager->AddWidget<Widget::Hierarchy>();
+	m_WidgetManager->AddWidget<Widget::Inspector>();
 
 	m_PlayButtonTexture = Texture2D::Create("Assets/Textures/PlayButton.png");
 	m_PauseButtonTexture = Texture2D::Create("Assets/Textures/PauseButton.png");
@@ -36,7 +38,7 @@ EditorLayer::EditorLayer() :
 
 void EditorLayer::OnAttach()
 {
-	EngineApplication::Instance().GetWindow().SetInterval(0);
+	EngineApplication::Instance().GetWindow().SetInterval(1);
 	EngineApplication::Instance().GetWindow().Maximize();
 }
 
@@ -114,15 +116,7 @@ void EditorLayer::OnImGuiRender()
 		ImGui::EndMenuBar();
 	}
 
-	ImGui::ShowDemoWindow();
-
-	m_Hierarchy->OnImGui();
-	m_Inspector->OnImGui(m_Hierarchy->GetSelectedEntity());
-	m_EditorCamera.OnImGui();
-
-	Renderer::OnImGui();
-	SceneRenderer::OnImGui();
-	Log::OnEditorLogConsoleGui();
+	m_WidgetManager->OnImGui();
 
 	if (ImGuiDockNode *node = ImGui::DockBuilderGetCentralNode(dockSpaceID))
 	{
@@ -188,7 +182,7 @@ void EditorLayer::OnImGuiRender()
 	ImGui::Image(SceneRenderer::GetFinalFramebufferColorAttachmentHandle(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 
 	// Gizmos
-	Entity activeEntity = m_Hierarchy->GetSelectedEntity();
+	Entity activeEntity = m_WidgetManager->GetSelectedEntity();
 	if (activeEntity && m_ImGuizmoOperation != -1)
 	{
 		ImGuizmo::SetOrthographic(false);

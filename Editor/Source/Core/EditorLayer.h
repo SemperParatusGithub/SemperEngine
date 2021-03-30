@@ -1,9 +1,9 @@
 #pragma once
-#include "SemperEngine.h"
+#include <SemperEngine.h>
 
-#include "Inspector.h"
-#include "Hierarchy.h"
+#include "Widgets/Inspector.h"
 
+#include "Widgets/Hierarchy.h"
 
 using namespace SemperEngine;
 
@@ -35,12 +35,12 @@ private:
 
 private:
 	SharedPtr<Scene> m_Scene;
-	SharedPtr<Hierarchy> m_Hierarchy;
-	SharedPtr<Inspector> m_Inspector;
 
 	SharedPtr<Texture2D> m_PlayButtonTexture;
 	SharedPtr<Texture2D> m_PauseButtonTexture;
 	SharedPtr<Texture2D> m_ExitButtonTexture;
+
+	UniquePtr<Widget::Manager> m_WidgetManager;
 
 	EditorCamera m_EditorCamera;
 

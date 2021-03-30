@@ -49,7 +49,7 @@ namespace SemperEngine
 
 		void AddSubMaterial(ConstRef<SubMaterial> material);
 
-		ConstRef<std::vector<SubMaterial>> GetSubMaterials() const;
+		std::vector<SubMaterial> &GetSubMaterials();
 
 	private:
 		std::string m_MaterialName;

@@ -1,7 +1,7 @@
 #include "EditorLayer.h"
 
 
-class Editor : public SemperEngine::EngineApplication
+class EditorApplication : public SemperEngine::EngineApplication
 {
 public:
 	static SemperEngine::EngineApplication *CreateApplication(const std::string &name)

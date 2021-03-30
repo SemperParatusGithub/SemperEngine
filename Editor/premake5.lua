@@ -16,6 +16,7 @@ project "Editor"
 
 	includedirs
 	{
+		"Source",
 		"../SemperEngine/Source",
 		"../SemperEngine/External",
 		"../SemperEngine/External/glm",

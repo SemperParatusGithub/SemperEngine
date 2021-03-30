@@ -48,6 +48,10 @@ namespace SemperEngine
 
 		void Load(ConstRef<std::string> filepath);
 
+		bool IsLoaded() const;
+		SharedPtr<Material> GetMaterial();
+		std::vector<SubMesh> &GetSubMeshes();
+
 		auto begin() const noexcept { return m_SubMeshes.begin(); }
 		auto end() const noexcept { return m_SubMeshes.end(); }
 
