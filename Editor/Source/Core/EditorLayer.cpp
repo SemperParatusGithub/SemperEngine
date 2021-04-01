@@ -82,22 +82,7 @@ void EditorLayer::OnUpdate(float deltaTime)
 
 void EditorLayer::OnImGuiRender()
 {
-	ImGuiWindowFlags dockSpaceWindowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
-		ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
-	ImGuiViewport *viewport = ImGui::GetMainViewport();
-	ImGui::SetNextWindowPos(viewport->Pos);
-	ImGui::SetNextWindowSize(viewport->Size);
-	ImGui::SetNextWindowViewport(viewport->ID);
-
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::Begin("DockSpace", 0, dockSpaceWindowFlags);
-	ImGui::PopStyleVar(3);
-
-	ImGuiID dockSpaceID = ImGui::GetID("DockSpace");
-	ImGui::DockSpace(dockSpaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoWindowMenuButton);
+	BeginDockspace();
 
 	if (ImGui::BeginMenuBar())
 	{
@@ -118,14 +103,10 @@ void EditorLayer::OnImGuiRender()
 
 	m_WidgetManager->OnImGui();
 
-	if (ImGuiDockNode *node = ImGui::DockBuilderGetCentralNode(dockSpaceID))
-	{
-		node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
-		node->LocalFlags |= ImGuiDockNodeFlags_NoDockingInCentralNode;
-		node->LocalFlags |= ImGuiDockNodeFlags_NoSplit;
-	}
-
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });
+	ImGuiWindowClass wndClass;
+	wndClass.ViewportFlagsOverrideSet = ImGuiWindowFlags_NoTitleBar;
+	ImGui::SetNextWindowClass(&wndClass);
 	ImGui::Begin("Scene Viewport");
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12, 0));
@@ -182,6 +163,80 @@ void EditorLayer::OnImGuiRender()
 	ImGui::Image(SceneRenderer::GetFinalFramebufferColorAttachmentHandle(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 
 	// Gizmos
+	UpdateGizmos();
+
+	ImGui::End();	// Viewport
+	ImGui::PopStyleVar();
+
+	EndDockspace();
+}
+
+void EditorLayer::OnEvent(Event &e)
+{
+	m_EditorCamera.OnEvent(e);
+}
+
+void EditorLayer::BeginDockspace()
+{
+	ImGuiWindowFlags dockSpaceWindowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+	ImGuiViewport *viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("DockSpace", 0, dockSpaceWindowFlags);
+	ImGui::PopStyleVar(3);
+
+	ImGuiID dockSpaceID = ImGui::GetID("DockSpace");
+
+	if (!ImGui::DockBuilderGetNode(dockSpaceID))
+	{
+		ImGui::DockBuilderRemoveNode(dockSpaceID); // Clear out existing layout
+		ImGui::DockBuilderAddNode(dockSpaceID); // Add empty node
+		ImVec2 nodeSize = { ImGui::GetIO().DisplaySize.x * ImGui::GetIO().DisplayFramebufferScale.x,
+			ImGui::GetIO().DisplaySize.y * ImGui::GetIO().DisplayFramebufferScale.y };
+		ImGui::DockBuilderSetNodeSize(dockSpaceID, nodeSize);
+
+		ImGuiID dock_main_id = dockSpaceID;
+		ImGuiID DockBottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.3f, nullptr, &dock_main_id);
+		ImGuiID DockTop = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.1f, nullptr, &dock_main_id);
+		ImGuiID DockLeft = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
+		ImGuiID DockRight = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
+
+		ImGuiID DockLeftChild = ImGui::DockBuilderSplitNode(DockLeft, ImGuiDir_Down, 0.5f, nullptr, &DockLeft);
+		ImGuiID DockRightChild = ImGui::DockBuilderSplitNode(DockRight, ImGuiDir_Down, 0.5f, nullptr, &DockRight);
+		ImGuiID DockingLeftDownChild = ImGui::DockBuilderSplitNode(DockLeftChild, ImGuiDir_Down, 0.5f, nullptr, &DockLeftChild);
+		ImGuiID DockingRightDownChild = ImGui::DockBuilderSplitNode(DockRightChild, ImGuiDir_Down, 0.5f, nullptr, &DockRightChild);
+
+		ImGuiID DockBottomChild = ImGui::DockBuilderSplitNode(DockBottom, ImGuiDir_Down, 0.2f, nullptr, &DockBottom);
+		ImGuiID DockingBottomLeftChild = ImGui::DockBuilderSplitNode(DockBottomChild, ImGuiDir_Left, 0.5f, nullptr, &DockBottomChild);
+		ImGuiID DockingBottomRightChild = ImGui::DockBuilderSplitNode(DockBottomChild, ImGuiDir_Right, 0.5f, nullptr, &DockBottomChild);
+
+		ImGuiID DockMiddle = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.8f, nullptr, &dock_main_id);
+
+		ImGui::DockBuilderDockWindow("Scene Viewport", DockMiddle);
+		ImGui::DockBuilderDockWindow("Taskbar", DockTop);
+		ImGui::DockBuilderDockWindow("Hierarchy", DockLeft);
+		ImGui::DockBuilderDockWindow("Inspector", DockingLeftDownChild);
+
+		ImGui::DockBuilderFinish(dockSpaceID);
+	}
+
+	// Dockspace
+	ImGui::DockSpace(dockSpaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoWindowMenuButton);
+}
+void EditorLayer::EndDockspace()
+{
+	ImGui::End();
+}
+
+void EditorLayer::UpdateGizmos()
+{
 	Entity activeEntity = m_WidgetManager->GetSelectedEntity();
 	if (activeEntity && m_ImGuizmoOperation != -1)
 	{
@@ -208,7 +263,7 @@ void EditorLayer::OnImGuiRender()
 
 			glm::vec3 deltaRotation = rotation - tc.transform.GetRotation();
 
-			if(m_ImGuizmoOperation == ImGuizmo::OPERATION::TRANSLATE)
+			if (m_ImGuizmoOperation == ImGuizmo::OPERATION::TRANSLATE)
 				tc.SetTranslation(translation);
 			if (m_ImGuizmoOperation == ImGuizmo::OPERATION::ROTATE)
 				tc.transform.Rotate(deltaRotation);
@@ -216,16 +271,6 @@ void EditorLayer::OnImGuiRender()
 				tc.SetScale(scale);
 		}
 	}
-
-	ImGui::End();	// Viewport
-	ImGui::PopStyleVar();
-
-	ImGui::End(); // Dock space
-}
-
-void EditorLayer::OnEvent(Event &e)
-{
-	m_EditorCamera.OnEvent(e);
 }
 
 void EditorLayer::OpenScene()

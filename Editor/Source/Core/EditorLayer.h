@@ -22,6 +22,11 @@ public:
 	virtual void OnEvent(Event &e) override;
 
 private:
+	void BeginDockspace();
+	void EndDockspace();
+
+	void UpdateGizmos();
+	
 	void OpenScene();
 	void SaveSceneAs();
 

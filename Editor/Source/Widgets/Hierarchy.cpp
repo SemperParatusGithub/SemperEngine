@@ -34,7 +34,7 @@ namespace Widget
 		SE_ASSERT(m_Scene);
 		if (m_IsOpen)
 		{
-			ImGui::Begin("Hierarchy##5", &m_IsOpen, ImGuiWindowFlags_None);
+			ImGui::Begin("Hierarchy", &m_IsOpen, ImGuiWindowFlags_None);
 			ImGui::PushFont(ImGuiLayer::GetFont(OPEN_SANS_REGULAR));
 
 			if (ImGui::BeginPopupContextWindow(0, 1, false))
