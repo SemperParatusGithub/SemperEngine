@@ -15,11 +15,15 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
+#include "Widgets/Inspector.h"
+#include "Widgets/Hierarchy.h"
+#include "Widgets/Objects.h"
+
 
 EditorLayer::EditorLayer() :
 	Layer("Editor Layer"),
 	m_ViewportSize({ 1280, 720 }),
-	m_SceneViewPortFocused(false), m_SceneViewPortHovered(false),
+	m_SceneViewportFocused(false), m_SceneViewportHovered(false),
 	m_ViewportSizeChanged(false)
 {
 	Log::EnableEditorLogConsole();
@@ -30,6 +34,7 @@ EditorLayer::EditorLayer() :
 	m_WidgetManager = MakeUnique<Widget::Manager>(m_Scene);
 	m_WidgetManager->AddWidget<Widget::Hierarchy>();
 	m_WidgetManager->AddWidget<Widget::Inspector>();
+	m_WidgetManager->AddWidget<Widget::Objects>();
 
 	m_PlayButtonTexture = Texture2D::Create("Assets/Textures/PlayButton.png");
 	m_PauseButtonTexture = Texture2D::Create("Assets/Textures/PauseButton.png");
@@ -48,12 +53,12 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(float deltaTime)
 {
-	if (m_SceneViewPortHovered && !m_Scene->IsPlaying())
+	if (m_SceneViewportHovered && !m_Scene->IsPlaying())
 		m_EditorCamera.OnUpdate(deltaTime);
 
 	UpdateWindowTitle();
 
-	bool allowEvents = m_SceneViewPortHovered || m_SceneViewPortFocused;
+	bool allowEvents = m_SceneViewportHovered || m_SceneViewportFocused;
 	EngineApplication::Instance().BlockImGuiEvents(!allowEvents);
 
 	if (m_ViewportSizeChanged)
@@ -104,45 +109,44 @@ void EditorLayer::OnImGuiRender()
 	m_WidgetManager->OnImGui();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 { 0, 0 });
-	ImGuiWindowClass wndClass;
-	wndClass.ViewportFlagsOverrideSet = ImGuiWindowFlags_NoTitleBar;
-	ImGui::SetNextWindowClass(&wndClass);
 	ImGui::Begin("Scene Viewport");
 
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12, 0));
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.8f, 0.8f, 0.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
-
-	ImGui::SetCursorPosX(ImGui::GetContentRegionAvailWidth() * 0.5f - 48.0f);
-
-	if (ImGui::ImageButton(m_PlayButtonTexture->GetHandle(), { 32.0f, 32.0f }))
 	{
-		m_Scene->Play();
-		m_ImGuizmoOperation = -1;
-		SE_CORE_INFO("Playing Scene");
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.8f, 0.8f, 0.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
+
+		ImGui::SetCursorPosX(ImGui::GetContentRegionAvailWidth() * 0.5f - 48.0f);
+
+		if (ImGui::ImageButton(m_PlayButtonTexture->GetHandle(), { 32.0f, 32.0f }))
+		{
+			m_Scene->Play();
+			m_ImGuizmoOperation = -1;
+			SE_CORE_INFO("Playing Scene");
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::ImageButton(m_PauseButtonTexture->GetHandle(), { 32.0f, 32.0f }))
+		{
+			m_Scene->Pause();
+			SE_CORE_INFO("Pausing Scene");
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::ImageButton(m_ExitButtonTexture->GetHandle(), { 32.0f, 32.0f }))
+		{
+			m_Scene->ReturnToEditing();
+			SE_CORE_INFO("Return");
+		}
+
+		ImGui::PopStyleColor(3);
+		ImGui::PopStyleVar(3);
 	}
-
-	ImGui::SameLine();
-
-	if (ImGui::ImageButton(m_PauseButtonTexture->GetHandle(), { 32.0f, 32.0f }))
-	{
-		m_Scene->Pause();
-		SE_CORE_INFO("Pausing Scene");
-	}
-
-	ImGui::SameLine();
-
-	if (ImGui::ImageButton(m_ExitButtonTexture->GetHandle(), { 32.0f, 32.0f }))
-	{
-		m_Scene->ReturnToEditing();
-		SE_CORE_INFO("Return");
-	}
-
-	ImGui::PopStyleColor(3);
-	ImGui::PopStyleVar(3);
 
 	m_ViewportPosition = {
 		ImGui::GetWindowPos().x + ImGui::GetCursorPos().x,
@@ -157,13 +161,38 @@ void EditorLayer::OnImGuiRender()
 		m_ViewportSizeChanged = true;
 	}
 
-	m_SceneViewPortFocused = ImGui::IsWindowFocused();
-	m_SceneViewPortHovered = ImGui::IsWindowHovered();
+	m_SceneViewportFocused = ImGui::IsWindowFocused();
+	m_SceneViewportHovered = ImGui::IsWindowHovered();
 
 	ImGui::Image(SceneRenderer::GetFinalFramebufferColorAttachmentHandle(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2 { 0, 1 }, ImVec2 { 1, 0 });
 
 	// Gizmos
 	UpdateGizmos();
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		auto t = ImGui::AcceptDragDropPayload("", ImGuiDragDropFlags_SourceExtern);
+		if (t)
+		{
+			SE_CORE_INFO("Extern source");
+		}
+
+		auto data = ImGui::AcceptDragDropPayload("payload");
+		if (data)
+		{
+			auto obj = *(Object*)data->Data;
+			if (obj == Object::Cube)
+			{
+				auto entity = m_Scene->CreateEntity("Cube");
+				MeshComponent mc;
+				mc.filepath = "Assets/Meshes/Cube.fbx";
+				mc.Load();
+				entity.Add<MeshComponent>(mc);
+				m_WidgetManager->SetSelectedEntity(entity);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
 
 	ImGui::End();	// Viewport
 	ImGui::PopStyleVar();

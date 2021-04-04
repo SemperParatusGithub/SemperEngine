@@ -1,6 +1,7 @@
 #include "Widget.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "Objects.h"
 
 
 namespace Widget

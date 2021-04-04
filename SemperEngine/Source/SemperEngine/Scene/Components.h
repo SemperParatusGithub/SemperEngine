@@ -227,14 +227,10 @@ namespace SemperEngine
 		template<typename Archive>
 		void save(Archive &archive) const
 		{
-			archive( cereal::make_nvp("Filepath", filepath) );
 		}
 		template<typename Archive>
 		void load(Archive &archive)
 		{
-			archive( cereal::make_nvp("Filepath", filepath) );
-			if(!filepath.empty())
-				Load();
 		}
 	};
 }

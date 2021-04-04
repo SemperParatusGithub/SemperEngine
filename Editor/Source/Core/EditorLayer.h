@@ -1,9 +1,7 @@
 #pragma once
 #include <SemperEngine.h>
 
-#include "Widgets/Inspector.h"
-
-#include "Widgets/Hierarchy.h"
+#include "Widgets/Widget.h"
 
 using namespace SemperEngine;
 
@@ -33,7 +31,7 @@ private:
 	void UpdateWindowTitle();
 
 private:
-	bool m_SceneViewPortFocused, m_SceneViewPortHovered;
+	bool m_SceneViewportFocused, m_SceneViewportHovered;
 	bool m_ViewportSizeChanged;
 	Vec2f m_ViewportPosition;
 	Vec2f m_ViewportSize;
